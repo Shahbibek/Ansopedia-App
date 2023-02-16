@@ -20,10 +20,22 @@
         <!-- The logo-->
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_ansopedia__216_x_216_px_</item>
         <!-- The Duration-->
-        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="windowSplashScreenAnimationDuration">2500</item>
         <!-- The original theme after splash screen ends-->
         <item name="postSplashScreenTheme">@style/Theme.Ansopedia</item>
     </style>
     <!--    style for splash screen end-->
+
+    <!--    style for signin button screen start-->
+    <style name="Button1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <!--        <item name="android:drawableTint">@color/white</item>-->
+        <item name="android:height">60dp</item>
+        <item name="android:backgroundTint">@color/primary</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:textColor">@color/white</item>
+    <!--    style for signin button screen end-->
+    </style>
 
 </resources>
