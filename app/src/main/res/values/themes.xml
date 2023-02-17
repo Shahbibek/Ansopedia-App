@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Ansopedia" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Ansopedia" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,18 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <!--    style for splash screen start-->
-    <style name="Theme.Ansopedia.Starting" parent="Theme.SplashScreen">
-        <!-- The background color-->
-        <item name="windowSplashScreenBackground">@color/white</item>
-        <!-- The logo-->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_ansopedia__216_x_216_px_</item>
-        <!-- The Duration-->
-        <item name="windowSplashScreenAnimationDuration">2500</item>
-        <!-- The original theme after splash screen ends-->
-        <item name="postSplashScreenTheme">@style/Theme.Ansopedia</item>
-    </style>
-    <!--    style for splash screen end-->
+
 
     <!--    style for signin button screen start-->
     <style name="Button1">
