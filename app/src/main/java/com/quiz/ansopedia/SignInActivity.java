@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ public class SignInActivity extends AppCompatActivity {
     CheckBox checkbox;
     TextView textViewForgetPassword, textViewSignUp;
     SignInButton sign_in_button;
-    ScrollView svMain;
+    RelativeLayout svMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +90,10 @@ public class SignInActivity extends AppCompatActivity {
                 finish();
             }
         });
-        svMain.setOnTouchListener(new View.OnTouchListener() {
+        svMain.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 Utility.hideSoftKeyboard(SignInActivity.this);
-                return true;
             }
         });
     }

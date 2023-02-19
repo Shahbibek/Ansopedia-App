@@ -1,6 +1,9 @@
 package com.quiz.ansopedia.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.quiz.ansopedia.ChaptersActivity;
 import com.quiz.ansopedia.R;
+import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.models.Subjects;
 
 import java.util.ArrayList;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<String> arrayList = new ArrayList<>();
+    private ArrayList<Subjects> arrayList = new ArrayList<>();
 
-    public CourseAdapter(Context context, ArrayList<String> arrayList) {
+    public CourseAdapter(Context context, ArrayList<Subjects> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
@@ -33,7 +41,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.clCourse.setBackgroundColor(Color.parseColor(arrayList.get(position).getColor()));
+        holder.tvCourseTitle.setText(Utility.toCapitalizeFirstLetter(arrayList.get(position).getSubject_name()));
 
+        Glide.with(context).load(Uri.parse(arrayList.get(position).getImage())).into(holder.ivCourse);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String subject = new Gson().toJson(arrayList.get(holder.getAdapterPosition()));
+                context.startActivity(new Intent(context, ChaptersActivity.class)
+                        .putExtra("subject", subject));
+            }
+        });
     }
 
     @Override

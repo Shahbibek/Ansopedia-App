@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -20,6 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.ImageSlider;
@@ -29,9 +32,21 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.adapter.CourseAdapter;
+import com.quiz.ansopedia.models.Branch;
+import com.quiz.ansopedia.models.Contents;
+import com.quiz.ansopedia.models.LoginModel;
+import com.quiz.ansopedia.models.Subjects;
+import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -42,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     RecyclerView rvContent;
     boolean isDoubleBackPressed = false;
+    Contents contents;
+    CourseAdapter courseAdapter;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -99,8 +116,11 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.navlogout) {
                     Utility.getLogout(MainActivity.this);
                 } else if (id == R.id.navshare) {
-                    Toast.makeText(getApplicationContext(), "Share Clicked", Toast.LENGTH_SHORT).show();
-
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    intent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.quiz.ansopedia");
+                    startActivity(Intent.createChooser(intent, "choose one"));
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -111,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
         });
 //        ########################### drawer Implementation End #############################################
         setImage_slider();
-        settabLayout();
-        setRecyclerView();
+        getContent();
     }
 
     private void initView() {
@@ -186,21 +205,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void settabLayout() {
+    private void settabLayout(String branch_name) {
         ArrayList<String> tabList = new ArrayList<>();
-        tabList.add("Programming");
-        tabList.add("Aptitude");
-        tabList.add("GK");
-        tabList.add("Interview");
+        for (Branch branch : contents.getBranch()) {
+            tabList.add(branch.getBranch_name());
+        }
 
-        for (String tab :
-                tabList) {
+        for (String tab : tabList) {
             tabLayout.addTab(tabLayout.newTab().setText(tab));
         }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Toast.makeText(MainActivity.this, "Selected tab is " + tab.getText(), Toast.LENGTH_SHORT).show();
+
+                setRecyclerView(getSubjects(tab.getText().toString()));
             }
 
             @Override
@@ -215,8 +233,56 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView() {
+    private void setRecyclerView(ArrayList<Subjects> subjects) {
         rvContent.setHasFixedSize(true);
         rvContent.setItemViewCacheSize(10);
+        courseAdapter = new CourseAdapter(this, subjects);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        rvContent.setLayoutManager(layoutManager);
+        rvContent.setAdapter(courseAdapter);
+    }
+
+    private void getContent() {
+        Utility.showProgress(MainActivity.this);
+        if (Utility.isNetConnected(this)) {
+            try {
+                ContentApiImplementer.getContent(new Callback<List<Contents>>() {
+                    @Override
+                    public void onResponse(Call<List<Contents>> call, Response<List<Contents>> response) {
+                        Utility.dismissProgress(MainActivity.this);
+                        if (response.code() == 200) {
+                            contents = response.body().get(0);
+                            settabLayout(contents.getBranch().get(0).getBranch_name());
+                            setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
+                        } else {
+                            Utility.showAlertDialog(MainActivity.this, "Error", "Something went wrong, Please Try Again");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Contents>> call, Throwable t) {
+                        Utility.dismissProgress(MainActivity.this);
+                        t.printStackTrace();
+                        Utility.showAlertDialog(MainActivity.this, "Error", "Something went wrong, Please Try Again");
+                    }
+                });
+            } catch (Exception e) {
+                Utility.dismissProgress(this);
+                e.printStackTrace();
+            }
+        } else {
+            Utility.dismissProgress(this);
+            Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
+        }
+    }
+
+    private ArrayList<Subjects> getSubjects(String branch_name) {
+        ArrayList<Subjects> tempList = new ArrayList<>();
+        for (Branch branch : contents.getBranch()) {
+            if (branch.getBranch_name().equalsIgnoreCase(branch_name)) {
+                tempList = (ArrayList<Subjects>) branch.getSubjects();
+            }
+        }
+        return tempList;
     }
 }

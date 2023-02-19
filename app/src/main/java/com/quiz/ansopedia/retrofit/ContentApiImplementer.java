@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.Utility.ApiInterceptor;
 import com.quiz.ansopedia.Utility.ApiService;
+import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 
@@ -62,6 +63,12 @@ public class ContentApiImplementer {
     public static void getLogout(Callback<List<LoginModel>> cb) {
         ApiService apiService = getRetrofit().create(ApiService.class);
         Call<List<LoginModel>> call = apiService.getLogout();
+        call.enqueue(cb);
+    }
+
+    public static void getContent(Callback<List<Contents>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<Contents>> call = apiService.getContent();
         call.enqueue(cb);
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     TextInputLayout userNameTextField, t3, passwordTextField, confirmPasswordTextField;
     String uName, uEmail, pass, confirmPass;
     SharedPreferences preferences;
-    ScrollView svMain;
+    RelativeLayout svMain;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,18 +80,20 @@ public class SignupActivity extends AppCompatActivity {
                     }else if(!pass.matches( ".{8,}")){
                         passwordTextField.setErrorEnabled(true);
                         passwordTextField.setError("Password must be of 8 digit");
-                    }else if(!pass.matches(confirmPass)){
+                    }else if(confirmPass.isEmpty()){
+                        confirmPasswordTextField.setErrorEnabled(true);
+                        confirmPasswordTextField.setError("Please Enter Password");
+                    }else if(!confirmPass.matches(pass)){
                         confirmPasswordTextField.setErrorEnabled(true);
                         confirmPasswordTextField.setError("Password must be same");
                     };
                 }
             }
         });
-        svMain.setOnTouchListener(new View.OnTouchListener() {
+        svMain.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 Utility.hideSoftKeyboard(SignupActivity.this);
-                return true;
             }
         });
     }
@@ -125,7 +128,6 @@ public class SignupActivity extends AppCompatActivity {
                         Utility.dismissProgress(SignupActivity.this);
                         if (response.code() == 201) {
                             LoginModel loginModel = response.body().get(0);
-                            if (loginModel.getStatus().equalsIgnoreCase("success")) {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
                                 preferences.edit().putString(Constants.username, uEmail).apply();
@@ -134,9 +136,6 @@ public class SignupActivity extends AppCompatActivity {
                                 Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                 finish();
-                            } else {
-                                Utility.showAlertDialog(SignupActivity.this, loginModel.getStatus(), loginModel.getMessage());
-                            }
                         } else if (response.code() == 403) {
                             Utility.showAlertDialog(SignupActivity.this, "Failed", "Email already exists!!");
                         } else {
@@ -164,7 +163,7 @@ public class SignupActivity extends AppCompatActivity {
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}")) {
+        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}") && (confirmPass.matches(pass))) {
             return true;
         } else {
             return false;

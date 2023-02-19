@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChaptersActivity">
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:layout_width="190dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="-30dp"
+        android:background="@drawable/ovalshape"
+        android:clipToOutline="true"
+        android:rotation="50"
+        android:text="">
+
+    </androidx.constraintlayout.utils.widget.MotionLabel>
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:layout_width="190dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="-80dp"
+        android:background="@drawable/ovalshape"
+        android:clipToOutline="true"
+        android:rotation="50"
+        android:text="">
+
+    </androidx.constraintlayout.utils.widget.MotionLabel>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="117dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="70dp"
+        android:background="#DCDCDC">
+
+        <RelativeLayout
+            android:id="@+id/rlTopic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/custom_oval" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/tvSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="bsddssk"
+            android:textColor="@color/white"
+            android:textSize="25dp" />
+
+        <SeekBar
+            android:id="@+id/sbProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="25dp"
+            android:max="100"
+            android:progress="50"
+            android:progressDrawable="@drawable/custom_progress"
+            android:thumbTint="@android:color/holo_blue_light" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChapter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlTopic" />
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_bottom_nav"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="?attr/colorOnPrimary"
+        app:menu="@menu/bottom_nav" />
+
+</RelativeLayout>

@@ -32,6 +32,7 @@ public class Utility {
         progressDialog = new ProgressDialog(context);
         if (!progressDialog.isShowing()) {
             progressDialog.setMessage("Please wait");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
     }
@@ -54,6 +55,7 @@ public class Utility {
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(msg)
+                .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -76,6 +78,7 @@ public class Utility {
         new AlertDialog.Builder(context)
                 .setTitle("Alert")
                 .setMessage("Do you want to Logout")
+                .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -115,5 +118,9 @@ public class Utility {
                     }
                 })
                 .create().show();
+    }
+
+    public static String toCapitalizeFirstLetter(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }
