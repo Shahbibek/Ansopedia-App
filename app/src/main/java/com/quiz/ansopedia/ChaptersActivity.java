@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.ChapterAdapter;
 import com.quiz.ansopedia.models.Chapters;
@@ -28,11 +30,15 @@ public class ChaptersActivity extends AppCompatActivity {
     ImageView ivBack;
     Subjects subject;
     ChapterAdapter adapter;
+//    for ToolbarColor
+    View vt1, vt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapters);
         initView();
+        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
+        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));
         subject = new Gson().fromJson(getIntent().getStringExtra("subject"), Subjects.class);
         tvSubject.setText(Utility.toCapitalizeFirstLetter(subject.getSubject_name()));
 
@@ -42,8 +48,9 @@ public class ChaptersActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        setRecyclerView();
+        if (subject.getChapters().size() != 0) {
+            setRecyclerView();
+        }
     }
 
     private void initView() {
@@ -52,6 +59,8 @@ public class ChaptersActivity extends AppCompatActivity {
         sbProgress = findViewById(R.id.sbProgress);
         tvSubject = findViewById(R.id.tvSubject);
         ivBack = findViewById(R.id.ivBack);
+        vt = findViewById(R.id.vt);
+        vt1 = findViewById(R.id.vt1);
     }
 
     private void setRecyclerView() {

@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.quiz.ansopedia.ChaptersActivity;
 import com.quiz.ansopedia.R;
+import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.models.Subjects;
 
@@ -48,6 +49,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.COLOR = arrayList.get(holder.getAdapterPosition()).getColor();
                 String subject = new Gson().toJson(arrayList.get(holder.getAdapterPosition()));
                 context.startActivity(new Intent(context, ChaptersActivity.class)
                         .putExtra("subject", subject));

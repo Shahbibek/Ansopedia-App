@@ -6,14 +6,17 @@
         android:iconTint="@color/orange"
         android:title="Home" />
     <item
-        android:id="@+id/navprofile"
+        android:id="@+id/navProfile"
         android:icon="@drawable/dr_profile_icon"
         android:title="Profile" />
     <item
-        android:id="@+id/navcourse"
-        android:icon="@drawable/dr_course"
+        android:id="@+id/navAboutUs"
+        android:icon="@drawable/aboutuspage"
         android:iconTint="@color/orange"
-        android:title="Courses" />
+        android:title="About Us" />
+    <item android:id="@+id/navContactUs"
+        android:icon="@drawable/ic_send"
+        android:title="Contact Us"/>
     <item
         android:id="@+id/navlogout"
         android:icon="@drawable/dr_logout"
@@ -23,7 +26,4 @@
         android:id="@+id/navshare"
         android:icon="@drawable/dr_share"
         android:title="Share" />
-    <item android:id="@+id/navabout"
-        android:icon="@drawable/aboutuspage"
-        android:title="About Us"/>
 </menu>

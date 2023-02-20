@@ -71,4 +71,22 @@ public class ContentApiImplementer {
         Call<List<Contents>> call = apiService.getContent();
         call.enqueue(cb);
     }
+
+    public static void sendEmailResetPassword(LoginRequestModel loginRequestModel, Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.sendEmailResetPassword(loginRequestModel);
+        call.enqueue(cb);
+    }
+
+    public static void sendOTPResetPassword(LoginRequestModel loginRequestModel, Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.sendOTPResetPassword(loginRequestModel);
+        call.enqueue(cb);
+    }
+
+    public static void sendNewPasswordResetPassword(LoginRequestModel loginRequestModel, Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.sendNewPasswordResetPassword(loginRequestModel);
+        call.enqueue(cb);
+    }
 }

@@ -5,13 +5,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.ReadQuestionAdapter;
 import com.quiz.ansopedia.models.Chapters;
@@ -28,15 +31,24 @@ public class ReadQuestionsActivity extends AppCompatActivity {
     Toolbar toolbar;
     Chapters chapters;
     ReadQuestionAdapter adapter;
+    View vt, vt1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_questions);
         initView();
+//        #######################################   Set Color Start ######################################
+
+        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
+        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));
+//        #######################################   Set Color Start ######################################
         chapters = new Gson().fromJson(getIntent().getStringExtra("chapter"), Chapters.class);
         tvSubject.setText(Utility.toCapitalizeFirstLetter(getIntent().getStringExtra("subject")));
         tvChapter.setText(Utility.toCapitalizeFirstLetter(chapters.getChapter_name()));
-        setRecyclerView();
+        if (chapters.getQuestions() != null) {
+            setRecyclerView();
+        }
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,6 +64,9 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.ivBack);
         tvChapter = findViewById(R.id.tvChapter);
         toolbar = findViewById(R.id.toolbar);
+        vt = findViewById(R.id.vt);
+        vt1 = findViewById(R.id.vt1);
+
     }
 
     private void setRecyclerView() {

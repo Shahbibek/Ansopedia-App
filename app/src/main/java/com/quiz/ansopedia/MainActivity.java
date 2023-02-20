@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-
+        Utility.getLogin(this);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -102,16 +102,17 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.navhome) {
-                    Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
 
-                } else if (id == R.id.navprofile) {
-                    Toast.makeText(getApplicationContext(), "Profile Clicked", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.navProfile) {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
 
-                } else if (id == R.id.navabout) {
-                    Toast.makeText(getApplicationContext(), "About Clicked", Toast.LENGTH_SHORT).show();
 
-                } else if (id == R.id.navcourse) {
-                    Toast.makeText(getApplicationContext(), "Course Clicked", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.navAboutUs) {
+                    startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
+
+
+                } else if (id == R.id.navContactUs) {
+                    startActivity(new Intent(MainActivity.this, ContactUsActivity.class));
 
                 } else if (id == R.id.navlogout) {
                     Utility.getLogout(MainActivity.this);
@@ -217,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
                 setRecyclerView(getSubjects(tab.getText().toString()));
             }
 
@@ -251,9 +251,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<List<Contents>> call, Response<List<Contents>> response) {
                         Utility.dismissProgress(MainActivity.this);
                         if (response.code() == 200) {
-                            contents = response.body().get(0);
-                            settabLayout(contents.getBranch().get(0).getBranch_name());
-                            setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
+                            if (response.body().size() != 0) {
+                                contents = response.body().get(0);
+                                settabLayout(contents.getBranch().get(0).getBranch_name());
+                                setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
+                            }
                         } else {
                             Utility.showAlertDialog(MainActivity.this, "Error", "Something went wrong, Please Try Again");
                         }

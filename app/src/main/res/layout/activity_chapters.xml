@@ -6,35 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ChaptersActivity">
 
-    <androidx.constraintlayout.utils.widget.MotionLabel
-        android:layout_width="190dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="-30dp"
-        android:background="@drawable/ovalshape"
-        android:clipToOutline="true"
-        android:rotation="50"
-        android:text="">
-
-    </androidx.constraintlayout.utils.widget.MotionLabel>
-
-    <androidx.constraintlayout.utils.widget.MotionLabel
-        android:layout_width="190dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="-80dp"
-        android:background="@drawable/ovalshape"
-        android:clipToOutline="true"
-        android:rotation="50"
-        android:text="">
-
-    </androidx.constraintlayout.utils.widget.MotionLabel>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="117dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="65dp"
         android:background="#DCDCDC">
 
         <RelativeLayout
@@ -57,9 +35,8 @@
             android:id="@+id/tvSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:text="bsddssk"

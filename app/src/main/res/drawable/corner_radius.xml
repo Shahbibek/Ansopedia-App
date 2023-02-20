@@ -3,10 +3,11 @@
     <solid
         android:color="#95ACC8">
     </solid>
-    <stroke
+    <View
+        android:id="@+id/strokeColor"
         android:width="0dp"
         android:color="#424242">
-    </stroke>
+    </View>
     <corners
         android:topLeftRadius="100dip"
         android:topRightRadius="100dip"

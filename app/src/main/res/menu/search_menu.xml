@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/help"
-        android:title="Help"
-        android:icon="@drawable/ic_q_mark_icon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/search"
         android:title="Search"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:icon="@drawable/search_icon"
-        android:iconTint="@color/black"
+        android:icon="@drawable/ic_searches_icon"
         app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView" />
+
+    <item
+        android:id="@+id/userIcons"
+        android:title="Help"
+        android:icon="@drawable/ic_q_mark_icon"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:showAsAction="ifRoom" />
 
 </menu>

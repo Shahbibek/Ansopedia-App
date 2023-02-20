@@ -23,4 +23,13 @@ public interface ApiService {
 
     @GET("contents")
     Call<List<Contents>> getContent();
+
+    @POST("user/send-reset-password-email")
+    Call<List<LoginModel>> sendEmailResetPassword(@Body LoginRequestModel loginRequestModel);
+
+    @POST("user/verify-otp")
+    Call<List<LoginModel>> sendOTPResetPassword(@Body LoginRequestModel loginRequestModel);
+
+    @POST("user/changepassword")
+    Call<List<LoginModel>> sendNewPasswordResetPassword(@Body LoginRequestModel loginRequestModel);
 }
