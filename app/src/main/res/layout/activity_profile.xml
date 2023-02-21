@@ -96,8 +96,8 @@
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="315dp"
-                    android:layout_centerHorizontal="true"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginHorizontal="5dp"
                     android:fontFamily="@font/poppins_bold"
                     android:text="User's Name"
@@ -110,8 +110,8 @@
                     android:id="@+id/tvUserEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_below="@+id/tvUserName"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginHorizontal="5dp"
                     android:fontFamily="@font/poppins_regular"
                     android:text="example@gmail.com"
@@ -292,7 +292,7 @@
                     android:background="@drawable/edit_profile_icon" />
 
                 <TextView
-                    android:id="@+id/editProfile"
+                    android:id="@+id/tvEditProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"

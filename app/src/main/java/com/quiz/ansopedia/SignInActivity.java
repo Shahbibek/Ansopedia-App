@@ -52,7 +52,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                String password = etPassword.getText().toString().trim();
                 Utility.hideSoftKeyboard(SignInActivity.this);
                 t1.setErrorEnabled(false);
                 t2.setErrorEnabled(false);
@@ -64,7 +64,7 @@ public class SignInActivity extends AppCompatActivity {
                         t1.setError("Please Enter Email");
                     } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()){
                         t1.setErrorEnabled(true);
-                        t1.setError("Please Enter Valid Email");
+                        t1.setError("Invalid Email");
                     }else if (password.isEmpty()){
                         t2.setErrorEnabled(true);
                         t2.setError("Please Enter Password");
@@ -75,12 +75,10 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
         });
-
         textViewForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignInActivity.this, ForgetPasswordActivity.class));
-                finish();
             }
         });
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
@@ -163,9 +161,9 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private boolean isValidateCredentials() {
-        String username = etUsername.getText().toString();
-        String password = etPassword.getText().toString();
-        if (!username.isEmpty() && !password.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(username).matches() && password.matches( ".{8,}")) {
+        String username = etUsername.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        if (!username.isEmpty() && !password.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(username).matches()  && password.matches( ".{8,}")) {
             return true;
         } else {
             return false;

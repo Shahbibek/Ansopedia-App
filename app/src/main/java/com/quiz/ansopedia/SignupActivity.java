@@ -68,6 +68,9 @@ public class SignupActivity extends AppCompatActivity {
                     if (uName.isEmpty()) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("Please Enter Name");
+                    } else if (!uName.matches("[a-zA-Z ]+")){
+                        userNameTextField.setErrorEnabled(true);
+                        userNameTextField.setError("Enter Valid Name");
                     } else if (uEmail.isEmpty()){
                         t3.setErrorEnabled(true);
                         t3.setError("Please Enter Email");
@@ -163,7 +166,7 @@ public class SignupActivity extends AppCompatActivity {
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}") && (confirmPass.matches(pass))) {
+        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}")  && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+")) {
             return true;
         } else {
             return false;

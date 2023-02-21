@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.quiz.ansopedia.Utility.Constants;
+import com.quiz.ansopedia.Utility.Utility;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -19,14 +20,6 @@ public class IntroActivity extends AppCompatActivity {
 //        ########################### splash screen End #############################################
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-        Constants.TOKEN = preferences.getString(Constants.token, "");
-        boolean  isLogin = preferences.getBoolean(Constants.isLogin, false);
-        if (isLogin) {
-            startActivity(new Intent(this, MainActivity.class));
-        } else {
-            startActivity(new Intent(this, SignInActivity.class));
-        }
-        finish();
+        Utility.getLogin(this);
     }
 }

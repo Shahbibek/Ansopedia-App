@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -33,6 +36,8 @@ public class EnterOtpActivity extends AppCompatActivity {
     MaterialButton verifyOTPbtn;
     TextView textView6;
     String email, otp;
+    RelativeLayout svMain;
+    ImageView ivBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +55,36 @@ public class EnterOtpActivity extends AppCompatActivity {
         verifyOTPbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                otp = password.getText().toString().trim();
-                sendOTP();
+                String userOTP = password.getText().toString().trim();
+                Utility.hideSoftKeyboard(EnterOtpActivity.this);
+                t4.setErrorEnabled(false);
+                if (isValidateCredentials()) {
+                    otp = password.getText().toString().trim();
+                    sendOTP();
+                } else {
+                    if (userOTP.isEmpty()) {
+                        t4.setErrorEnabled(true);
+                        t4.setError("Please Enter OTP");
+                    }else if(!userOTP.matches("^[a-zA-Z0-9]{6}$")){
+                        t4.setErrorEnabled(true);
+                        t4.setError("Invalid OTP");
+                    };
+                }
+
+            }
+        });
+
+//        ############################# Hide KeyBoard OnClick #######################################
+        svMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {Utility.hideSoftKeyboard(EnterOtpActivity.this);}
+        });
+//        ############################# Hide KeyBoard OnClick #######################################
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -162,5 +195,16 @@ public class EnterOtpActivity extends AppCompatActivity {
         textView5 = findViewById(R.id.textView5);
         verifyOTPbtn = findViewById(R.id.verifyOTPbtn);
         textView6 = findViewById(R.id.textView6);
+        svMain = findViewById(R.id.svMain);
+        ivBack = findViewById(R.id.ivBack);
+    }
+
+    private boolean isValidateCredentials() {
+        String userOTP = password.getText().toString();
+        if (!userOTP.isEmpty() && userOTP.matches("^[a-zA-Z0-9]{6}$")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

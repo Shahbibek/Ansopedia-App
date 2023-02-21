@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.ReadQuestionAdapter;
+import com.quiz.ansopedia.adapter.ReadQuestionAdapter1;
 import com.quiz.ansopedia.models.Chapters;
 import com.quiz.ansopedia.models.Questions;
 
@@ -24,20 +25,27 @@ import java.util.ArrayList;
 
 public class ReadQuestionsActivity extends AppCompatActivity {
     BottomNavigationView bnHome;
-    RecyclerView rvChapter;
+    static RecyclerView rvChapter;
     TextView tvSubject;
     ImageView ivBack;
     TextView tvChapter;
     Toolbar toolbar;
     Chapters chapters;
-    ReadQuestionAdapter adapter;
+    private static ReadQuestionAdapter adapter;
+    private static ReadQuestionAdapter1 adapter1;
     View vt, vt1;
+    public static ArrayList<Questions> questions = new ArrayList<>();
+
+    private static ReadQuestionsActivity readQuestionsActivity = new ReadQuestionsActivity();
+    public static int lower = 0, upper = 10;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_questions);
         initView();
+        readQuestionsActivity = this;
 //        #######################################   Set Color Start ######################################
 
         vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
@@ -46,8 +54,9 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         chapters = new Gson().fromJson(getIntent().getStringExtra("chapter"), Chapters.class);
         tvSubject.setText(Utility.toCapitalizeFirstLetter(getIntent().getStringExtra("subject")));
         tvChapter.setText(Utility.toCapitalizeFirstLetter(chapters.getChapter_name()));
+        questions = (ArrayList<Questions>) chapters.getQuestions();
         if (chapters.getQuestions() != null) {
-            setRecyclerView();
+            setRecyclerView(lower,upper);
         }
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,12 +78,25 @@ public class ReadQuestionsActivity extends AppCompatActivity {
 
     }
 
-    private void setRecyclerView() {
-        adapter = new ReadQuestionAdapter(this, (ArrayList<Questions>) chapters.getQuestions());
+    public static void setRecyclerView( int i1, int i2) {
+        adapter = new ReadQuestionAdapter(readQuestionsActivity, getArrayList(i1,i2));
         rvChapter.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(readQuestionsActivity, LinearLayoutManager.VERTICAL, false);
         rvChapter.setLayoutManager(layoutManager);
         rvChapter.setAdapter(adapter);
-        rvChapter.setItemViewCacheSize(10);
+        rvChapter.setItemViewCacheSize(15);
+    }
+
+    public static ArrayList<Questions> getArrayList(int i1, int i2){
+        ArrayList<Questions> tempArrayList = new ArrayList<>();
+        for (int i = i1; i < i2; i++) {
+            tempArrayList.add(questions.get(i));
+        }
+        return tempArrayList;
+    }
+
+    public static void setRecyclerView1(int i1, int i2) {
+        adapter1 = new ReadQuestionAdapter1(readQuestionsActivity, getArrayList(i1,i2));
+        rvChapter.setAdapter(adapter1);
     }
 }

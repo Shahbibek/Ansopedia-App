@@ -137,15 +137,17 @@ public class Utility {
                 ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
                     @Override
                     public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(context);
                         if (response.code() == 200) {
                             LoginModel loginModel = (LoginModel) response.body().get(0);
                             if (loginModel.getStatus().equalsIgnoreCase("success")) {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putBoolean(Constants.isLogin, true).apply();
                                 preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+                                context.startActivity(new Intent(context, MainActivity.class));
+                                ((Activity) context).finish();
                             } else {
-                                Utility.showAlertDialog(context, loginModel.getStatus(), loginModel.getMessage());
+                                context.startActivity(new Intent(context, SignInActivity.class));
+                                ((Activity) context).finish();
                             }
                         } else {
                             Utility.showAlertDialog(context, "Error", "Something went wrong, Please Try Again");
@@ -154,17 +156,14 @@ public class Utility {
 
                     @Override
                     public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(context);
                         t.printStackTrace();
                         Utility.showAlertDialog(context, "Error", "Something went wrong, Please Try Again");
                     }
                 });
             } catch (Exception e) {
-                Utility.dismissProgress(context);
                 e.printStackTrace();
             }
         } else {
-            Utility.dismissProgress(context);
             Utility.showAlertDialog(context, "Error", "Please Connect to Internet");
         }
     }

@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,17 +27,46 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     TextInputLayout t1;
     TextInputEditText userEmail;
     MaterialButton sendOTPBtn;
+    RelativeLayout svMain;
+    ImageView ivBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         t1 = findViewById(R.id.t1);
+        svMain = findViewById(R.id.svMain);
         userEmail = findViewById(R.id.userEmail);
         sendOTPBtn = findViewById(R.id.sendOTPBtn);
+        ImageView ivBack = findViewById(R.id.ivBack);
         sendOTPBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendEmail();
+                String userName = userEmail.getText().toString();
+                Utility.hideSoftKeyboard(ForgetPasswordActivity.this);
+                t1.setErrorEnabled(false);
+                if (isValidateCredentials()) {
+                    sendEmail();
+                } else {
+                    if (userName.isEmpty()) {
+                        t1.setErrorEnabled(true);
+                        t1.setError("Please Enter Email");
+                    } else if (!Patterns.EMAIL_ADDRESS.matcher(userName).matches()) {
+                        t1.setErrorEnabled(true);
+                        t1.setError("Please Enter Valid Email");
+                    };
+                }
+            }
+        });
+
+        svMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {Utility.hideSoftKeyboard(ForgetPasswordActivity.this);}
+        });
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -54,7 +86,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             if (loginModel.getStatus().toLowerCase().contains("success")) {
                                 startActivity(new Intent(ForgetPasswordActivity.this, EnterOtpActivity.class)
                                         .putExtra("email", userEmail.getText().toString().trim()));
-                                finish();
                             } else {
                                 Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
                             }
@@ -77,6 +108,16 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         } else {
             Utility.dismissProgress(this);
             Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
+        }
+    }
+
+
+    private boolean isValidateCredentials() {
+        String userName = userEmail.getText().toString();
+        if (!userName.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(userName).matches()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
