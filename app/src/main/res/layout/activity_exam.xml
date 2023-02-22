@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExamActivity">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="65dp"
+            android:background="#DCDCDC"
+            android:paddingBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/rlTopic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/question_board" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_margin="12dp"
+                android:translationZ="90dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_back_min" />
+
+            <TextView
+                android:id="@+id/tvSubject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Exam Name"
+                android:textColor="@color/white"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvSubject"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="16:28"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlTopic"
+                android:layout_marginStart="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="25dp"
+                android:backgroundTint="#DCDCDC"
+                android:padding="10dp"
+                app:cardCornerRadius="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:paddingVertical="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvQuestions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:text="1. "
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/quiz_questions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="What is the data type?"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/quiz_questions"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginVertical="5dp"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/cbOption1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/white"
+                            android:elevation="5dp"
+                            android:paddingVertical="10dp"
+                            android:paddingLeft="20dp"
+                            android:text="option 1"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <CheckBox
+                            android:id="@+id/cbOption2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/white"
+                            android:elevation="5dp"
+                            android:paddingVertical="10dp"
+                            android:paddingLeft="20dp"
+                            android:text="option 2"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <CheckBox
+                            android:id="@+id/cbOption3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/white"
+                            android:elevation="5dp"
+                            android:paddingVertical="10dp"
+                            android:paddingLeft="20dp"
+                            android:text="option 3"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <CheckBox
+                            android:id="@+id/cbOption4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/white"
+                            android:elevation="5dp"
+                            android:paddingVertical="10dp"
+                            android:paddingLeft="20dp"
+                            android:text="option 4"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/btnPre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cvQuestion"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/ivPreviousQuestion"
+                    android:layout_width="110dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_button"
+                    android:src="@drawable/ic_baseline_arrow_back" />
+
+                <ImageView
+                    android:id="@+id/ivNextQuestion"
+                    android:layout_width="110dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="70dp"
+                    android:background="@drawable/bg_button"
+                    android:src="@drawable/ic_baseline_arrow_forward" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSendBtn"
+                android:layout_below="@+id/btnPre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginVertical="30dp"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/syne_bold"
+                android:padding="5dp"
+                android:paddingHorizontal="30dp"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
+
+        </RelativeLayout>
+    </ScrollView>
+

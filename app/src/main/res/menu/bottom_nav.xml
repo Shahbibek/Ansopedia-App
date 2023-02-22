@@ -14,7 +14,7 @@
         android:id="@+id/navList"
         android:icon="@drawable/daily_quiz"
         android:iconTint="@color/white"
-        android:title="Quiz" />
+        android:title="Courses" />
     <item
         android:id="@+id/navBookmark"
         android:icon="@drawable/achivement_icon"

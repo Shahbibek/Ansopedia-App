@@ -308,7 +308,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialiconsround/arrow_back/round_arrow_back_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/timer/baseline_timer_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -318,9 +318,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_back_min" />
+                            <entry key="outputName" value="ic_timer" />
                             <entry key="sourceFile" value="C:\Users\bibek\Downloads\back_min.svg" />
                           </map>
                         </option>

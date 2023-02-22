@@ -3,6 +3,7 @@ package com.quiz.ansopedia;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +21,13 @@ public class IntroActivity extends AppCompatActivity {
 //        ########################### splash screen End #############################################
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-        Utility.getLogin(this);
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        if (preferences.getBoolean(Constants.isLogin, false)) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+        }
     }
 }

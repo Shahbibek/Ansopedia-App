@@ -179,14 +179,19 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signUpBtn"
-                style="@style/Button1"
-                android:layout_width="260dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="44dp"
-                android:text="SIGN UP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="80dp"
+                android:text="Sign up"
+                android:layout_gravity="center"
                 android:textSize="22sp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/syne_bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextField" />
 

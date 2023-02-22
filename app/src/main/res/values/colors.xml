@@ -10,6 +10,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="__p__sign_in_color">#000000</color>
     <color name="profile_bg_color">#C1FF6A17</color>
+    <color name="profile_Rank">#C54600</color>
 
     <color name="primary">#FF6A17</color>
     <color name="lightWhite">#5F5F5F</color>

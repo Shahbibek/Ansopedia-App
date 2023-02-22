@@ -50,6 +50,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:gravity="center"
             android:fontFamily="verdana"
             android:text="My Profile"
             android:textAlignment="center"
@@ -79,9 +80,10 @@
 
             <ImageView
                 android:id="@+id/badge_img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="-40dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="-25dp"
+                android:outlineSpotShadowColor="@color/border_color"
                 android:src="@drawable/bronze_badge" />
 
             <RelativeLayout
@@ -295,10 +297,10 @@
                     android:id="@+id/tvEditProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="10dp"
                     android:fontFamily="@font/syne"
                     android:text="Edit Profile"
-                    android:layout_gravity="center"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -307,8 +309,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/border_color"
-                android:layout_marginHorizontal="20dp"/>
+                android:layout_marginHorizontal="20dp"
+                android:background="@color/border_color" />
 
             <LinearLayout
                 android:id="@+id/llEditSetting"
@@ -328,10 +330,10 @@
                     android:id="@+id/editSetting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="10dp"
                     android:fontFamily="@font/syne"
                     android:text="Setting"
-                    android:layout_gravity="center"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -353,15 +355,17 @@
 
             <Button
                 android:id="@+id/btnLogoutButton"
-                android:layout_width="240dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
+                android:paddingVertical="5dp"
                 android:background="@drawable/button_background"
                 android:fontFamily="@font/syne_bold"
                 android:text="Logout"
+                android:layout_gravity="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:textSize="22sp" />
         </LinearLayout>
 
     </RelativeLayout>

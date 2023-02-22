@@ -143,8 +143,6 @@ public class Utility {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putBoolean(Constants.isLogin, true).apply();
                                 preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-                                context.startActivity(new Intent(context, MainActivity.class));
-                                ((Activity) context).finish();
                             } else {
                                 context.startActivity(new Intent(context, SignInActivity.class));
                                 ((Activity) context).finish();

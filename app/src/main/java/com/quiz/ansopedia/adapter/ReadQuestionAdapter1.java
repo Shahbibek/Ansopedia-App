@@ -49,6 +49,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
     @Override
     public void onBindViewHolder(@NonNull ReadQuestionAdapter1.ViewHolder holder, int position) {
         int i = holder.getAdapterPosition();
+        int j = holder.getAdapterPosition() + ReadQuestionsActivity.lower + 1;
         if (count <= arrayList.size()) {
             holder.colorOptions.getBackground().setTint(Color.parseColor(Constants.COLOR));
             holder.cvDescription.setVisibility(View.GONE);
@@ -57,7 +58,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
             holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-            holder.srNoQuestion.setText(holder.getAdapterPosition() + 1 + ". ");
+            holder.srNoQuestion.setText(j + ". ");
             holder.quiz_questions.setText(arrayList.get(holder.getAdapterPosition()).getQuestion_title());
             holder.option1.setText("a. " + arrayList.get(i).getOptions().get(0).getOpt1());
             holder.option2.setText("b. " + arrayList.get(i).getOptions().get(0).getOpt2());
@@ -118,11 +119,22 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                 }
             });
         } else {
+
+            if (ReadQuestionsActivity.lower == 0) {
+                holder.previousquestion.setVisibility(View.GONE);
+            }
+            if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
+                holder.nextquestion.setVisibility(View.GONE);
+            }
             holder.nextquestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ReadQuestionsActivity.lower = ReadQuestionsActivity.lower + 10;
+                    ReadQuestionsActivity.diff = ReadQuestionsActivity.upper;
                     ReadQuestionsActivity.upper = ReadQuestionsActivity.upper +10;
+                    if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
+                        ReadQuestionsActivity.upper = ReadQuestionsActivity.questions.size();
+                    }
                     ReadQuestionsActivity.setRecyclerView(ReadQuestionsActivity.lower, ReadQuestionsActivity.upper);
                 }
             });
@@ -130,8 +142,13 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             holder.previousquestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ReadQuestionsActivity.lower = ReadQuestionsActivity.lower - 10;
-                    ReadQuestionsActivity.upper = ReadQuestionsActivity.upper - 10;
+                    if ((ReadQuestionsActivity.upper - ReadQuestionsActivity.lower) == 10) {
+                        ReadQuestionsActivity.lower = ReadQuestionsActivity.lower - 10;
+                        ReadQuestionsActivity.upper = ReadQuestionsActivity.upper - 10;
+                    } else {
+                        ReadQuestionsActivity.upper = ReadQuestionsActivity.diff;
+                        ReadQuestionsActivity.lower = ReadQuestionsActivity.upper - 10;
+                    }
                     ReadQuestionsActivity.setRecyclerView(ReadQuestionsActivity.lower, ReadQuestionsActivity.upper);
                 }
             });

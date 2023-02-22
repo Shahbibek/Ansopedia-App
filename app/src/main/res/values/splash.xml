@@ -8,7 +8,7 @@
         <!-- The logo-->
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_ansopedia__216_x_216_px_</item>
         <!-- The Duration-->
-        <item name="windowSplashScreenAnimationDuration">2500</item>
+        <item name="windowSplashScreenAnimationDuration">4000</item>
         <!-- The original theme after splash screen ends-->
         <item name="postSplashScreenTheme">@style/Theme.Ansopedia</item>
     </style>

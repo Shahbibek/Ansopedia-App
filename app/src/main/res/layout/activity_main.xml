@@ -38,10 +38,11 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:background="@color/trans">
 
             <TextView
+                android:id="@+id/tvToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -53,56 +54,14 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvSlider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:layout_margin="15dp"
-            app:cardCornerRadius="10dp">
-
-            <com.denzcoskun.imageslider.ImageSlider
-                android:id="@+id/image_slider"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                app:iss_auto_cycle="true"
-                app:iss_delay="0"
-                app:iss_period="1000" />
-        </androidx.cardview.widget.CardView>
-
-        <View
-            android:id="@+id/lineBelowCard"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_below="@+id/cvSlider"
-            android:background="@color/grey_font" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_below="@+id/lineBelowCard"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@android:color/holo_green_dark"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@android:color/holo_green_dark" />
-
-        <View
-            android:id="@+id/lineBelowTab"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_below="@+id/tabLayout"
-            android:layout_marginTop="7dp"
-            android:background="@color/grey_font" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <FrameLayout
+            android:id="@+id/flHome"
+            android:layout_below="@+id/toolbar"
             android:layout_above="@+id/bnHome"
-            android:layout_below="@+id/lineBelowTab"
-            android:background="#F0F0F0" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+        </FrameLayout>
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnHome"
             android:layout_width="match_parent"

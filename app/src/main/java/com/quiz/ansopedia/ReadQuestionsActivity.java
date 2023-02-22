@@ -9,14 +9,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
-import com.quiz.ansopedia.adapter.ReadQuestionAdapter;
 import com.quiz.ansopedia.adapter.ReadQuestionAdapter1;
 import com.quiz.ansopedia.models.Chapters;
 import com.quiz.ansopedia.models.Questions;
@@ -31,14 +29,13 @@ public class ReadQuestionsActivity extends AppCompatActivity {
     TextView tvChapter;
     Toolbar toolbar;
     Chapters chapters;
-    private static ReadQuestionAdapter adapter;
     private static ReadQuestionAdapter1 adapter1;
     View vt, vt1;
     public static ArrayList<Questions> questions = new ArrayList<>();
 
     private static ReadQuestionsActivity readQuestionsActivity = new ReadQuestionsActivity();
     public static int lower = 0, upper = 10;
-
+    public static int diff = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +59,8 @@ public class ReadQuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                lower = 0;
+                upper = 10;
             }
         });
     }
@@ -79,11 +78,11 @@ public class ReadQuestionsActivity extends AppCompatActivity {
     }
 
     public static void setRecyclerView( int i1, int i2) {
-        adapter = new ReadQuestionAdapter(readQuestionsActivity, getArrayList(i1,i2));
+        adapter1 = new ReadQuestionAdapter1(readQuestionsActivity, getArrayList(i1,i2));
         rvChapter.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(readQuestionsActivity, LinearLayoutManager.VERTICAL, false);
         rvChapter.setLayoutManager(layoutManager);
-        rvChapter.setAdapter(adapter);
+        rvChapter.setAdapter(adapter1);
         rvChapter.setItemViewCacheSize(15);
     }
 
@@ -93,10 +92,5 @@ public class ReadQuestionsActivity extends AppCompatActivity {
             tempArrayList.add(questions.get(i));
         }
         return tempArrayList;
-    }
-
-    public static void setRecyclerView1(int i1, int i2) {
-        adapter1 = new ReadQuestionAdapter1(readQuestionsActivity, getArrayList(i1,i2));
-        rvChapter.setAdapter(adapter1);
     }
 }
