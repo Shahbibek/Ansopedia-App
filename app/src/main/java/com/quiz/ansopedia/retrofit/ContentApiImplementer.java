@@ -89,4 +89,10 @@ public class ContentApiImplementer {
         Call<List<LoginModel>> call = apiService.sendNewPasswordResetPassword(loginRequestModel);
         call.enqueue(cb);
     }
+
+    public static void sendContactMessage(LoginRequestModel loginRequestModel, Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.sendContactMessage(loginRequestModel);
+        call.enqueue(cb);
+    }
 }

@@ -19,6 +19,9 @@ public class LoginRequestModel{
 	@SerializedName("password_confirmation")
 	private String password_confirmation;
 
+	@SerializedName("message")
+	private String message;
+
 	@SerializedName("tc")
 	private boolean tc;
 
@@ -68,5 +71,13 @@ public class LoginRequestModel{
 
 	public void setOtp(String otp) {
 		this.otp = otp;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

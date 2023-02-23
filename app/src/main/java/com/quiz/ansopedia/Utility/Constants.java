@@ -7,6 +7,7 @@ public class Constants {
     public static String TOKEN = "";
     public static String COLOR = "";
     public static String username = "username";
+    public static String name = "name";
     public static String password = "password";
     public static String isLogin = "isLogin";
     public static Contents contents;

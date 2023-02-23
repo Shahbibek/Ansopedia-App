@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
@@ -40,7 +42,8 @@ public class HomeFragment extends Fragment {
     TabLayout tabLayout;
     RecyclerView rvContent;
     CourseAdapter courseAdapter;
-
+    ImageView ivProgress;
+    View userIcons;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -56,11 +59,14 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         image_slider = view.findViewById(R.id.image_slider);
         tabLayout = view.findViewById(R.id.tabLayout);
+        userIcons = view.findViewById(R.id.userIcons);
         rvContent = view.findViewById(R.id.rvContent);
-        rvContent = view.findViewById(R.id.rvContent);
-        
+        ivProgress = view.findViewById(R.id.ivProgress);
+        Glide.with(getContext()).load(R.drawable.ansopedia_loader).into(ivProgress);
         setImage_slider();
         if (contents == null) {
+            rvContent.setVisibility(View.GONE);
+            ivProgress.setVisibility(View.VISIBLE);
             getContent();
         } else {
             settabLayout(contents.getBranch().get(0).getBranch_name());
@@ -123,37 +129,47 @@ public class HomeFragment extends Fragment {
     }
 
     private void getContent() {
-        Utility.showProgress(getContext());
+//        Utility.showProgressGif(getContext());
         if (Utility.isNetConnected(getContext())) {
             try {
                 ContentApiImplementer.getContent(new Callback<List<Contents>>() {
                     @Override
                     public void onResponse(Call<List<Contents>> call, Response<List<Contents>> response) {
-                        Utility.dismissProgress(getContext());
+//                        Utility.dismissProgressGif();
+                        rvContent.setVisibility(View.VISIBLE);
+                        ivProgress.setVisibility(View.GONE);
                         if (response.code() == 200) {
                             if (response.body().size() != 0) {
                                 contents = response.body().get(0);
                                 settabLayout(contents.getBranch().get(0).getBranch_name());
                                 setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
                             }
-                        } else {
+                        }else if(response.code() == 500) {
+                            Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
+                        }else{
                             Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<Contents>> call, Throwable t) {
-                        Utility.dismissProgress(getContext());
+//                        Utility.dismissProgressGif();
+                        rvContent.setVisibility(View.VISIBLE);
+                        ivProgress.setVisibility(View.GONE);
                         t.printStackTrace();
                         Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
                     }
                 });
             } catch (Exception e) {
-                Utility.dismissProgress(getContext());
+//                Utility.dismissProgressGif();
+                rvContent.setVisibility(View.VISIBLE);
+                ivProgress.setVisibility(View.GONE);
                 e.printStackTrace();
             }
         } else {
-            Utility.dismissProgress(getContext());
+//            Utility.dismissProgressGif();
+            rvContent.setVisibility(View.VISIBLE);
+            ivProgress.setVisibility(View.GONE);
             Utility.showAlertDialog(getContext(), "Error", "Please Connect to Internet");
         }
     }

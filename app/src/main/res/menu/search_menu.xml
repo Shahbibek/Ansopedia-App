@@ -13,8 +13,8 @@
 
     <item
         android:id="@+id/userIcons"
-        android:title="Help"
-        android:icon="@drawable/dr_profile_icon"
+        android:title="Profile"
+        android:icon="@drawable/shikat"
         android:layout_width="10dp"
         android:layout_height="10dp"
         app:showAsAction="always" />

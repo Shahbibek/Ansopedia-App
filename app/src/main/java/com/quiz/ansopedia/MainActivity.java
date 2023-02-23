@@ -204,4 +204,5 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.flHome, fragment);
         fragmentTransaction.commit();
     }
+
 }

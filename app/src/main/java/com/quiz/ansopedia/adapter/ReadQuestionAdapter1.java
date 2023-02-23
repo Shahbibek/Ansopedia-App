@@ -121,10 +121,12 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
         } else {
 
             if (ReadQuestionsActivity.lower == 0) {
-                holder.previousquestion.setVisibility(View.GONE);
+//                holder.previousquestion.setVisibility(View.GONE);
+                holder.previousquestion.setEnabled(false);
             }
             if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
-                holder.nextquestion.setVisibility(View.GONE);
+//                holder.nextquestion.setVisibility(View.GONE);
+                holder.nextquestion.setEnabled(false);
             }
             holder.nextquestion.setOnClickListener(new View.OnClickListener() {
                 @Override

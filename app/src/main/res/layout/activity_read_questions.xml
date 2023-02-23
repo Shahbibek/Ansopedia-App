@@ -32,6 +32,7 @@
         android:layout_below="@+id/toolbar"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="12dp"
         android:background="#DCDCDC">
 
@@ -89,14 +90,14 @@
 
     </RelativeLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnHome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_bottom_nav"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="?attr/colorOnPrimary"
-        app:menu="@menu/bottom_nav" />
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bnHome"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:background="@drawable/bg_bottom_nav"-->
+<!--        app:itemIconTint="@color/white"-->
+<!--        app:itemTextColor="?attr/colorOnPrimary"-->
+<!--        app:menu="@menu/bottom_nav" />-->
 
 </RelativeLayout>

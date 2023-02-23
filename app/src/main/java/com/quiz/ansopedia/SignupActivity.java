@@ -134,6 +134,7 @@ public class SignupActivity extends AppCompatActivity {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
                                 preferences.edit().putString(Constants.username, uEmail).apply();
+                                preferences.edit().putString(Constants.name, uName).apply();
                                 preferences.edit().putString(Constants.password, confirmPass).apply();
                                 preferences.edit().putBoolean(Constants.isLogin, true).apply();
                                 Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
@@ -141,6 +142,8 @@ public class SignupActivity extends AppCompatActivity {
                                 finish();
                         } else if (response.code() == 403) {
                             Utility.showAlertDialog(SignupActivity.this, "Failed", "Email already exists!!");
+                        } else if (response.code() == 500) {
+                            Utility.showAlertDialog(SignupActivity.this, "Failed", "Server Error, Please Try Again!!");
                         } else {
                             Utility.showAlertDialog(SignupActivity.this, "Error", "Something went wrong, Please Try Again");
                         }

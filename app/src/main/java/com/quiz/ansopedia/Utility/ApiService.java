@@ -32,4 +32,7 @@ public interface ApiService {
 
     @POST("user/changepassword")
     Call<List<LoginModel>> sendNewPasswordResetPassword(@Body LoginRequestModel loginRequestModel);
+
+    @POST("contact")
+    Call<List<LoginModel>> sendContactMessage(@Body LoginRequestModel loginRequestModel);
 }

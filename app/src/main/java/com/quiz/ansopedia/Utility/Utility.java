@@ -9,9 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.quiz.ansopedia.MainActivity;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.SignInActivity;
@@ -97,7 +102,9 @@ public class Utility {
                                         preferences.edit().putString(Constants.token, "").apply();
                                         context.startActivity(new Intent(context, SignInActivity.class));
                                         ((Activity) context).finish();
-                                    } else {
+                                    }else if(response.code() == 500){
+                                        showAlertDialog(context, "Failed", "Server Error, Please Try Again");
+                                    }else{
                                         showAlertDialog(context, "Error", "Something went wrong, Please try again");
                                     }
                                 }
@@ -148,7 +155,9 @@ public class Utility {
                                 ((Activity) context).finish();
                             }
                         } else {
-                            Utility.showAlertDialog(context, "Error", "Something went wrong, Please Try Again");
+//                            Utility.showAlertDialog(context, "Error", "Something went wrong, Please Try Again");
+                            context.startActivity(new Intent(context, SignInActivity.class));
+                            ((Activity) context).finish();
                         }
                     }
 
@@ -164,5 +173,21 @@ public class Utility {
         } else {
             Utility.showAlertDialog(context, "Error", "Please Connect to Internet");
         }
+    }
+    public static AlertDialog dialog;
+    public static void showProgressGif(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.my_dialog);
+        View view = ((Activity) context).getLayoutInflater().inflate(R.layout.progress_image_dialog, null);
+        ImageView imageView = view.findViewById(R.id.ivProgress);
+        Glide.with(context).load(R.drawable.ansopedia_loader).into(imageView);
+        builder.setView(view);
+        builder.setCancelable(false);
+        dialog = builder.create();
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+    }
+
+    public static void dismissProgressGif() {
+        dialog.dismiss();
     }
 }

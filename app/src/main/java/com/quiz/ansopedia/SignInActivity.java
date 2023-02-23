@@ -138,6 +138,10 @@ public class SignInActivity extends AppCompatActivity {
                             } else {
                                 Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
                             }
+                        } else if(response.code() == 500){
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again");
+                        } else if(response.code() == 429){
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
                         } else {
                             Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
                         }

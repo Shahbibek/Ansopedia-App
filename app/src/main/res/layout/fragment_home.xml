@@ -50,13 +50,27 @@
             android:layout_marginTop="7dp"
             android:background="@color/grey_font" />
 
+        <RelativeLayout
+
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/lineBelowTab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivProgress"
+                android:src="@drawable/ansopedia_loader"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/lineBelowTab"
             android:background="#F0F0F0" />
+        </RelativeLayout>
 
     </RelativeLayout>
 
