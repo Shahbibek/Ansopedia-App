@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -31,6 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ContentApiImplementer {
     private static Retrofit retrofit;
     private static String BASE_URL = "https://api.ansopedia.com/api/";
+//    private static String BASE_URL = "http://192.168.185.148:8000/api/";
 
     private static Retrofit getRetrofit() {
         if (retrofit == null) {
@@ -93,6 +96,12 @@ public class ContentApiImplementer {
     public static void sendContactMessage(LoginRequestModel loginRequestModel, Callback<List<LoginModel>> cb) {
         ApiService apiService = getRetrofit().create(ApiService.class);
         Call<List<LoginModel>> call = apiService.sendContactMessage(loginRequestModel);
+        call.enqueue(cb);
+    }
+
+    public static void uploadImage(MultipartBody.Part image, Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.uploadImage(image);
         call.enqueue(cb);
     }
 }

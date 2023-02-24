@@ -74,7 +74,6 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         vt = findViewById(R.id.vt);
         vt1 = findViewById(R.id.vt1);
-
     }
 
     public static void setRecyclerView( int i1, int i2) {

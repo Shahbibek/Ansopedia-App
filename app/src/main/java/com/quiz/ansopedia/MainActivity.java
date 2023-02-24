@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -53,6 +54,7 @@ import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     boolean isDoubleBackPressed = false;
     TextView tvToolbar;
+    CircleImageView profileMenu;
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,13 +180,21 @@ public class MainActivity extends AppCompatActivity {
     public void onClickClose(View view) {
         drawerLayout.closeDrawer(GravityCompat.START);
     }
-//    ########################## Option Menu ######################################################
+//    ########################## Option Menu ##################################################################
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.searchView);
+
+//    ########################## Profile Menu Bar Start   ##################################################################
+
+        View view = MenuItemCompat.getActionView(menuItem);
         SearchView searchView = (SearchView) menuItem.getActionView();
+        CircleImageView profileMenu = findViewById(R.id.profileMenu);
+
+
+//    ########################## Profile Menu Bar End   ##################################################################
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -198,11 +209,26 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+//    ############################### Menu bar Call start ########################
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.userIcons:
+                Toast.makeText(this, "profile clicked", Toast.LENGTH_SHORT).show();
+//                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//        ############################### Menu bar Call end ######################################
+
     public void loadFrag(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flHome, fragment);
         fragmentTransaction.commit();
     }
+
 
 }

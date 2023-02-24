@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.quiz.ansopedia.MainActivity;
@@ -26,6 +30,12 @@ import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import retrofit2.Call;
@@ -179,7 +189,7 @@ public class Utility {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.my_dialog);
         View view = ((Activity) context).getLayoutInflater().inflate(R.layout.progress_image_dialog, null);
         ImageView imageView = view.findViewById(R.id.ivProgress);
-        Glide.with(context).load(R.drawable.ansopedia_loader).into(imageView);
+        Glide.with(context).load(R.drawable.ansopedia_loader_new).into(imageView);
         builder.setView(view);
         builder.setCancelable(false);
         dialog = builder.create();
@@ -189,5 +199,22 @@ public class Utility {
 
     public static void dismissProgressGif() {
         dialog.dismiss();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String getFileSize(String FILE_NAME) {
+        Path filePath = Paths.get(String.valueOf(FILE_NAME));
+        System.out.println(filePath);
+        FileChannel fileChannel;
+        try {
+            fileChannel = FileChannel.open(filePath);
+            long fileSize = fileChannel.size();
+            System.out.println(fileSize + " bytes");
+            fileChannel.close();
+            return fileSize + " Bytes";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Not Found";
     }
 }

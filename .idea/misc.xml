@@ -22,6 +22,7 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/custom_bg_oval.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/custom_oval_leader_board.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/custom_progress.xml" value="0.1425" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/dr_home.xml" value="0.1655" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_arrow_back.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_arrow_forward.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.1425" />
@@ -30,6 +31,7 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_shopping_cart_checkout_24.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_stars.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_discript_icon.xml" value="0.1425" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_dr_home.xml" value="0.1655" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_eye_icon.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_facebook.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_favorite.xml" value="0.1425" />
@@ -85,11 +87,12 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/notification.xml" value="0.2359375" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/oval_leader.xml" value="0.2359375" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/previous_next.xml" value="0.25" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/profile_menu_layout.xml" value="0.1" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/progress_image_dialog.xml" value="0.2359375" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/question_board.xml" value="0.25" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/layout/read_question.xml" value="0.24895833333333334" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/menu/bottom_nav.xml" value="0.25" />
-        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/menu/search_menu.xml" value="0.1" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/menu/search_menu.xml" value="0.264" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/menu/sidemenu.xml" value="0.23125" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1065" />

@@ -50,7 +50,7 @@
             android:background="@drawable/contact_shape">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shikatimage"
+                android:id="@+id/ivSikhat"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginStart="5dp"
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="5dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/shikat"
+                android:src="@drawable/dr_profile_icon"
                 app:shapeAppearanceOverlay="@style/imagecorner">
 
             </com.google.android.material.imageview.ShapeableImageView>
@@ -145,7 +145,7 @@
             android:background="@drawable/contact_shape">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/bibek"
+                android:id="@+id/ivBibek"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginStart="5dp"
@@ -154,7 +154,7 @@
                 android:layout_marginBottom="5dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/shikat"
+                android:src="@drawable/dr_profile_icon"
                 app:shapeAppearanceOverlay="@style/imagecorner">
 
             </com.google.android.material.imageview.ShapeableImageView>
@@ -240,7 +240,7 @@
             android:background="@drawable/contact_shape">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/sanjay"
+                android:id="@+id/ivSanjay"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginStart="5dp"
@@ -249,7 +249,7 @@
                 android:layout_marginBottom="5dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/shikat"
+                android:src="@drawable/dr_profile_icon"
                 app:shapeAppearanceOverlay="@style/imagecorner">
 
             </com.google.android.material.imageview.ShapeableImageView>
@@ -335,7 +335,7 @@
             android:background="@drawable/contact_shape">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/nayan"
+                android:id="@+id/ivNayan"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_marginStart="5dp"
@@ -344,7 +344,7 @@
                 android:layout_marginBottom="5dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/shikat"
+                android:src="@drawable/dr_profile_icon"
                 app:shapeAppearanceOverlay="@style/imagecorner">
 
             </com.google.android.material.imageview.ShapeableImageView>

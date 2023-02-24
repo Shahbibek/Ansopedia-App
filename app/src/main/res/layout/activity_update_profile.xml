@@ -157,13 +157,13 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/ivChangeImg"
                     android:layout_width="140dp"
-                    android:layout_height="140dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginVertical="10dp"
-                    android:src="@drawable/profile_pic_circle"
-                    app:shapeAppearanceOverlay="@style/roundimageview" />
+                    android:layout_height="140dp"
+                    android:src="@drawable/profile_pic_circle" />
 
                 <Button
                     android:id="@+id/ivChangeBtn"

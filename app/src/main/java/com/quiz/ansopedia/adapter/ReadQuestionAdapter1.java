@@ -101,6 +101,81 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                 }
             });
 
+//            ##############################  Check Question Answer Start ###########################
+            holder.option1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!isShowingAnswer) {
+                        isShowingAnswer = true;
+                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt1().trim())) {
+                            holder.option1.setBackgroundColor(Color.parseColor("#C6D33C"));
+                        } else {
+                            holder.option1.setBackgroundColor(Color.parseColor("#D94E00"));
+                        }
+                    }else{
+                        isShowingAnswer = false;
+                        holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    }
+
+                }
+            });
+
+            holder.option2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!isShowingAnswer) {
+                        isShowingAnswer = true;
+                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt2().trim())) {
+                            holder.option2.setBackgroundColor(Color.parseColor("#C6D33C"));
+                        } else {
+                            holder.option2.setBackgroundColor(Color.parseColor("#D94E00"));
+                        }
+                    }else{
+                        isShowingAnswer = false;
+                        holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    }
+
+                }
+            });
+
+            holder.option3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!isShowingAnswer) {
+                        isShowingAnswer = true;
+                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt3().trim())) {
+                            holder.option3.setBackgroundColor(Color.parseColor("#C6D33C"));
+                        } else {
+                            holder.option3.setBackgroundColor(Color.parseColor("#D94E00"));
+                        }
+                    }else{
+                        isShowingAnswer = false;
+                        holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    }
+
+                }
+            });
+
+            holder.option4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!isShowingAnswer) {
+                        isShowingAnswer = true;
+                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt4().trim())) {
+                            holder.option4.setBackgroundColor(Color.parseColor("#C6D33C"));
+                        } else {
+                            holder.option4.setBackgroundColor(Color.parseColor("#D94E00"));
+                        }
+                    }else{
+                        isShowingAnswer = false;
+                        holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    }
+
+                }
+            });
+
+//            ##############################  Check Question Answer End ###########################
+
             holder.ivShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -133,7 +208,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                 public void onClick(View view) {
                     ReadQuestionsActivity.lower = ReadQuestionsActivity.lower + 10;
                     ReadQuestionsActivity.diff = ReadQuestionsActivity.upper;
-                    ReadQuestionsActivity.upper = ReadQuestionsActivity.upper +10;
+                    ReadQuestionsActivity.upper = ReadQuestionsActivity.upper + 10;
                     if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
                         ReadQuestionsActivity.upper = ReadQuestionsActivity.questions.size();
                     }
@@ -155,6 +230,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                 }
             });
         }
+
     }
 
     @Override

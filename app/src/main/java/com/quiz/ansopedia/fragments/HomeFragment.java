@@ -62,7 +62,8 @@ public class HomeFragment extends Fragment {
         userIcons = view.findViewById(R.id.userIcons);
         rvContent = view.findViewById(R.id.rvContent);
         ivProgress = view.findViewById(R.id.ivProgress);
-        Glide.with(getContext()).load(R.drawable.ansopedia_loader).into(ivProgress);
+//            ############################### progress gif start ########################
+        Glide.with(getContext()).load(R.drawable.ansopedia_loader_new).into(ivProgress);
         setImage_slider();
         if (contents == null) {
             rvContent.setVisibility(View.GONE);

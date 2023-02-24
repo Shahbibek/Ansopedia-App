@@ -20,15 +20,7 @@
         android:theme="@style/Theme.Ansopedia"
         tools:targetApi="31">
         <activity
-            android:name=".NotificationActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ExamActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".LeaderBoardActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

@@ -39,7 +39,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/trans">
+            android:background="@color/transparent">
 
             <TextView
                 android:id="@+id/tvToolbar"
