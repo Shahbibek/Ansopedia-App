@@ -17,6 +17,8 @@ import com.quiz.ansopedia.Utility.ApiService;
 import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
+import com.quiz.ansopedia.models.Notification;
+import com.quiz.ansopedia.models.UserDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ContentApiImplementer {
     private static Retrofit retrofit;
-    private static String BASE_URL = "https://api.ansopedia.com/api/";
+    public static String BASE_URL = "https://api.ansopedia.com/api/";
 //    private static String BASE_URL = "http://192.168.185.148:8000/api/";
 
     private static Retrofit getRetrofit() {
@@ -102,6 +104,24 @@ public class ContentApiImplementer {
     public static void uploadImage(MultipartBody.Part image, Callback<List<LoginModel>> cb) {
         ApiService apiService = getRetrofit().create(ApiService.class);
         Call<List<LoginModel>> call = apiService.uploadImage(image);
+        call.enqueue(cb);
+    }
+
+    public static void getUserDetail(Callback<List<UserDetail>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<UserDetail>> call = apiService.getUserDetail();
+        call.enqueue(cb);
+    }
+
+    public static void updateUserDetail(UserDetail userDetail, Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.updateUserDetail(userDetail);
+        call.enqueue(cb);
+    }
+
+    public static void getNotification(Callback<List<Notification>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<Notification>> call = apiService.getNotification();
         call.enqueue(cb);
     }
 }

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,7 +31,8 @@ public class ReadQuestionsActivity extends AppCompatActivity {
     Toolbar toolbar;
     Chapters chapters;
     private static ReadQuestionAdapter1 adapter1;
-    View vt, vt1;
+//    View vt, vt1;
+    RelativeLayout rlTopic;
     public static ArrayList<Questions> questions = new ArrayList<>();
 
     private static ReadQuestionsActivity readQuestionsActivity = new ReadQuestionsActivity();
@@ -45,8 +47,9 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         readQuestionsActivity = this;
 //        #######################################   Set Color Start ######################################
 
-        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
-        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));
+//        rlTopic.setBackgroundColor(Color.parseColor(Constants.COLOR));
+//        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
+        rlTopic.getBackground().setTint(Color.parseColor(Constants.COLOR));
 //        #######################################   Set Color Start ######################################
         chapters = new Gson().fromJson(getIntent().getStringExtra("chapter"), Chapters.class);
         tvSubject.setText(Utility.toCapitalizeFirstLetter(getIntent().getStringExtra("subject")));
@@ -72,8 +75,9 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         ivBack = findViewById(R.id.ivBack);
         tvChapter = findViewById(R.id.tvChapter);
         toolbar = findViewById(R.id.toolbar);
-        vt = findViewById(R.id.vt);
-        vt1 = findViewById(R.id.vt1);
+        rlTopic = findViewById(R.id.rlTopic);
+//        vt = findViewById(R.id.vt);
+//        vt1 = findViewById(R.id.vt1);
     }
 
     public static void setRecyclerView( int i1, int i2) {

@@ -41,27 +41,54 @@
             android:layout_height="50dp"
             android:background="@color/transparent">
 
-            <TextView
-                android:id="@+id/tvToolbar"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Home"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tvToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="Home"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginEnd="80dp"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivSearchIcon"
+                    android:background="@drawable/search_icon"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="50dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileMenu"
+                    android:layout_width="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/dr_profile_icon" />
+
+            </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
         <FrameLayout
             android:id="@+id/flHome"
-            android:layout_below="@+id/toolbar"
-            android:layout_above="@+id/bnHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bnHome"
+            android:layout_below="@+id/toolbar">
 
         </FrameLayout>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnHome"
             android:layout_width="match_parent"

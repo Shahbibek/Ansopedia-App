@@ -7,41 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".ReadQuestionsActivity">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/trans">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvSubjects"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:fontFamily="@font/poppins_regular"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Home"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="25sp"-->
-<!--            android:textStyle="bold" />-->
-<!--    </androidx.appcompat.widget.Toolbar>-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bnHome"
-        android:layout_below="@+id/toolbar"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="10dp"
         android:layout_marginEnd="12dp"
-        android:background="#DCDCDC">
+        android:background="@drawable/material_bg">
 
         <RelativeLayout
             android:id="@+id/rlTopic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="120dp"
+            android:background="@drawable/ic_heading_bg">
 
-            <include layout="@layout/custom_oval" />
+            <!--            <include layout="@layout/custom_oval" />-->
+
         </RelativeLayout>
 
         <ImageView
@@ -54,29 +37,27 @@
 
         <TextView
             android:id="@+id/tvSubject"
-            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginVertical="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:text="bibek"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvChapter"
-            android:layout_below="@+id/tvSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_below="@+id/tvSubject"
             android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginVertical="5dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="bibek1"
             android:textColor="@color/white"

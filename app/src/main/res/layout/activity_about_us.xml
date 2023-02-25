@@ -81,7 +81,7 @@
                     android:fontFamily="@font/syne"
                     android:gravity="start"
                     android:paddingBottom="2dp"
-                    android:text="Eftakhar M. Shikat"
+                    android:text="Eftakhar M. Saikat"
                     android:textColor="@color/about_color"
                     android:textSize="22sp"
                     android:textStyle="bold" />

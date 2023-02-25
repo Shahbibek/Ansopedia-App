@@ -14,6 +14,7 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/bg_profileitems.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/bg_userprofile.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/button_background.xml" value="0.1425" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/chapter_background.xml" value="0.1655" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/contact_shape.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/contact_shape2.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/corner_layout.xml" value="0.1425" />
@@ -23,6 +24,8 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/custom_oval_leader_board.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/custom_progress.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/dr_home.xml" value="0.1655" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_anso_coin.xml" value="0.1065" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_anso_coin_new.xml" value="0.1655" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_arrow_back.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_arrow_forward.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.1425" />
@@ -36,6 +39,7 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_facebook.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_favorite.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_github_min.xml" value="0.143" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_heading_bg.xml" value="0.136" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_linkedin_min.xml" value="0.143" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1425" />
@@ -44,6 +48,7 @@
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_share_min_icon.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ic_yatra_logo_3__180x180_.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/leaderboard_oval.xml" value="0.1425" />
+        <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/material_bg.xml" value="0.1655" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/ovalshape.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/profile_bg.xml" value="0.1425" />
         <entry key="..\:/SEM VI-RKU/Git_Version_Control_Ansopedia_App/Ansopedia-App/app/src/main/res/drawable/profile_circle.xml" value="0.143" />

@@ -54,7 +54,7 @@ public class ContactUsActivity extends AppCompatActivity {
     private void sendContactMessage() {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
         loginRequestModel.setMessage(tvEditText.getText().toString().trim());
-        loginRequestModel.setName("Bibek Kumar Sah");
+        loginRequestModel.setName(preferences.getString(Constants.name, ""));
         loginRequestModel.setEmail(preferences.getString(Constants.username, ""));
         Utility.showProgress(this);
         if (Utility.isNetConnected(this)) {

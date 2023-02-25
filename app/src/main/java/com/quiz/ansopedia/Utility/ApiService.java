@@ -3,6 +3,8 @@ package com.quiz.ansopedia.Utility;
 import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
+import com.quiz.ansopedia.models.Notification;
+import com.quiz.ansopedia.models.UserDetail;
 
 import java.util.List;
 
@@ -44,4 +46,13 @@ public interface ApiService {
     @Multipart
     @PUT("user/avatar")
     Call<List<LoginModel>> uploadImage(@Part MultipartBody.Part image);
+
+    @GET("user")
+    Call<List<UserDetail>> getUserDetail();
+
+    @PUT("user")
+    Call<List<LoginModel>> updateUserDetail(@Body UserDetail userDetail);
+
+    @GET("notify")
+    Call<List<Notification>> getNotification();
 }

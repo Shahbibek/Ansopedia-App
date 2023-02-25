@@ -23,13 +23,7 @@ public class AboutUsActivity extends AppCompatActivity {
         ivSikhat = findViewById(R.id.ivSikhat);
         ivSanjay = findViewById(R.id.ivSanjay);
         ivNayan = findViewById(R.id.ivNayan);
-//        ######################## Load Image Start ###########################
-        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677252637/samples/About%20Us/shikat_mjxapo.png").into(ivSikhat);
-        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677251023/samples/About%20Us/bibek_sah_unbavx.jpg").into(ivBibek);
-        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677251023/samples/About%20Us/bibek_sah_unbavx.jpg").into(ivSanjay);
-        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677251023/samples/About%20Us/bibek_sah_unbavx.jpg").into(ivNayan);
-
-//        ######################## Load Image End ###########################
+        LoadImage();
 
         ImageView ivBack = findViewById(R.id.ivBack);
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -38,5 +32,15 @@ public class AboutUsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void LoadImage() {
+        //        ######################## Load Image Start ###########################
+        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677252637/samples/About%20Us/shikat_mjxapo.png").into(ivSikhat);
+        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677251023/samples/About%20Us/bibek_sah_unbavx.jpg").into(ivBibek);
+        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677251023/samples/About%20Us/bibek_sah_unbavx.jpg").into(ivSanjay);
+        Glide.with(AboutUsActivity.this).load("https://res.cloudinary.com/ddhtmkllj/image/upload/v1677251023/samples/About%20Us/bibek_sah_unbavx.jpg").into(ivNayan);
+
+        //        ######################## Load Image End ###########################
     }
 }

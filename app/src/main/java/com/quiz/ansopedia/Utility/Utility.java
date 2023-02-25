@@ -26,6 +26,7 @@ import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.SignInActivity;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
+import com.quiz.ansopedia.models.UserDetail;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
 import org.json.JSONObject;
@@ -36,6 +37,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import retrofit2.Call;
@@ -160,12 +163,19 @@ public class Utility {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putBoolean(Constants.isLogin, true).apply();
                                 preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+                                getUserDetail(context);
                             } else {
+                                Constants.TOKEN = "";
+                                preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                                preferences.edit().putString(Constants.token, "").apply();
                                 context.startActivity(new Intent(context, SignInActivity.class));
                                 ((Activity) context).finish();
                             }
                         } else {
 //                            Utility.showAlertDialog(context, "Error", "Something went wrong, Please Try Again");
+                            Constants.TOKEN = "";
+                            preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                            preferences.edit().putString(Constants.token, "").apply();
                             context.startActivity(new Intent(context, SignInActivity.class));
                             ((Activity) context).finish();
                         }
@@ -173,11 +183,17 @@ public class Utility {
 
                     @Override
                     public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                        Constants.TOKEN = "";
+                        preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                        preferences.edit().putString(Constants.token, "").apply();
                         t.printStackTrace();
                         Utility.showAlertDialog(context, "Error", "Something went wrong, Please Try Again");
                     }
                 });
             } catch (Exception e) {
+                Constants.TOKEN = "";
+                preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                preferences.edit().putString(Constants.token, "").apply();
                 e.printStackTrace();
             }
         } else {
@@ -200,21 +216,49 @@ public class Utility {
     public static void dismissProgressGif() {
         dialog.dismiss();
     }
+    public static UserDetail userDetail;
+    public static void getUserDetail(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+        ContentApiImplementer.getUserDetail(new Callback<List<UserDetail>>() {
+            @Override
+            public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
+                if (response.code() == 200) {
+                    userDetail = response.body().get(0);
+                    preferences.edit().putString(Constants.name, userDetail.getName()).apply();
+                    if (userDetail.getAvatar() != null) {
+                        preferences.edit().putBoolean(Constants.isImageAdded, true).apply();
+                    }
+                }
+            }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static String getFileSize(String FILE_NAME) {
-        Path filePath = Paths.get(String.valueOf(FILE_NAME));
-        System.out.println(filePath);
-        FileChannel fileChannel;
+            @Override
+            public void onFailure(Call<List<UserDetail>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    public static String calculateDate(Duration duration) {
+        String diff = "";
         try {
-            fileChannel = FileChannel.open(filePath);
-            long fileSize = fileChannel.size();
-            System.out.println(fileSize + " bytes");
-            fileChannel.close();
-            return fileSize + " Bytes";
-        } catch (IOException e) {
+            if (duration.toMinutes() < 60) {
+                diff = duration.toMinutes() + " minutes ago";
+            } else if (duration.toHours() < 24) {
+                diff = duration.toHours() + " hours ago";
+            } else if (duration.toHours() >= 24 && duration.toHours() < 720) {
+                diff = duration.toHours()/24 + " days ago";
+            }else if (duration.toHours() >= 720 && duration.toHours() < 8760) {
+                diff = duration.toHours()/720 + " month ago";
+            } else if (duration.toHours() >= 8760) {
+                diff = duration.toHours() / 8760 + " years ago";
+            }
+
+        }catch (Exception e){
             e.printStackTrace();
         }
-        return "Not Found";
+        return diff;
+
     }
+
 }

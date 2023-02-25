@@ -9,19 +9,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="10dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
-        android:background="#DCDCDC">
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/material_bg"
+        android:paddingBottom="10dp">
 
         <RelativeLayout
             android:id="@+id/rlTopic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="120dp"
+            android:background="@drawable/ic_heading_bg">
 
-            <include layout="@layout/custom_oval" />
+            <!--            <include layout="@layout/custom_oval" />-->
         </RelativeLayout>
 
         <ImageView
@@ -40,7 +41,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="bsddssk"
+            android:text="Bibek"
             android:textColor="@color/white"
             android:textSize="25dp" />
 
@@ -52,17 +53,17 @@
             android:layout_marginTop="60dp"
             android:layout_marginEnd="25dp"
             android:max="100"
-            android:visibility="gone"
             android:progress="50"
             android:progressDrawable="@drawable/custom_progress"
-            android:thumbTint="@android:color/holo_blue_light" />
+            android:thumbTint="@android:color/holo_blue_light"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvChapter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/rlTopic" />
+            android:layout_below="@+id/rlTopic"
+            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 

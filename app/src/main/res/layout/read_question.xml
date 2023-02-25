@@ -133,10 +133,10 @@
                 android:src="@drawable/ic_eye_icon" />
 
             <View
-                android:layout_width="3dp"
+                android:layout_width="2dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:background="#3B5A80" />
+                android:background="#D6D6D6" />
 
             <ImageView
                 android:id="@+id/ivDescription"
@@ -147,10 +147,10 @@
                 android:src="@drawable/ic_discript_icon" />
 
             <View
-                android:layout_width="3dp"
+                android:layout_width="2dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:background="#3B5A80" />
+                android:background="#D6D6D6" />
 
             <ImageView
                 android:id="@+id/ivShare"

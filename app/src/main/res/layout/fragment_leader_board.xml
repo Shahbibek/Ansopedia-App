@@ -12,15 +12,15 @@
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="16dp"
-        android:paddingBottom="50dp"
-        android:background="#DCDCDC">
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/material_bg">
 
         <RelativeLayout
             android:id="@+id/rlTopic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/question_board" />
+            android:layout_height="100dp"
+            android:background="@drawable/chapter_background">
         </RelativeLayout>
 
         <TextView
@@ -34,187 +34,187 @@
             android:text="Ranker's"
             android:fontFamily="@font/syne_bold"
             android:textColor="@color/white"
-            android:textSize="28dp" />
-
-    <LinearLayout
-        android:id="@+id/topLeads"
-        android:layout_below="@+id/rlTopic"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginVertical="15dp"
-        android:gravity="center">
+            android:textSize="24dp" />
 
         <LinearLayout
-            android:id="@+id/userSecond"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="-25dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:id="@+id/topLeads"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/rlTopic"
+            android:layout_marginVertical="10dp"
+            android:gravity="center">
 
-            <TextView
-                android:id="@+id/tvSecondRank"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/userSecond"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/UserImage_1"
-                android:fontFamily="@font/syne_bold"
-                android:text="2nd"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="-25dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/UserImage_2"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                app:shapeAppearance="@style/rankimageview"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px"
-                android:layout_below="@+id/tvSecondRankName"
-                android:src="@drawable/shikat"
-                style="@style/rank1imageview" />
+                <TextView
+                    android:id="@+id/tvSecondRank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/UserImage_1"
+                    android:fontFamily="@font/syne_bold"
+                    android:text="2nd"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvSecondRRankName"
-                android:layout_width="match_parent"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/UserImage_2"
+                    style="@style/rank1imageview"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_below="@+id/tvSecondRankName"
+                    android:src="@drawable/shikat"
+                    app:shapeAppearance="@style/rankimageview"
+                    app:strokeColor="@color/contact_shape"
+                    app:strokeWidth="2px" />
+
+                <TextView
+                    android:id="@+id/tvSecondRRankName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/UserImage_1"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Sanjay"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSecondRankScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/userFname_2"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="893"
+                    android:textAlignment="center"
+                    android:textColor="@color/profile_Rank"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/userFirst"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/UserImage_1"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Sanjay"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:translationZ="90dp">
 
-            <TextView
-                android:id="@+id/tvSecondRankScore"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvFirstRank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/UserImage_1"
+                    android:fontFamily="@font/syne_bold"
+                    android:text="1st"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/UserImage_1"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_below="@+id/tvFirstRank"
+                    android:src="@drawable/shikat"
+                    app:shapeAppearance="@style/rankimageviewTop"
+                    app:strokeColor="@color/contact_shape"
+                    app:strokeWidth="2px" />
+
+                <TextView
+                    android:id="@+id/tvFirstRankName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/UserImage_1"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Shikat"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvFirstRankScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/userFname_1"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="921"
+                    android:textAlignment="center"
+                    android:textColor="@color/profile_Rank"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/userThird"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/userFname_2"
-                android:fontFamily="@font/poppins_regular"
-                android:text="893"
-                android:textAlignment="center"
-                android:textColor="@color/profile_Rank"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="-25dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
 
-        </LinearLayout>
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/userFirst"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:translationZ="90dp">
+                <TextView
+                    android:id="@+id/tvThirdRank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/UserImage_3"
+                    android:fontFamily="@font/syne_bold"
+                    android:text="3rd"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvFirstRank"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/UserImage_1"
-                android:fontFamily="@font/syne_bold"
-                android:text="1st"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/UserImage_3"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_below="@+id/Rank_3"
+                    android:src="@drawable/shikat"
+                    app:shapeAppearance="@style/rankimageview"
+                    app:strokeColor="@color/contact_shape"
+                    app:strokeWidth="2px" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/UserImage_1"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px"
-                android:layout_below="@+id/tvFirstRank"
-                app:shapeAppearance="@style/rankimageviewTop"
-                android:src="@drawable/shikat" />
+                <TextView
+                    android:id="@+id/tvThirdRankName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/UserImage_3"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Bibek"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvFirstRankName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/UserImage_1"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Shikat"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvThirdRankScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/userFname_3"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="865"
+                    android:textAlignment="center"
+                    android:textColor="@color/profile_Rank"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvFirstRankScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/userFname_1"
-                android:fontFamily="@font/poppins_regular"
-                android:text="921"
-                android:textAlignment="center"
-                android:textColor="@color/profile_Rank"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/userThird"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="-25dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvThirdRank"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/UserImage_3"
-                android:fontFamily="@font/syne_bold"
-                android:text="3rd"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/UserImage_3"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_below="@+id/Rank_3"
-                android:src="@drawable/shikat"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px"
-                app:shapeAppearance="@style/rankimageview" />
-
-            <TextView
-                android:id="@+id/tvThirdRankName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/UserImage_3"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Bibek"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvThirdRankScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/userFname_3"
-                android:fontFamily="@font/poppins_regular"
-                android:text="865"
-                android:textAlignment="center"
-                android:textColor="@color/profile_Rank"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -403,5 +403,4 @@
             android:layout_marginBottom="20dp" />
 
     </RelativeLayout>
-
 </FrameLayout>

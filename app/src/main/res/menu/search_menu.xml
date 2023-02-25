@@ -14,7 +14,7 @@
     <item
         android:id="@+id/userIcons"
         android:title="Profile"
-        app:actionLayout="@layout/profile_menu_layout"
+        android:icon="@drawable/dr_profile_icon"
         android:layout_width="10dp"
         android:layout_height="10dp"
         app:showAsAction="always" />

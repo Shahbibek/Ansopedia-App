@@ -2,10 +2,10 @@ package com.quiz.ansopedia;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -17,47 +17,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.interfaces.ItemClickListener;
-import com.denzcoskun.imageslider.models.SlideModel;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
-import com.quiz.ansopedia.adapter.CourseAdapter;
 import com.quiz.ansopedia.fragments.HomeFragment;
 import com.quiz.ansopedia.fragments.LeaderBoardFragment;
 import com.quiz.ansopedia.fragments.NotificationFragment;
 import com.quiz.ansopedia.fragments.QuizFragment;
-import com.quiz.ansopedia.models.Branch;
-import com.quiz.ansopedia.models.Contents;
-import com.quiz.ansopedia.models.LoginModel;
-import com.quiz.ansopedia.models.Subjects;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -68,12 +62,15 @@ public class MainActivity extends AppCompatActivity {
     boolean isDoubleBackPressed = false;
     TextView tvToolbar;
     CircleImageView profileMenu;
+    SharedPreferences preferences;
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         Utility.getLogin(this);
         bottomNavigationView.setSelectedItemId(R.id.navhome);
         loadFrag(new HomeFragment());
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     tvToolbar.setText("Notification");
                     loadFrag(new NotificationFragment());
                 } else if (id == R.id.navList) {
-                    tvToolbar.setText("Courses");
+                    tvToolbar.setText("My Courses");
                     loadFrag(new QuizFragment());
                 } else if (id == R.id.navBookmark) {
                     tvToolbar.setText("Leader Board");
@@ -116,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.navhome) {
-
+                    loadFrag(new HomeFragment());
                 } else if (id == R.id.navProfile) {
                     startActivity(new Intent(MainActivity.this, ProfileActivity.class));
 
@@ -145,6 +142,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //        ########################### drawer Implementation End #############################################
+//        ########################### User profile Icon Start #############################################
+        profileMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            }
+        });
+//        ########################### User profile Icon End #############################################
+
+//        ########################### Profile menu Bar Shown Start #############################################
+        if (preferences.getBoolean(Constants.isImageAdded, false)) {
+            try {
+                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
+                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
+                        .build());
+                Glide.with(this)
+                        .load(url)
+                        .into(profileMenu);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+//        ########################### Profile menu Bar Shown End #############################################
     }
 
     private void initView() {
@@ -152,9 +175,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bnHome);
         frameLayout = findViewById(R.id.flHome);
         tvToolbar = findViewById(R.id.tvToolbar);
+        profileMenu = findViewById(R.id.profileMenu);
     }
 
-//        ########################### drawer Implementation Open And Close Start #############################################
+//        ########################### drawer Implementation Open And Close Start ###############################
 
     @Override
     public void onBackPressed() {
@@ -182,48 +206,47 @@ public class MainActivity extends AppCompatActivity {
     }
 //    ########################## Option Menu ##################################################################
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.searchView);
-
-//    ########################## Profile Menu Bar Start   ##################################################################
-
-        View view = MenuItemCompat.getActionView(menuItem);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        CircleImageView profileMenu = findViewById(R.id.profileMenu);
-
-
-//    ########################## Profile Menu Bar End   ##################################################################
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-//    ############################### Menu bar Call start ########################
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.userIcons:
-                Toast.makeText(this, "profile clicked", Toast.LENGTH_SHORT).show();
+//    @SuppressLint("CheckResult")
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.search_menu, menu);
+//        MenuItem menuItem = menu.findItem(R.id.searchView);
+//
+////    ########################## Profile Menu Bar Start   ##################################################################
+//
+//        SearchView searchView = (SearchView) menuItem.getActionView();
+//        MenuItem profile = menu.findItem(R.id.userIcons);
+//        profile.setIcon(profileDrawable);
+//
+////    ########################## Profile Menu Bar End   ##################################################################
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+////    ############################### Menu bar Call start ########################
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch(item.getItemId()){
+//            case R.id.userIcons:
 //                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 //        ############################### Menu bar Call end ######################################
 
-    public void loadFrag(Fragment fragment){
+    public void loadFrag(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flHome, fragment);

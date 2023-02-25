@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -31,14 +32,17 @@ public class ChaptersActivity extends AppCompatActivity {
     Subjects subject;
     ChapterAdapter adapter;
 //    for ToolbarColor
-    View vt1, vt;
+//    View vt1, vt;
+    RelativeLayout rlTopic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapters);
         initView();
-        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
-        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));
+
+        rlTopic.getBackground().setTint(Color.parseColor(Constants.COLOR));
+//        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
+//        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));
         subject = new Gson().fromJson(getIntent().getStringExtra("subject"), Subjects.class);
         tvSubject.setText(Utility.toCapitalizeFirstLetter(subject.getSubject_name()));
 
@@ -59,8 +63,9 @@ public class ChaptersActivity extends AppCompatActivity {
         sbProgress = findViewById(R.id.sbProgress);
         tvSubject = findViewById(R.id.tvSubject);
         ivBack = findViewById(R.id.ivBack);
-        vt = findViewById(R.id.vt);
-        vt1 = findViewById(R.id.vt1);
+        rlTopic = findViewById(R.id.rlTopic);
+//        vt = findViewById(R.id.vt);
+//        vt1 = findViewById(R.id.vt1);
     }
 
     private void setRecyclerView() {

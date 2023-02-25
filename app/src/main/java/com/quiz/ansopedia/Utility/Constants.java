@@ -11,4 +11,5 @@ public class Constants {
     public static String password = "password";
     public static String isLogin = "isLogin";
     public static Contents contents;
+    public static String isImageAdded = "isImageAdded";
 }

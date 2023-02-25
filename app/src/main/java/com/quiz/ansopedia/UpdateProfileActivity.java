@@ -1,6 +1,9 @@
 package com.quiz.ansopedia;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,8 +20,14 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.android.material.textfield.TextInputEditText;
+import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.models.LoginModel;
+import com.quiz.ansopedia.models.UserDetail;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
 import java.io.BufferedOutputStream;
@@ -46,18 +55,42 @@ public class UpdateProfileActivity extends AppCompatActivity {
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
     ImageView ivChangeImg;
+    TextInputEditText tvDesignation;
+    TextInputEditText tvPhoneNo;
+    TextInputEditText address1;
+    SharedPreferences preferences;
+    Button btnEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button btnUpdate;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
-
+        preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         RelativeLayout svMain = findViewById(R.id.svMain);
         btnUpdate = findViewById(R.id.btnUpdate);
+        btnEdit = findViewById(R.id.btnEdit);
         ImageView ivBack = findViewById(R.id.ivBack);
         Button ivChangeBtn = findViewById(R.id.ivChangeBtn);
         ivChangeImg = findViewById(R.id.ivChangeImg);
+        address1 = findViewById(R.id.address1);
+        tvPhoneNo = findViewById(R.id.tvPhoneNo);
+        tvDesignation = findViewById(R.id.tvDesignation);
+
+        if (preferences.getBoolean(Constants.isImageAdded, false)) {
+            try {
+                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
+                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
+                        .build());
+
+                Glide.with(this).load(url).into(ivChangeImg);
+                address1.setText(Utility.userDetail.getName());
+                tvDesignation.setText(Utility.userDetail.getDesignation());
+                tvPhoneNo.setText(Utility.userDetail.getMobile());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         ivChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +102,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               finish();
+                finish();
             }
         });
 
@@ -77,20 +110,40 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Utility.hideSoftKeyboard(UpdateProfileActivity.this);
-                Toast.makeText(UpdateProfileActivity.this, "Update button clicked", Toast.LENGTH_SHORT).show();
+                updateUserDetail();
+                btnUpdate.setVisibility(View.GONE);
+                btnEdit.setVisibility(View.VISIBLE);
+            }
+        });
+//        ###################### Edit and Save Open and Shut Start ################################
+        tvPhoneNo.setEnabled(false);
+        tvDesignation.setEnabled(false);
+        address1.setEnabled(false);
+        btnUpdate.setVisibility(View.GONE);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvPhoneNo.setEnabled(true);
+                tvDesignation.setEnabled(true);
+                address1.setEnabled(true);
+                btnUpdate.setVisibility(View.VISIBLE);
+                btnEdit.setVisibility(View.GONE);
             }
         });
 
+//        ###################### Edit and Save Open and Shut End ################################
+
         svMain.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {Utility.hideSoftKeyboard(UpdateProfileActivity.this);}
+            public void onClick(View view) {
+                Utility.hideSoftKeyboard(UpdateProfileActivity.this);
+            }
         });
 
     }
 
     // Select Image method
-    private void selectImage()
-    {
+    private void selectImage() {
 
         // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -106,8 +159,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode,
                                     int resultCode,
-                                    Intent data)
-    {
+                                    Intent data) {
 
         super.onActivityResult(requestCode,
                 resultCode,
@@ -137,7 +189,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 String part_image;
                 String[] imageProjection = {MediaStore.Images.Media.DATA};
                 Cursor cursor = getContentResolver().query(filePath, imageProjection, null, null, null);
-                if(cursor != null) {
+                if (cursor != null) {
                     cursor.moveToFirst();
                     int indexImage = cursor.getColumnIndex(imageProjection[0]);
                     part_image = cursor.getString(indexImage);
@@ -153,8 +205,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File Size must be less than 1000 KB !!");
                     }
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 // Log the exception
                 e.printStackTrace();
             }
@@ -167,8 +218,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         File imageFile = new File(part_image);
         System.out.println(imageFile);
         RequestBody reqBody = RequestBody.create(MediaType.parse("multipart/form-file"), imageFile);
-        System.out.println(part_image.lastIndexOf("/")+1);
-        String name = part_image.substring(part_image.lastIndexOf("/")+1);
+        System.out.println(part_image.lastIndexOf("/") + 1);
+        String name = part_image.substring(part_image.lastIndexOf("/") + 1);
         System.out.println(name);
         MultipartBody.Part partImage = MultipartBody.Part.createFormData("avatar", name, reqBody);
 
@@ -181,11 +232,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     if (loginModel.getStatus().equalsIgnoreCase("success")) {
                         Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
                     }
-                } else if(response.code() == 500) {
+                } else if (response.code() == 500) {
                     Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Server Error, Please Try Again");
-                }else if(response.code() == 400){
+                } else if (response.code() == 400) {
                     Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File not found, Please Try Again..");
-                }else{
+                } else {
                     Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again");
                 }
             }
@@ -196,6 +247,51 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    private void updateUserDetail() {
+        Utility.showProgress(this);
+        UserDetail userDetail = new UserDetail();
+        userDetail.setName(address1.getText().toString());
+        userDetail.setDesignation(tvDesignation.getText().toString());
+        userDetail.setMobile(tvPhoneNo.getText().toString());
+
+        if (Utility.isNetConnected(this)) {
+            try {
+                ContentApiImplementer.updateUserDetail(userDetail, new Callback<List<LoginModel>>() {
+                    @Override
+                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                        if (response.code() == 200) {
+                            LoginModel loginModel = (LoginModel) response.body().get(0);
+                            if (loginModel.getStatus().equalsIgnoreCase("success")) {
+                                Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                            }
+                        }else if(response.code() == 304){
+                            LoginModel loginModel = (LoginModel) response.body().get(0);
+                            Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                        }else if(response.code() == 422){
+                            LoginModel loginModel = (LoginModel) response.body().get(0);
+                            Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                        }else if(response.code() == 500){
+                            LoginModel loginModel = (LoginModel) response.body().get(0);
+                            Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                        }else{
+                            Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                        Utility.dismissProgress(UpdateProfileActivity.this);
+                        t.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
+        }
     }
 
 }
