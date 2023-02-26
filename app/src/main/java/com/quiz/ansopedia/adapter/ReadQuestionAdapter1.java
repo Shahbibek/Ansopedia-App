@@ -52,6 +52,8 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
         int j = holder.getAdapterPosition() + ReadQuestionsActivity.lower + 1;
         if (count <= arrayList.size()) {
             holder.colorOptions.getBackground().setTint(Color.parseColor(Constants.COLOR));
+//            holder.nextquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
+//            holder.previousquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
             holder.cvDescription.setVisibility(View.GONE);
             holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
             holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -194,7 +196,8 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                 }
             });
         } else {
-
+            holder.nextquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
+            holder.previousquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
             if (ReadQuestionsActivity.lower == 0) {
 //                holder.previousquestion.setVisibility(View.GONE);
                 holder.previousquestion.setEnabled(false);

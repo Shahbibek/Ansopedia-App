@@ -63,6 +63,7 @@
                     android:id="@+id/ivSearchIcon"
                     android:background="@drawable/search_icon"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="50dp"
                     android:layout_width="30dp"
@@ -71,11 +72,11 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profileMenu"
                     android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="10dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/dr_profile_icon" />
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/home_profile" />
 
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>

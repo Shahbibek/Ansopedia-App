@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:backgroundTint="#94BBEB"
         app:cardCornerRadius="10dp"
         android:layout_marginBottom="10dp"
@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Python"
+            android:textSize="18sp"
             android:layout_gravity="center"
             android:padding="10dp"
             android:textColor="@color/black"
@@ -34,11 +35,12 @@
             android:id="@+id/ivChecked"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_baseline_correct"
-            android:layout_gravity="right"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="9dp"/>
+            android:visibility="visible"
+            android:src="@drawable/delete"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginVertical="15dp"
+            />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

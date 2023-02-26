@@ -1,6 +1,9 @@
 package com.quiz.ansopedia.Utility;
 
 import com.quiz.ansopedia.models.Contents;
+import com.quiz.ansopedia.models.Subjects;
+
+import java.util.ArrayList;
 
 public class Constants {
     public static String token = "token";
@@ -11,5 +14,7 @@ public class Constants {
     public static String password = "password";
     public static String isLogin = "isLogin";
     public static Contents contents;
+    public static ArrayList<Subjects> subjectsArrayList;
     public static String isImageAdded = "isImageAdded";
+    public static String fragment = "fragment";
 }

@@ -27,10 +27,19 @@
 
         <ImageView
             android:id="@+id/ivBack"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_back"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/ivSaveCourse"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="13dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/add_course"
             app:tint="@color/white" />
 
         <TextView

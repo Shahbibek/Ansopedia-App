@@ -10,13 +10,13 @@
 
 
     <ImageView
-        android:layout_marginTop="20dp"
         android:id="@+id/ivClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        app:tint="@color/black"
-        android:onClick="onClickClose"/>
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="20dp"
+        android:onClick="onClickClose"
+        android:src="@drawable/close"
+        app:tint="@color/black" />
 
     <LinearLayout
         android:layout_below="@+id/ivClose"
@@ -29,7 +29,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="125dp"
             android:layout_height="125dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/ansopedia_logo" />
 
         <TextView
             android:layout_width="wrap_content"

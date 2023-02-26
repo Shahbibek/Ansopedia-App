@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +22,8 @@ import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.ChapterAdapter;
 import com.quiz.ansopedia.models.Chapters;
 import com.quiz.ansopedia.models.Subjects;
+import com.quiz.ansopedia.sqlite.CoursesHelper;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class ChaptersActivity extends AppCompatActivity {
@@ -29,6 +32,7 @@ public class ChaptersActivity extends AppCompatActivity {
     SeekBar sbProgress;
     TextView tvSubject;
     ImageView ivBack;
+    ImageView ivSaveCourse;
     Subjects subject;
     ChapterAdapter adapter;
 //    for ToolbarColor
@@ -55,6 +59,18 @@ public class ChaptersActivity extends AppCompatActivity {
         if (subject.getChapters().size() != 0) {
             setRecyclerView();
         }
+        for (Subjects s :
+                Constants.subjectsArrayList) {
+            if (s.getSubject_name().equalsIgnoreCase(subject.getSubject_name())) {
+                ivSaveCourse.setVisibility(View.GONE);
+            }
+        }
+        ivSaveCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveSubject();
+            }
+        });
     }
 
     private void initView() {
@@ -64,6 +80,7 @@ public class ChaptersActivity extends AppCompatActivity {
         tvSubject = findViewById(R.id.tvSubject);
         ivBack = findViewById(R.id.ivBack);
         rlTopic = findViewById(R.id.rlTopic);
+        ivSaveCourse = findViewById(R.id.ivSaveCourse);
 //        vt = findViewById(R.id.vt);
 //        vt1 = findViewById(R.id.vt1);
     }
@@ -75,5 +92,34 @@ public class ChaptersActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvChapter.setAdapter(adapter);
         rvChapter.setLayoutManager(layoutManager);
+    }
+
+    private void saveSubject(){
+        CoursesHelper db = new CoursesHelper(this);
+        db.addNewData(subject.getSubject_name() ,getIntent().getStringExtra("subject"));
+        Constants.subjectsArrayList = new ArrayList<>();
+        Constants.subjectsArrayList = db.readData(this);
+        for (Subjects s :
+                Constants.subjectsArrayList) {
+            if (s.getSubject_name().equalsIgnoreCase(subject.getSubject_name())) {
+//                Utility.showAlertDialog(this, "Success", subject.getSubject_name() + "is added to local Database");
+                new AlertDialog.Builder(this)
+                        .setTitle("Success")
+                        .setMessage(subject.getSubject_name() +" is added successfully to courses !!")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                Intent intent = new Intent(ChaptersActivity.this,
+                                        ChaptersActivity.class);
+                                    intent.putExtra("subject", getIntent().getStringExtra("subject"));
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .create().show();
+            }
+        }
     }
 }

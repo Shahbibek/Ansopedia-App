@@ -25,6 +25,7 @@ import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     TextView textViewForgetPassword, textViewSignUp;
     SignInButton sign_in_button;
     RelativeLayout svMain;
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +63,19 @@ public class SignInActivity extends AppCompatActivity {
                 } else {
                     if (username.isEmpty()) {
                         t1.setErrorEnabled(true);
-                        t1.setError("Please Enter Email");
+                        t1.setError("* Please Enter Email");
                     } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()){
                         t1.setErrorEnabled(true);
-                        t1.setError("Invalid Email");
+                        t1.setError("* Invalid Email");
                     }else if (password.isEmpty()){
                         t2.setErrorEnabled(true);
-                        t2.setError("Please Enter Password");
+                        t2.setError("* Please Enter Password");
                     }else if(!password.matches( ".{8,}")){
                         t2.setErrorEnabled(true);
-                        t2.setError("Password must be of 8 digit");
+                        t2.setError("* Password must be of 8 digit");
+                    }else if (!Utility.isValidPassword(password)){
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Invalid Password");
                     };
                 }
             }
@@ -139,11 +144,13 @@ public class SignInActivity extends AppCompatActivity {
                                 Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
                             }
                         } else if(response.code() == 500){
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again");
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
+                        } else if(response.code() == 403){
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
                         } else if(response.code() == 429){
                             Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
                         } else {
-                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
+                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again..");
                         }
                     }
 
@@ -167,7 +174,7 @@ public class SignInActivity extends AppCompatActivity {
     private boolean isValidateCredentials() {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
-        if (!username.isEmpty() && !password.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(username).matches()  && password.matches( ".{8,}")) {
+        if (!username.isEmpty() && !password.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(username).matches()  && password.matches( ".{8,}") && Utility.isValidPassword(password)) {
             return true;
         } else {
             return false;

@@ -1,7 +1,9 @@
 package com.quiz.ansopedia;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -67,28 +69,31 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     if (uName.isEmpty()) {
                         userNameTextField.setErrorEnabled(true);
-                        userNameTextField.setError("Please Enter Name");
+                        userNameTextField.setError("* Please Enter Name");
                     } else if (!uName.matches("[a-zA-Z ]+")){
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("Enter Valid Name");
                     } else if (uEmail.isEmpty()){
                         t3.setErrorEnabled(true);
-                        t3.setError("Please Enter Email");
+                        t3.setError("* Please Enter Email");
                     } else if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()){
                         t3.setErrorEnabled(true);
-                        t3.setError("Please Enter Valid Email");
+                        t3.setError("* Please Enter Valid Email");
                     }else if (pass.isEmpty()){
                         passwordTextField.setErrorEnabled(true);
-                        passwordTextField.setError("Please Enter Password");
+                        passwordTextField.setError("* Please Enter Password");
                     }else if(!pass.matches( ".{8,}")){
                         passwordTextField.setErrorEnabled(true);
-                        passwordTextField.setError("Password must be of 8 digit");
+                        passwordTextField.setError("* Password must be of 8 digit");
+                    }else if(!Utility.isValidPassword(pass)){
+                        passwordTextField.setErrorEnabled(true);
+                        passwordTextField.setError("* password must contain uppercase, lowercase, one digit and one special character");
                     }else if(confirmPass.isEmpty()){
                         confirmPasswordTextField.setErrorEnabled(true);
-                        confirmPasswordTextField.setError("Please Enter Password");
+                        confirmPasswordTextField.setError("* Please Enter Password");
                     }else if(!confirmPass.matches(pass)){
                         confirmPasswordTextField.setErrorEnabled(true);
-                        confirmPasswordTextField.setError("Password must be same");
+                        confirmPasswordTextField.setError("* Password must be same");
                     };
                 }
             }
@@ -169,10 +174,36 @@ public class SignupActivity extends AppCompatActivity {
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}")  && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+")) {
+        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}")  && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public void ShowMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                getApplicationContext());
+        builder.setCancelable(true);
+        builder.setTitle("Title");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

@@ -3,6 +3,7 @@ package com.quiz.ansopedia;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -71,9 +73,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        Utility.getLogin(this);
+//        Utility.getLogin(this);
         bottomNavigationView.setSelectedItemId(R.id.navhome);
-        loadFrag(new HomeFragment());
+        try {
+            String fragment = getIntent().getStringExtra("fragment");
+            if (fragment.equalsIgnoreCase("HomeFragment")) {
+                loadFrag(new HomeFragment());
+                bottomNavigationView.setSelectedItemId(R.id.navHome);
+            } else if (fragment.equalsIgnoreCase("NotificationFragment")){
+                loadFrag(new NotificationFragment());
+                bottomNavigationView.setSelectedItemId(R.id.navNotification);
+            } else if (fragment.equalsIgnoreCase("QuizFragment")){
+                loadFrag(new QuizFragment());
+                bottomNavigationView.setSelectedItemId(R.id.navList);
+            } else if (fragment.equalsIgnoreCase("LeaderBoardFragment")){
+                loadFrag(new LeaderBoardFragment());
+                bottomNavigationView.setSelectedItemId(R.id.navBookmark);
+            }
+        } catch (Exception e){
+            loadFrag(new HomeFragment());
+            e.printStackTrace();
+        }
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -186,7 +206,22 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             if (isDoubleBackPressed) {
-                super.onBackPressed();
+                new AlertDialog.Builder(this)
+                        .setMessage("Do you want to exit?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .create().show();
             } else {
                 isDoubleBackPressed = true;
                 Toast.makeText(this, "Tap Again to Exit", Toast.LENGTH_SHORT).show();

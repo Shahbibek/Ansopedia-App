@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.models.LoginModel;
@@ -59,7 +60,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
     TextInputEditText tvPhoneNo;
     TextInputEditText address1;
     SharedPreferences preferences;
-    Button btnEdit;
+    Button btnEdit1;
+    TextInputLayout t1,t2,t3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +71,16 @@ public class UpdateProfileActivity extends AppCompatActivity {
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         RelativeLayout svMain = findViewById(R.id.svMain);
         btnUpdate = findViewById(R.id.btnUpdate);
-        btnEdit = findViewById(R.id.btnEdit);
+//        btnEdit1 = findViewById(R.id.btnEdit1);
         ImageView ivBack = findViewById(R.id.ivBack);
         Button ivChangeBtn = findViewById(R.id.ivChangeBtn);
         ivChangeImg = findViewById(R.id.ivChangeImg);
         address1 = findViewById(R.id.address1);
         tvPhoneNo = findViewById(R.id.tvPhoneNo);
         tvDesignation = findViewById(R.id.tvDesignation);
+        t1 = findViewById(R.id.t1);
+        t2 = findViewById(R.id.t2);
+        t3 = findViewById(R.id.t3);
 
         if (preferences.getBoolean(Constants.isImageAdded, false)) {
             try {
@@ -109,27 +114,53 @@ public class UpdateProfileActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String userName = address1.getText().toString().trim();
+                String userPhone = tvPhoneNo.getText().toString().trim();
+                String userDesignation = tvDesignation.getText().toString().trim();
+                t1.setErrorEnabled(false);
+                t2.setErrorEnabled(false);
+                t3.setErrorEnabled(false);
                 Utility.hideSoftKeyboard(UpdateProfileActivity.this);
-                updateUserDetail();
-                btnUpdate.setVisibility(View.GONE);
-                btnEdit.setVisibility(View.VISIBLE);
+                if (isValidateCredentials()) {
+                    updateUserDetail();
+                } else  {
+                    if((userName.isEmpty())){
+                        t1.setErrorEnabled(true);
+                        t1.setError("* Please Enter Name");
+                    } else if(!userName.matches("[a-zA-Z ]+")){
+                        t1.setErrorEnabled(true);
+                        t1.setError("* Invalid Name");
+                    } else if(userPhone.isEmpty()){
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Please Enter Phone Number");
+                    }else if(!userPhone.matches( ".{10,10}")){
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Mobile no must be 10 digit");
+                    } else if(userDesignation.isEmpty()){
+                        t3.setErrorEnabled(true);
+                        t3.setError("* Please Enter Phone Number");
+                    } else if(!userDesignation.matches("[a-zA-Z ]+")) {
+                        t3.setErrorEnabled(true);
+                        t3.setError("* Invalid Designation");
+                    };
+                }
             }
         });
 //        ###################### Edit and Save Open and Shut Start ################################
-        tvPhoneNo.setEnabled(false);
-        tvDesignation.setEnabled(false);
-        address1.setEnabled(false);
-        btnUpdate.setVisibility(View.GONE);
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tvPhoneNo.setEnabled(true);
-                tvDesignation.setEnabled(true);
-                address1.setEnabled(true);
-                btnUpdate.setVisibility(View.VISIBLE);
-                btnEdit.setVisibility(View.GONE);
-            }
-        });
+//        tvPhoneNo.setEnabled(false);
+//        tvDesignation.setEnabled(false);
+//        address1.setEnabled(false);
+//        btnUpdate.setVisibility(View.GONE);
+//        btnEdit1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                tvPhoneNo.setEnabled(true);
+//                tvDesignation.setEnabled(true);
+//                address1.setEnabled(true);
+//                btnUpdate.setVisibility(View.VISIBLE);
+//                btnEdit1.setVisibility(View.GONE);
+//            }
+//        });
 
 //        ###################### Edit and Save Open and Shut End ################################
 
@@ -195,7 +226,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     part_image = cursor.getString(indexImage);
                     System.out.println(part_image);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
                     byte[] imageInByte = stream.toByteArray();
                     long lengthbmp = imageInByte.length;
                     System.out.println(lengthbmp);
@@ -230,14 +261,14 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     LoginModel loginModel = (LoginModel) response.body().get(0);
                     if (loginModel.getStatus().equalsIgnoreCase("success")) {
-                        Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                        Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Uploaded Successfully !!");
                     }
                 } else if (response.code() == 500) {
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Server Error, Please Try Again");
+                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Server Error, Please Try Again..");
                 } else if (response.code() == 400) {
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File not found, Please Try Again..");
+                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File size too large, Please Try Again..");
                 } else {
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again");
+                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again..");
                 }
             }
 
@@ -261,6 +292,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 ContentApiImplementer.updateUserDetail(userDetail, new Callback<List<LoginModel>>() {
                     @Override
                     public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                        Utility.dismissProgress(UpdateProfileActivity.this);
                         if (response.code() == 200) {
                             LoginModel loginModel = (LoginModel) response.body().get(0);
                             if (loginModel.getStatus().equalsIgnoreCase("success")) {
@@ -287,10 +319,23 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
+                Utility.dismissProgress(UpdateProfileActivity.this);
                 e.printStackTrace();
             }
         } else {
+            Utility.dismissProgress(UpdateProfileActivity.this);
             Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
+        }
+    }
+    private boolean isValidateCredentials() {
+        String userName = address1.getText().toString();
+        String userPhone = tvPhoneNo.getText().toString();
+        String userDesignation = tvDesignation.getText().toString();
+
+        if (!userName.isEmpty() && userName.matches("[a-zA-Z ]+") && !userPhone.isEmpty() && !userDesignation.isEmpty() && userPhone.matches( ".{10,10}") && userDesignation.matches("[a-zA-Z ]+")) {
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -52,6 +52,9 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
                     }else if(!uPass.matches( ".{8,}")){
                         t4.setErrorEnabled(true);
                         t4.setError("* Password must be 8 digit");
+                    }else if(!Utility.isValidPassword(uPass)){
+                        t4.setErrorEnabled(true);
+                        t4.setError("* password must contain uppercase, lowercase, one digit and one special character");
                     }else if(uCNFPass.isEmpty()){
                         t5.setErrorEnabled(true);
                         t5.setError("* Please Enter Password");
@@ -92,7 +95,7 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
                         if (response.code() == 200) {
                             LoginModel loginModel = response.body().get(0);
                             if (loginModel.getStatus().toLowerCase().contains("success")) {
-                                startActivity(new Intent(ForgotPasswordLinkActivity.this, PasswordResetSuccessfulActivity.class));
+                                startActivity(new Intent(ForgotPasswordLinkActivity.this, SignInActivity.class));
                                 finish();
                             } else {
                                 Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
@@ -132,7 +135,7 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
     private boolean isValidateCredentials() {
         String uPass = password.getText().toString();
         String uCNFPass = confirmPassword.getText().toString();
-        if (!uPass.isEmpty() && !uCNFPass.isEmpty() && uPass.matches( ".{8,}") && (uCNFPass.matches(uPass))) {
+        if (!uPass.isEmpty() && !uCNFPass.isEmpty() && uPass.matches( ".{8,}") && (uCNFPass.matches(uPass)) && Utility.isValidPassword(uPass)) {
             return true;
         } else {
             return false;

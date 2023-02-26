@@ -97,14 +97,20 @@ public class ProfileActivity extends AppCompatActivity {
         tvLeadershipBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ProfileActivity.this, "LeaderShip Board Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                intent.putExtra(Constants.fragment, "LeaderBoardFragment");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
         tvCourses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ProfileActivity.this, "Courses Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                intent.putExtra(Constants.fragment, "QuizFragment");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 

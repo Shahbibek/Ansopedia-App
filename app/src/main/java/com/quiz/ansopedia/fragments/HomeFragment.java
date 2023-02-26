@@ -4,7 +4,6 @@ import static com.quiz.ansopedia.Utility.Constants.contents;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,6 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
-import com.quiz.ansopedia.MainActivity;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.CourseAdapter;
@@ -70,7 +68,7 @@ public class HomeFragment extends Fragment {
             ivProgress.setVisibility(View.VISIBLE);
             getContent();
         } else {
-            settabLayout(contents.getBranch().get(0).getBranch_name());
+            setTabLayout(contents.getBranch().get(0).getBranch_name());
             setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
         }
         return view;
@@ -93,7 +91,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void settabLayout(String branch_name) {
+    private void setTabLayout(String branch_name) {
         ArrayList<String> tabList = new ArrayList<>();
         for (Branch branch : contents.getBranch()) {
             tabList.add(branch.getBranch_name());
@@ -142,7 +140,7 @@ public class HomeFragment extends Fragment {
                         if (response.code() == 200) {
                             if (response.body().size() != 0) {
                                 contents = response.body().get(0);
-                                settabLayout(contents.getBranch().get(0).getBranch_name());
+                                setTabLayout(contents.getBranch().get(0).getBranch_name());
                                 setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
                             }
                         }else if(response.code() == 500) {

@@ -32,6 +32,8 @@ public class ReadQuestionsActivity extends AppCompatActivity {
     Chapters chapters;
     private static ReadQuestionAdapter1 adapter1;
 //    View vt, vt1;
+    ImageView nextquestion;
+    ImageView previousquestion;
     RelativeLayout rlTopic;
     public static ArrayList<Questions> questions = new ArrayList<>();
 
@@ -50,6 +52,8 @@ public class ReadQuestionsActivity extends AppCompatActivity {
 //        rlTopic.setBackgroundColor(Color.parseColor(Constants.COLOR));
 //        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
         rlTopic.getBackground().setTint(Color.parseColor(Constants.COLOR));
+//        nextquestion.setBackgroundColor(Color.parseColor(Constants.COLOR));
+//        previousquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
 //        #######################################   Set Color Start ######################################
         chapters = new Gson().fromJson(getIntent().getStringExtra("chapter"), Chapters.class);
         tvSubject.setText(Utility.toCapitalizeFirstLetter(getIntent().getStringExtra("subject")));
@@ -76,6 +80,8 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         tvChapter = findViewById(R.id.tvChapter);
         toolbar = findViewById(R.id.toolbar);
         rlTopic = findViewById(R.id.rlTopic);
+        nextquestion = findViewById(R.id.nextquestion);
+        previousquestion = findViewById(R.id.previousquestion);
 //        vt = findViewById(R.id.vt);
 //        vt1 = findViewById(R.id.vt1);
     }
