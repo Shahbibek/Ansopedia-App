@@ -38,6 +38,7 @@ public class SignupActivity extends AppCompatActivity {
     String uName, uEmail, pass, confirmPass;
     SharedPreferences preferences;
     RelativeLayout svMain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,31 +71,32 @@ public class SignupActivity extends AppCompatActivity {
                     if (uName.isEmpty()) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("* Please Enter Name");
-                    } else if (!uName.matches("[a-zA-Z ]+")){
+                    } else if (!uName.matches("[a-zA-Z ]+")) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("Enter Valid Name");
-                    } else if (uEmail.isEmpty()){
+                    } else if (uEmail.isEmpty()) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Please Enter Email");
-                    } else if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()){
+                    } else if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Please Enter Valid Email");
-                    }else if (pass.isEmpty()){
+                    } else if (pass.isEmpty()) {
                         passwordTextField.setErrorEnabled(true);
                         passwordTextField.setError("* Please Enter Password");
-                    }else if(!pass.matches( ".{8,}")){
+                    } else if (!pass.matches(".{8,}")) {
                         passwordTextField.setErrorEnabled(true);
                         passwordTextField.setError("* Password must be of 8 digit");
-                    }else if(!Utility.isValidPassword(pass)){
+                    } else if (!Utility.isValidPassword(pass)) {
                         passwordTextField.setErrorEnabled(true);
                         passwordTextField.setError("* password must contain uppercase, lowercase, one digit and one special character");
-                    }else if(confirmPass.isEmpty()){
+                    } else if (confirmPass.isEmpty()) {
                         confirmPasswordTextField.setErrorEnabled(true);
                         confirmPasswordTextField.setError("* Please Enter Password");
-                    }else if(!confirmPass.matches(pass)){
+                    } else if (!confirmPass.matches(pass)) {
                         confirmPasswordTextField.setErrorEnabled(true);
                         confirmPasswordTextField.setError("* Password must be same");
-                    };
+                    }
+                    ;
                 }
             }
         });
@@ -136,15 +138,15 @@ public class SignupActivity extends AppCompatActivity {
                         Utility.dismissProgress(SignupActivity.this);
                         if (response.code() == 201) {
                             LoginModel loginModel = response.body().get(0);
-                                Constants.TOKEN = loginModel.getToken();
-                                preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-                                preferences.edit().putString(Constants.username, uEmail).apply();
-                                preferences.edit().putString(Constants.name, uName).apply();
-                                preferences.edit().putString(Constants.password, confirmPass).apply();
-                                preferences.edit().putBoolean(Constants.isLogin, true).apply();
-                                Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                finish();
+                            Constants.TOKEN = loginModel.getToken();
+                            preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+                            preferences.edit().putString(Constants.username, uEmail).apply();
+                            preferences.edit().putString(Constants.name, uName).apply();
+                            preferences.edit().putString(Constants.password, confirmPass).apply();
+                            preferences.edit().putBoolean(Constants.isLogin, true).apply();
+                            Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                            finish();
                         } else if (response.code() == 403) {
                             Utility.showAlertDialog(SignupActivity.this, "Failed", "Email already exists!!");
                         } else if (response.code() == 500) {
@@ -169,41 +171,17 @@ public class SignupActivity extends AppCompatActivity {
             Utility.showAlertDialog(this, "Error", "Please connect to Internet");
         }
     }
+
     private boolean isValidateCredentials() {
         uName = userName.getText().toString().trim();
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches( ".{8,}")  && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
+        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches(".{8,}") && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void ShowMessage(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                getApplicationContext());
-        builder.setCancelable(true);
-        builder.setTitle("Title");
-        builder.setInverseBackgroundForced(true);
-        builder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 }

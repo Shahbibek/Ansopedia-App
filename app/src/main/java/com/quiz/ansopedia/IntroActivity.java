@@ -45,9 +45,15 @@ public class IntroActivity extends AppCompatActivity {
         subjectsArrayList = db.readData(this);
 
         ImageView ivProgress = findViewById(R.id.ivProgress);
-        Glide.with(this).load(R.drawable.ansopedia_loader_new).into(ivProgress);
+        try{
+            Glide.with(this).load(R.drawable.ansopedia_loader_new).into(ivProgress);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
         SharedPreferences preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         if (preferences.getBoolean(Constants.isLogin, false)) {
+            Utility.getUserDetail(this);
             Utility.getLogin(this);
             getContent();
         } else {

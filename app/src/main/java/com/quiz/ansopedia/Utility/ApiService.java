@@ -55,4 +55,7 @@ public interface ApiService {
 
     @GET("notify")
     Call<List<Notification>> getNotification();
+
+    @GET("leaders")
+    Call<List<UserDetail>> getRankers();
 }

@@ -80,17 +80,17 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        tvEditSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ProfileActivity.this, "Edit Setting Clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        tvEditSetting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(ProfileActivity.this, "Edit Setting Clicked", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         tvBadges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ProfileActivity.this, "Badges Clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ProfileActivity.this, BadgesActivity.class));
             }
         });
 
@@ -114,17 +114,21 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (preferences.getBoolean(Constants.isImageAdded, false)) {
-            try {
-                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
-                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
-                        .build());
+        try {
+            if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
+                try {
+                    Glide.with(this)
+                            .load(Utility.userDetail.getAvatar())
+                            .into(ivChangeImage);
 
-                Glide.with(this).load(url).into(ivChangeImage);
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
     }
 

@@ -225,11 +225,9 @@ public class Utility {
             @Override
             public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
                 if (response.code() == 200) {
+                    userDetail = new UserDetail();
                     userDetail = response.body().get(0);
                     preferences.edit().putString(Constants.name, userDetail.getName()).apply();
-                    if (userDetail.getAvatar() != null) {
-                        preferences.edit().putBoolean(Constants.isImageAdded, true).apply();
-                    }
                 }
             }
 

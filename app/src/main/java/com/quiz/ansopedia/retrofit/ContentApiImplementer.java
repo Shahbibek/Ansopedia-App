@@ -124,4 +124,10 @@ public class ContentApiImplementer {
         Call<List<Notification>> call = apiService.getNotification();
         call.enqueue(cb);
     }
+
+    public static void getRankers(Callback<List<UserDetail>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<UserDetail>> call = apiService.getRankers();
+        call.enqueue(cb);
+    }
 }

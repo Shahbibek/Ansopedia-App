@@ -40,6 +40,7 @@
             android:id="@+id/topLeads"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:visibility="gone"
             android:layout_below="@+id/rlTopic"
             android:layout_marginVertical="10dp"
             android:gravity="center">
@@ -218,180 +219,180 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/tvFourth"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/topLeads"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/rank_bg">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/tvFourth"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_below="@+id/topLeads"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:background="@drawable/rank_bg">-->
 
-            <TextView
-                android:id="@+id/tvFourthRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="16dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="4."
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvFourthRank"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="16dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="center"-->
+<!--                android:text="4."-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="20sp" />-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/changeImg"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="8dp"
-                android:src="@drawable/shikat"
-                app:shapeAppearanceOverlay="@style/rank4imageview"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px" />
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/changeImg"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginHorizontal="10dp"-->
+<!--                android:layout_marginVertical="8dp"-->
+<!--                android:src="@drawable/shikat"-->
+<!--                app:shapeAppearanceOverlay="@style/rank4imageview"-->
+<!--                app:strokeColor="@color/contact_shape"-->
+<!--                app:strokeWidth="2px" />-->
 
-            <TextView
-                android:id="@+id/tvFourthRankName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Engineer"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvFourthRankName"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Engineer"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="18sp" />-->
 
-            <TextView
-                android:id="@+id/tvFourthRankScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="20dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="end"
-                android:text="844"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvFourthRankScore"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="end"-->
+<!--                android:text="844"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="13sp" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/tvFifth"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/tvFourth"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/rank_bg">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/tvFifth"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_below="@+id/tvFourth"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:background="@drawable/rank_bg">-->
 
-            <TextView
-                android:id="@+id/tvRankFifth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="16dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="5."
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvRankFifth"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="16dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="center"-->
+<!--                android:text="5."-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="20sp" />-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/changeImgFifth"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="8dp"
-                android:src="@drawable/shikat"
-                app:shapeAppearanceOverlay="@style/rank4imageview"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px" />
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/changeImgFifth"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginHorizontal="10dp"-->
+<!--                android:layout_marginVertical="8dp"-->
+<!--                android:src="@drawable/shikat"-->
+<!--                app:shapeAppearanceOverlay="@style/rank4imageview"-->
+<!--                app:strokeColor="@color/contact_shape"-->
+<!--                app:strokeWidth="2px" />-->
 
-            <TextView
-                android:id="@+id/tvFifthRankName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Afroz"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvFifthRankName"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Afroz"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="18sp" />-->
 
-            <TextView
-                android:id="@+id/tvFifthRankScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="20dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="end"
-                android:text="844"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvFifthRankScore"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="end"-->
+<!--                android:text="844"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="13sp" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/tvSixth"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/tvFifth"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/rank_bg">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/tvSixth"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_below="@+id/tvFifth"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:background="@drawable/rank_bg">-->
 
-            <TextView
-                android:id="@+id/tvRankFourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="16dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="6."
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvRankFourth"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="16dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="center"-->
+<!--                android:text="6."-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="20sp" />-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/changeImgSixth"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="8dp"
-                android:src="@drawable/shikat"
-                app:shapeAppearanceOverlay="@style/rank4imageview"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px" />
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/changeImgSixth"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginHorizontal="10dp"-->
+<!--                android:layout_marginVertical="8dp"-->
+<!--                android:src="@drawable/shikat"-->
+<!--                app:shapeAppearanceOverlay="@style/rank4imageview"-->
+<!--                app:strokeColor="@color/contact_shape"-->
+<!--                app:strokeWidth="2px" />-->
 
-            <TextView
-                android:id="@+id/tvSixthRankName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Lal Mohan"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvSixthRankName"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Lal Mohan"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="18sp" />-->
 
-            <TextView
-                android:id="@+id/tvSixthRankScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="20dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="end"
-                android:text="844"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvSixthRankScore"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:gravity="end"-->
+<!--                android:text="844"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="13sp" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLeaderBoard"

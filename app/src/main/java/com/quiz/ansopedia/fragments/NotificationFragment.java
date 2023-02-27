@@ -66,7 +66,7 @@ public class NotificationFragment extends Fragment {
                         Utility.dismissProgress(getContext());
                         if (response.code() == 200) {
                             notifications = (ArrayList<Notification>) response.body();
-                            Collections.reverse(notifications);
+//                            Collections.reverse(notifications);
                             setRecyclerView();
                         }else if(response.code() == 404){
                             Utility.showAlertDialog(getContext(), "Failed", "Nothing to show");

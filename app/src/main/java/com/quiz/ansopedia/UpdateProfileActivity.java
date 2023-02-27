@@ -1,9 +1,14 @@
 package com.quiz.ansopedia;
 
+import static com.quiz.ansopedia.Utility.Constants.contents;
+
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,7 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -27,6 +34,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.UserDetail;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
@@ -50,9 +58,9 @@ import retrofit2.Response;
 
 public class UpdateProfileActivity extends AppCompatActivity {
 
+    private static final int WRITE_STORAGE_REQUEST_CODE = 10;
     // Uri indicates, where the image will be picked from
     private Uri filePath;
-
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
     ImageView ivChangeImg;
@@ -60,7 +68,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     TextInputEditText tvPhoneNo;
     TextInputEditText address1;
     SharedPreferences preferences;
-    Button btnEdit1;
+    Button btnEdit;
     TextInputLayout t1,t2,t3;
 
     @Override
@@ -71,7 +79,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         RelativeLayout svMain = findViewById(R.id.svMain);
         btnUpdate = findViewById(R.id.btnUpdate);
-//        btnEdit1 = findViewById(R.id.btnEdit1);
+        btnEdit = findViewById(R.id.btnEdit);
         ImageView ivBack = findViewById(R.id.ivBack);
         Button ivChangeBtn = findViewById(R.id.ivChangeBtn);
         ivChangeImg = findViewById(R.id.ivChangeImg);
@@ -82,22 +90,20 @@ public class UpdateProfileActivity extends AppCompatActivity {
         t2 = findViewById(R.id.t2);
         t3 = findViewById(R.id.t3);
 
-        if (preferences.getBoolean(Constants.isImageAdded, false)) {
             try {
-                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
-                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
-                        .build());
+                if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
 
-                Glide.with(this).load(url).into(ivChangeImg);
+                    Glide.with(this).load(Utility.userDetail.getAvatar()).into(ivChangeImg);
+                }
                 address1.setText(Utility.userDetail.getName());
                 tvDesignation.setText(Utility.userDetail.getDesignation());
                 tvPhoneNo.setText(Utility.userDetail.getMobile());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
 
         ivChangeBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
                 selectImage();
@@ -123,6 +129,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 Utility.hideSoftKeyboard(UpdateProfileActivity.this);
                 if (isValidateCredentials()) {
                     updateUserDetail();
+                    btnEdit.setVisibility(View.VISIBLE);
+                    btnUpdate.setVisibility(View.GONE);
                 } else  {
                     if((userName.isEmpty())){
                         t1.setErrorEnabled(true);
@@ -147,20 +155,20 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
         });
 //        ###################### Edit and Save Open and Shut Start ################################
-//        tvPhoneNo.setEnabled(false);
-//        tvDesignation.setEnabled(false);
-//        address1.setEnabled(false);
-//        btnUpdate.setVisibility(View.GONE);
-//        btnEdit1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                tvPhoneNo.setEnabled(true);
-//                tvDesignation.setEnabled(true);
-//                address1.setEnabled(true);
-//                btnUpdate.setVisibility(View.VISIBLE);
-//                btnEdit1.setVisibility(View.GONE);
-//            }
-//        });
+        tvPhoneNo.setEnabled(false);
+        tvDesignation.setEnabled(false);
+        address1.setEnabled(false);
+        btnUpdate.setVisibility(View.GONE);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvPhoneNo.setEnabled(true);
+                tvDesignation.setEnabled(true);
+                address1.setEnabled(true);
+                btnUpdate.setVisibility(View.VISIBLE);
+                btnEdit.setVisibility(View.GONE);
+            }
+        });
 
 //        ###################### Edit and Save Open and Shut End ################################
 
@@ -174,15 +182,30 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     // Select Image method
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void selectImage() {
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            // Defining Implicit Intent to mobile gallery
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(
+                    Intent.createChooser(
+                            intent,
+                            "Select Image from here..."),
+                    PICK_IMAGE_REQUEST);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_REQUEST_CODE);
+        }
+    }
 
-        // Defining Implicit Intent to mobile gallery
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(
-                Intent.createChooser(
-                        intent,
-                        "Select Image from here..."),
-                PICK_IMAGE_REQUEST);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == WRITE_STORAGE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                selectImage();
+            }
+        }
     }
 
     // Override onActivityResult method
@@ -260,9 +283,10 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 Utility.dismissProgress(UpdateProfileActivity.this);
                 if (response.code() == 200) {
                     LoginModel loginModel = (LoginModel) response.body().get(0);
-                    if (loginModel.getStatus().equalsIgnoreCase("success")) {
-                        Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Uploaded Successfully !!");
-                    }
+                    Utility.getUserDetail(UpdateProfileActivity.this);
+                    Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Picture Uploaded Successfully !!");
+                    startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
+                    finish();
                 } else if (response.code() == 500) {
                     Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Server Error, Please Try Again..");
                 } else if (response.code() == 400) {
@@ -296,7 +320,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         if (response.code() == 200) {
                             LoginModel loginModel = (LoginModel) response.body().get(0);
                             if (loginModel.getStatus().equalsIgnoreCase("success")) {
-                                Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                                Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile details updated successfully !!");
+                                startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
+                                finish();
                             }
                         }else if(response.code() == 304){
                             LoginModel loginModel = (LoginModel) response.body().get(0);

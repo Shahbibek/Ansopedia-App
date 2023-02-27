@@ -66,6 +66,24 @@ public class MainActivity extends AppCompatActivity {
     CircleImageView profileMenu;
     SharedPreferences preferences;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
+                try {
+                    Glide.with(this)
+                            .load(Utility.userDetail.getAvatar())
+                            .into(profileMenu);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,18 +190,22 @@ public class MainActivity extends AppCompatActivity {
 //        ########################### User profile Icon End #############################################
 
 //        ########################### Profile menu Bar Shown Start #############################################
-        if (preferences.getBoolean(Constants.isImageAdded, false)) {
-            try {
-                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
-                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
-                        .build());
-                Glide.with(this)
-                        .load(url)
-                        .into(profileMenu);
+        try {
+            if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
+                try {
+//                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
+//                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
+//                        .build());
+                    Glide.with(this)
+                            .load(Utility.userDetail.getAvatar())
+                            .into(profileMenu);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 

@@ -7,6 +7,11 @@
     <string name="silverdesc">If you got the Silver level then you are the Intermediate in the following program and course.</string>
     <string name="bronzedesc">If you got the Bronze level then you are a beginner in the following program and course</string>
 
+    <string name="inactive_golddesc">If you got the gold medal then you are Advanced in the following program and course.</string>
+    <string name="inactive_silverdesc">If you got the Silver level then you are the Intermediate in the following program and course.</string>
+    <string name="inactive_bronzedesc">If you got the Bronze level then you are a beginner in the following program and course</string>
+
+
     <string name="navigation_open">Open Navigation drawer</string>
     <string name="navigation_close">Close Navigation drawer</string>
     <!-- TODO: Remove or change this placeholder text -->

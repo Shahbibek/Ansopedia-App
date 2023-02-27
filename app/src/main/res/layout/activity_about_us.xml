@@ -109,6 +109,7 @@
                     android:gravity="start">
 
                     <ImageView
+                        android:id="@+id/ivShikatFB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -117,6 +118,7 @@
                         android:src="@drawable/ic_facebook" />
 
                     <ImageView
+                        android:id="@+id/ivShikatGH"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -125,6 +127,7 @@
                         android:src="@drawable/ic_github_min" />
 
                     <ImageView
+                        android:id="@+id/ivShikatLN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -204,6 +207,7 @@
                     android:gravity="start">
 
                     <ImageView
+                        android:id="@+id/ivBibekFB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -212,6 +216,7 @@
                         android:src="@drawable/ic_facebook" />
 
                     <ImageView
+                        android:id="@+id/ivBibekGH"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -220,6 +225,7 @@
                         android:src="@drawable/ic_github_min" />
 
                     <ImageView
+                        android:id="@+id/ivBibekLN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -299,6 +305,7 @@
                     android:gravity="start">
 
                     <ImageView
+                        android:id="@+id/ivSanjayFB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -307,6 +314,7 @@
                         android:src="@drawable/ic_facebook" />
 
                     <ImageView
+                        android:id="@+id/ivSanjayGH"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -315,6 +323,7 @@
                         android:src="@drawable/ic_github_min" />
 
                     <ImageView
+                        android:id="@+id/ivSanjayLN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -394,6 +403,7 @@
                     android:gravity="start">
 
                     <ImageView
+                        android:id="@+id/ivNayanFB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -402,6 +412,7 @@
                         android:src="@drawable/ic_facebook" />
 
                     <ImageView
+                        android:id="@+id/ivNayanGH"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -410,6 +421,7 @@
                         android:src="@drawable/ic_github_min" />
 
                     <ImageView
+                        android:id="@+id/ivNayanLN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
