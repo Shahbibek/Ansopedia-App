@@ -127,6 +127,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_margin="10dp"
                 android:gravity="center">
 
@@ -209,6 +210,7 @@
 
                 </LinearLayout>
             </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -294,6 +296,7 @@
                 android:layout_height="45dp"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/inner_layout_border">
 
                 <View
@@ -322,6 +325,7 @@
                 android:layout_height="45dp"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/inner_layout_border">
 

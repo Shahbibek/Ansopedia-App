@@ -142,9 +142,10 @@ public class EnterOtpActivity extends AppCompatActivity {
                         if (response.code() == 200) {
                             LoginModel loginModel = response.body().get(0);
                             if (loginModel.getStatus().toLowerCase().contains("success")) {
-                                Constants.TOKEN = loginModel.getToken();
-                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class));
-                                finish();
+//                                Constants.TOKEN = loginModel.getToken();
+                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class)
+                                        .putExtra("email", getIntent().getStringExtra("email")));
+
                             } else {
                                 Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
                             }

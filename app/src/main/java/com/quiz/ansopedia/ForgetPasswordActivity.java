@@ -89,7 +89,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             } else {
                                 Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
                             }
-                        } else {
+                        } else if(response.code() == 429){
+                            Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Too many request, please try after 15 minutes..!!");
+                        }else {
                             Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
                         }
                     }

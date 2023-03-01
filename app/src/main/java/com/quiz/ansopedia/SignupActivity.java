@@ -145,7 +145,7 @@ public class SignupActivity extends AppCompatActivity {
                             preferences.edit().putString(Constants.password, confirmPass).apply();
                             preferences.edit().putBoolean(Constants.isLogin, true).apply();
                             Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                            startActivity(new Intent(SignupActivity.this, SignInActivity.class));
                             finish();
                         } else if (response.code() == 403) {
                             Utility.showAlertDialog(SignupActivity.this, "Failed", "Email already exists!!");

@@ -2,6 +2,7 @@ package com.quiz.ansopedia.fragments;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,7 +31,6 @@ public class QuizFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -38,6 +38,7 @@ public class QuizFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_quiz, container, false);
+        ((AppCompatActivity) getContext()).getSupportActionBar().setTitle("My Courses");
         rvCourses = view.findViewById(R.id.rvCourses);
         CoursesHelper db = new CoursesHelper(getContext());
         Constants.subjectsArrayList = db.readData(getContext());
