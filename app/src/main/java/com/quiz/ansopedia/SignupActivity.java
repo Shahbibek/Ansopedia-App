@@ -74,6 +74,9 @@ public class SignupActivity extends AppCompatActivity {
                     } else if (!uName.matches("[a-zA-Z ]+")) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("Enter Valid Name");
+                    } else if (!uName.matches(".{3,}")) {
+                        userNameTextField.setErrorEnabled(true);
+                        userNameTextField.setError("* Name must be of at least 3 character");
                     } else if (uEmail.isEmpty()) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Please Enter Email");
@@ -177,7 +180,7 @@ public class SignupActivity extends AppCompatActivity {
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uName.isEmpty() && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches(".{8,}") && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
+        if (!uName.isEmpty() && uName.matches(".{3,}") && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches(".{8,}") && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
             return true;
         } else {
             return false;

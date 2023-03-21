@@ -145,6 +145,8 @@ public class SignInActivity extends AppCompatActivity {
                             }
                         } else if(response.code() == 500){
                             Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
+                        } else if(response.code() == 404){
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
                         } else if(response.code() == 403){
                             Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
                         } else if(response.code() == 429){

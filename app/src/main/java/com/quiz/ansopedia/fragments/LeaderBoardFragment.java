@@ -72,8 +72,6 @@ public class LeaderBoardFragment extends Fragment {
                         setRecyclerView();
                     }else if(response.code() == 500) {
                         Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
-                    }else{
-                        Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
                     }
                 }
 
@@ -83,6 +81,9 @@ public class LeaderBoardFragment extends Fragment {
                     t.printStackTrace();
                 }
             });
+        }else{
+            Utility.dismissProgress(getContext());
+            Utility.showAlertDialog(getContext(), "Error", "Please Connect to Internet..!!");
         }
     }
 

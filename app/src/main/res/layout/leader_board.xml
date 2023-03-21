@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/tvRankCount"
-                android:layout_width="15dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
@@ -44,7 +44,7 @@
 
             <TextView
                 android:id="@+id/tvRankerName"
-                android:layout_width="150dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="5dp"

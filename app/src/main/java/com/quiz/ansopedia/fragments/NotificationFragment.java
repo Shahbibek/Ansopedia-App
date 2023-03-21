@@ -72,8 +72,6 @@ public class NotificationFragment extends Fragment {
                             Utility.showAlertDialog(getContext(), "Failed", "Nothing to show");
                         }else if(response.code() == 500){
                             Utility.showAlertDialog(getContext(), "Failed", "Server error, Please Try Again");
-                        }else{
-                            Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
                         }
                     }
 
@@ -89,7 +87,7 @@ public class NotificationFragment extends Fragment {
             }
         } else {
             Utility.dismissProgress(getContext());
-            Utility.showAlertDialog(getContext(), "Error", "Please Connect to Internet");
+            Utility.showAlertDialog(getContext(), "Error", "Please Connect to Internet..!!");
         }
     }
 

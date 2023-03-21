@@ -119,8 +119,6 @@ public class Utility {
                                         ((Activity) context).finish();
                                     }else if(response.code() == 500){
                                         showAlertDialog(context, "Failed", "Server Error, Please Try Again");
-                                    }else{
-                                        showAlertDialog(context, "Error", "Something went wrong, Please try again");
                                     }
                                 }
 
@@ -131,6 +129,7 @@ public class Utility {
                                 }
                             });
                         } catch (Exception e) {
+                            dismissProgress(context);
                             e.printStackTrace();
                         }
                     }
@@ -237,6 +236,28 @@ public class Utility {
             }
         });
     }
+    public static void getUserDetailAwait(Context context, final onResponseFromServer responseFromServer) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+        ContentApiImplementer.getUserDetail(new Callback<List<UserDetail>>() {
+            @Override
+            public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
+                if (response.code() == 200) {
+                    userDetail = new UserDetail();
+                    userDetail = response.body().get(0);
+                    preferences.edit().putString(Constants.name, userDetail.getName()).apply();
+                    responseFromServer.iOnResponseFromServer(response.code(), "Success");
+                } else {
+                    responseFromServer.iOnResponseFromServer(response.code(), "fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserDetail>> call, Throwable t) {
+                t.printStackTrace();
+                responseFromServer.iOnResponseFromServer(500, "Server error");
+            }
+        });
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     public static String calculateDate(Duration duration) {
@@ -286,5 +307,7 @@ public class Utility {
         // matched the ReGex
         return m.matches();
     }
-
+    public interface onResponseFromServer{
+        void iOnResponseFromServer(int responseCode, String msg);
+    }
 }

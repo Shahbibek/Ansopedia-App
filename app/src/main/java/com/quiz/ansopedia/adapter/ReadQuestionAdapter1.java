@@ -3,6 +3,7 @@ package com.quiz.ansopedia.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -181,6 +182,13 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             holder.ivShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    holder.ivShare.setClickable(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.ivShare.setClickable(true);
+                        }
+                    }, 1000);
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_SUBJECT, "Question");
@@ -199,12 +207,12 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             holder.nextquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
             holder.previousquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
             if (ReadQuestionsActivity.lower == 0) {
-//                holder.previousquestion.setVisibility(View.GONE);
-                holder.previousquestion.setEnabled(false);
+                holder.previousquestion.setVisibility(View.GONE);
+//                holder.previousquestion.setEnabled(false);
             }
             if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
-//                holder.nextquestion.setVisibility(View.GONE);
-                holder.nextquestion.setEnabled(false);
+                holder.nextquestion.setVisibility(View.GONE);
+//                holder.nextquestion.setEnabled(false);
             }
             holder.nextquestion.setOnClickListener(new View.OnClickListener() {
                 @Override
