@@ -41,6 +41,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.fragments.HomeFragment;
@@ -164,7 +165,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, ContactUsActivity.class));
 
                 } else if (id == R.id.navlogout) {
-                    Utility.getLogout(MainActivity.this);
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                    finish();
+//                    Utility.getLogout(MainActivity.this);
                 } else if (id == R.id.navshare) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");

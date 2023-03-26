@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.google.firebase.auth.FirebaseAuth;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
@@ -56,7 +57,10 @@ public class ProfileActivity extends AppCompatActivity {
         btnLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utility.getLogout(ProfileActivity.this);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ProfileActivity.this, SignInActivity.class));
+                finish();
+//                Utility.getLogout(ProfileActivity.this);
             }
         });
 
