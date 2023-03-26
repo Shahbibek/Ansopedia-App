@@ -18,10 +18,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.quiz.ansopedia.MainActivity;
+import com.quiz.ansopedia.ProfileActivity;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.SignInActivity;
 import com.quiz.ansopedia.models.LoginModel;
@@ -60,9 +68,9 @@ public class Utility {
     }
 
     public static void dismissProgress(Context context) {
-        if (progressDialog.isShowing()) {
+//        if (progressDialog.isShowing()) {
             progressDialog.dismiss();
-        }
+//        }
     }
 
     public static boolean isNetConnected(Context context) {
@@ -107,27 +115,54 @@ public class Utility {
                         dialogInterface.dismiss();
                         showProgress(context);
                         try {
-                            ContentApiImplementer.getLogout(new Callback<List<LoginModel>>() {
-                                @Override
-                                public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                                    dismissProgress(context);
-                                    if (response.code() == 200) {
-                                        Constants.TOKEN = "";
-                                        preferences.edit().putBoolean(Constants.isLogin, false).apply();
-                                        preferences.edit().putString(Constants.token, "").apply();
-                                        context.startActivity(new Intent(context, SignInActivity.class));
-                                        ((Activity) context).finish();
-                                    }else if(response.code() == 500){
-                                        showAlertDialog(context, "Failed", "Server Error, Please Try Again");
-                                    }
-                                }
+                            GoogleSignInClient mGoogleSignInClient;
+                            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken(context.getString(R.string.default_web_client_id))
+                                    .requestEmail()
+                                    .build();
 
-                                @Override
-                                public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                                    dismissProgress(context);
-                                    showAlertDialog(context, "Error", "Something went wrong, Please try again");
-                                }
-                            });
+                            mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
+                            mGoogleSignInClient.signOut()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    FirebaseAuth.getInstance().signOut();
+                                                    Constants.TOKEN = "";
+                                                    preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                                                    preferences.edit().putString(Constants.token, "").apply();
+                                                    dismissProgress(context);
+                                                    ((Activity) context).startActivity(new Intent(context, SignInActivity.class));
+                                                    ((Activity) context).finish();
+                                                }
+                                            });
+//                            FirebaseAuth.getInstance().signOut();
+//                            Constants.TOKEN = "";
+//                            preferences.edit().putBoolean(Constants.isLogin, false).apply();
+//                            preferences.edit().putString(Constants.token, "").apply();
+//                            dismissProgress(context);
+//                            ((Activity) context).startActivity(new Intent(context, SignInActivity.class));
+//                            ((Activity) context).finish();
+//                            ContentApiImplementer.getLogout(new Callback<List<LoginModel>>() {
+//                                @Override
+//                                public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                                    dismissProgress(context);
+//                                    if (response.code() == 200) {
+//                                        Constants.TOKEN = "";
+//                                        preferences.edit().putBoolean(Constants.isLogin, false).apply();
+//                                        preferences.edit().putString(Constants.token, "").apply();
+//                                        context.startActivity(new Intent(context, SignInActivity.class));
+//                                        ((Activity) context).finish();
+//                                    }else if(response.code() == 500){
+//                                        showAlertDialog(context, "Failed", "Server Error, Please Try Again");
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                                    dismissProgress(context);
+//                                    showAlertDialog(context, "Error", "Something went wrong, Please try again");
+//                                }
+//                            });
                         } catch (Exception e) {
                             dismissProgress(context);
                             e.printStackTrace();

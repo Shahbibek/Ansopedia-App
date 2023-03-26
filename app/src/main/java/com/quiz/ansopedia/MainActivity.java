@@ -165,10 +165,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, ContactUsActivity.class));
 
                 } else if (id == R.id.navlogout) {
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
-                    finish();
-//                    Utility.getLogout(MainActivity.this);
+//                    FirebaseAuth.getInstance().signOut();
+//                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
+//                    finish();
+                    Utility.getLogout(MainActivity.this);
                 } else if (id == R.id.navshare) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
