@@ -9,14 +9,14 @@
     <RelativeLayout
         android:id="@+id/svMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true">
 
         <androidx.constraintlayout.utils.widget.MotionLabel
             android:layout_width="190dp"
             android:layout_height="70dp"
-            android:layout_marginLeft="-30dp"
+            android:layout_marginStart="-30dp"
             android:background="@drawable/ovalshape"
             android:rotation="50"
             android:text="">
@@ -26,7 +26,7 @@
         <androidx.constraintlayout.utils.widget.MotionLabel
             android:layout_width="190dp"
             android:layout_height="70dp"
-            android:layout_marginLeft="-80dp"
+            android:layout_marginStart="-80dp"
             android:background="@drawable/ovalshape"
             android:rotation="50"
             android:text="">
@@ -45,7 +45,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/__p__sign_in"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/logo" />
 
             <TextView
                 android:id="@+id/__p__sign_in"
@@ -87,7 +88,7 @@
                     android:focusable="true"
                     android:hint="Username"
                     android:inputType="textEmailAddress"
-                    android:textSize="22dp" />
+                    android:textSize="22sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
