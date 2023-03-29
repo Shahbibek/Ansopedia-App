@@ -58,4 +58,7 @@ public interface ApiService {
 
     @GET("leaders")
     Call<List<UserDetail>> getRankers();
+
+    @GET("user/sign-in-with-google")
+    Call<List<LoginModel>> signInWithGoogle();
 }

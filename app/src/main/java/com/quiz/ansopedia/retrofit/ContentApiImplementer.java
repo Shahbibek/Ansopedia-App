@@ -130,4 +130,10 @@ public class ContentApiImplementer {
         Call<List<UserDetail>> call = apiService.getRankers();
         call.enqueue(cb);
     }
+
+    public static void signInWithGoogle(Callback<List<LoginModel>> cb) {
+        ApiService apiService = getRetrofit().create(ApiService.class);
+        Call<List<LoginModel>> call = apiService.signInWithGoogle();
+        call.enqueue(cb);
+    }
 }
