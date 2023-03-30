@@ -7,6 +7,9 @@ public class LoginRequestModel{
 	@SerializedName("name")
 	private String name;
 
+	@SerializedName("username")
+	private String username;
+
 	@SerializedName("password")
 	private String password;
 
@@ -47,6 +50,14 @@ public class LoginRequestModel{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getUserName() {
+		return username;
+	}
+
+	public void setUserName(String username) {
+		this.username = username;
 	}
 
 	public String getPassword_confirmation() {

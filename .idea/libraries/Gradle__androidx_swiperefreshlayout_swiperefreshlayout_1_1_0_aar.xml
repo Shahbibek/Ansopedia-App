@@ -1,16 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.swiperefreshlayout:swiperefreshlayout:1.1.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e72619143a4c696f706499a348b64cdd/transformed/swiperefreshlayout-1.1.0/annotations.zip!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d42e467dac22d3adbfefa75ee73ec199/transformed/swiperefreshlayout-1.1.0/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/04954b3d78fc79146e25fb4030476554/transformed/swiperefreshlayout-1.1.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e72619143a4c696f706499a348b64cdd/transformed/swiperefreshlayout-1.1.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e72619143a4c696f706499a348b64cdd/transformed/swiperefreshlayout-1.1.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e72619143a4c696f706499a348b64cdd/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d42e467dac22d3adbfefa75ee73ec199/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d42e467dac22d3adbfefa75ee73ec199/transformed/swiperefreshlayout-1.1.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d42e467dac22d3adbfefa75ee73ec199/transformed/swiperefreshlayout-1.1.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/04954b3d78fc79146e25fb4030476554/transformed/swiperefreshlayout-1.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/04954b3d78fc79146e25fb4030476554/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/04954b3d78fc79146e25fb4030476554/transformed/swiperefreshlayout-1.1.0/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

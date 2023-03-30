@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "290159073203",
+    "project_id": "ansopedia-aeb06",
+    "storage_bucket": "ansopedia-aeb06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290159073203:android:d9b907969334eccc4b9dc6",
+        "android_client_info": {
+          "package_name": "com.quiz.ansopedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290159073203-pslg80afak1t8b5n39frep2pvata8cbn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quiz.ansopedia",
+            "certificate_hash": "b1c45717a8fa6f5c2b8e27437fdddfa267659786"
+          }
+        },
+        {
+          "client_id": "290159073203-gur9nfep5rinng7l0kci73b9trglgdfo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanew-KAsupaZsosSkM-c8AIM1ggclE_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290159073203-g57t8q44pe52t19ltjvabjo6strtpemt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         image_slider = view.findViewById(R.id.image_slider);
         tabLayout = view.findViewById(R.id.tabLayout);
-        userIcons = view.findViewById(R.id.userIcons);
+        //userIcons = view.findViewById(R.id.userIcons);
         rvContent = view.findViewById(R.id.rvContent);
         ivProgress = view.findViewById(R.id.ivProgress);
 //            ############################### progress gif start ########################

@@ -33,9 +33,9 @@ import retrofit2.Response;
 public class SignupActivity extends AppCompatActivity {
     TextView signInTextBtn;
     MaterialButton signUpBtn;
-    TextInputEditText userName, userEmail, password, confirmPassword;
-    TextInputLayout userNameTextField, t3, passwordTextField, confirmPasswordTextField;
-    String uName, uEmail, pass, confirmPass;
+    TextInputEditText userName, userEmail, password, confirmPassword, userName_text;
+    TextInputLayout userNameTextField, t2, t3, passwordTextField, confirmPasswordTextField;
+    String uName, uUserName, uEmail, pass, confirmPass;
     SharedPreferences preferences;
     RelativeLayout svMain;
 
@@ -57,11 +57,13 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 uName = userName.getText().toString().trim();
+                uUserName = userName_text.getText().toString().trim();
                 uEmail = userEmail.getText().toString().trim();
                 pass = password.getText().toString();
                 confirmPass = confirmPassword.getText().toString();
                 Utility.hideSoftKeyboard(SignupActivity.this);
                 userNameTextField.setErrorEnabled(false);
+                t2.setErrorEnabled(false);
                 t3.setErrorEnabled(false);
                 passwordTextField.setErrorEnabled(false);
                 confirmPasswordTextField.setErrorEnabled(false);
@@ -73,10 +75,16 @@ public class SignupActivity extends AppCompatActivity {
                         userNameTextField.setError("* Please Enter Name");
                     } else if (!uName.matches("[a-zA-Z ]+")) {
                         userNameTextField.setErrorEnabled(true);
-                        userNameTextField.setError("Enter Valid Name");
+                        userNameTextField.setError("* Enter Valid Name");
                     } else if (!uName.matches(".{3,}")) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("* Name must be of at least 3 character");
+                    } else if (uUserName.isEmpty()) {
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Please Enter Name");
+                    } else if (!uUserName.matches(".{3,}")) {
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Username must be of at least 3 character");
                     } else if (uEmail.isEmpty()) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Please Enter Email");
@@ -99,7 +107,6 @@ public class SignupActivity extends AppCompatActivity {
                         confirmPasswordTextField.setErrorEnabled(true);
                         confirmPasswordTextField.setError("* Password must be same");
                     }
-                    ;
                 }
             }
         });
@@ -114,12 +121,14 @@ public class SignupActivity extends AppCompatActivity {
     private void initView() {
         signInTextBtn = findViewById(R.id.signInTextBtn);
         signUpBtn = findViewById(R.id.signUpBtn);
+        userName_text = findViewById(R.id.userName_text);
         userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
         userNameTextField = findViewById(R.id.userNameTextField);
         t3 = findViewById(R.id.t3);
+        t2 = findViewById(R.id.t2);
         passwordTextField = findViewById(R.id.passwordTextField);
         confirmPasswordTextField = findViewById(R.id.confirmPasswordTextField);
         svMain = findViewById(R.id.svMain);
@@ -128,6 +137,7 @@ public class SignupActivity extends AppCompatActivity {
     private void getRegister() {
         Utility.showProgress(this);
         LoginRequestModel loginRequestModel = new LoginRequestModel();
+        loginRequestModel.setUserName(uUserName);
         loginRequestModel.setName(uName);
         loginRequestModel.setEmail(uEmail);
         loginRequestModel.setPassword(pass);
@@ -177,10 +187,11 @@ public class SignupActivity extends AppCompatActivity {
 
     private boolean isValidateCredentials() {
         uName = userName.getText().toString().trim();
+        uUserName = userName_text.getText().toString().trim();
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uName.isEmpty() && uName.matches(".{3,}") && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches(".{8,}") && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
+        if (!uUserName.isEmpty() && uUserName.matches(".{3,}") && !uName.isEmpty() && uName.matches(".{3,}") && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches(".{8,}") && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
             return true;
         } else {
             return false;

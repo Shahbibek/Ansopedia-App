@@ -72,8 +72,10 @@ public class SignInActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        if (preferences.getBoolean(Constants.isLogin, false)) {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            updateUI(currentUser);
+        }
     }
     // [END on_start_check_user]
 
@@ -154,6 +156,7 @@ public class SignInActivity extends AppCompatActivity {
         sign_in_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Utility.showProgress(SignInActivity.this);
                 signIn();
             }
         });
@@ -196,7 +199,19 @@ public class SignInActivity extends AppCompatActivity {
                                 Constants.TOKEN = result.getToken();
                                 Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
                                 Log.d(TAG, "GetTokenResult result = " + user);
-                                updateUI(user);
+                                ContentApiImplementer.signInWithGoogle(new Callback<List<LoginModel>>() {
+                                    @Override
+                                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                                        if (response.code() == 200) {
+                                            updateUI(user);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                                        updateUI(null);
+                                    }
+                                });
 
                             });
                             Toast.makeText(SignInActivity.this, ""+user, Toast.LENGTH_SHORT).show();
@@ -219,13 +234,14 @@ public class SignInActivity extends AppCompatActivity {
     // [END signin]
 
     private void updateUI(FirebaseUser user) {
+        Utility.dismissProgress(this);
         if(user != null){
             preferences.edit().putBoolean(Constants.isLogin, true).apply();
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
     //                                Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
-//            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//            startActivity(new Intent(this, MainActivity.class));
             finish();
         }
     }
@@ -272,10 +288,13 @@ public class SignInActivity extends AppCompatActivity {
                             } else {
                                 Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
                             }
-                        } else if(response.code() == 500){
+                        }
+                        else if(response.code() == 500){
                             Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
                         } else if(response.code() == 404){
                             Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
+                        } else if(response.code() == 401){
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Credentials..!!");
                         } else if(response.code() == 403){
                             Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
                         } else if(response.code() == 429){
