@@ -288,8 +288,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
                             Utility.dismissProgress(UpdateProfileActivity.this);
                             Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Picture Uploaded Successfully !!");
-                            startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
-                            finish();
 
                         }
                     });
@@ -332,7 +330,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void iOnResponseFromServer(int responseCode, String msg) {
                                         Utility.dismissProgress(UpdateProfileActivity.this);
-                                        Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Picture Uploaded Successfully !!");
+                                        Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Details Uploaded Successfully !!");
                                         startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
                                         finish();
                                     }

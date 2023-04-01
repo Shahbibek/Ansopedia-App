@@ -68,9 +68,9 @@ public class Utility {
     }
 
     public static void dismissProgress(Context context) {
-//        if (progressDialog.isShowing()) {
+        if (progressDialog.isShowing()) {
             progressDialog.dismiss();
-//        }
+        }
     }
 
     public static boolean isNetConnected(Context context) {

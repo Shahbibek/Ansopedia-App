@@ -3,6 +3,7 @@ package com.quiz.ansopedia;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Patterns;
@@ -38,11 +39,13 @@ public class EnterOtpActivity extends AppCompatActivity {
     String email, otp;
     RelativeLayout svMain;
     ImageView ivBack;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_otp);
         initView();
+        preferences = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
         email = getIntent().getStringExtra("email");
         textView4.setText(email);
         timer();
@@ -101,6 +104,7 @@ public class EnterOtpActivity extends AppCompatActivity {
                         Utility.dismissProgress(EnterOtpActivity.this);
                         if (response.code() == 200) {
                             LoginModel loginModel = response.body().get(0);
+                            Constants.TOKEN = loginModel.getToken();
                             if (loginModel.getStatus().toLowerCase().contains("success")) {
                                 timer();
                             } else {
@@ -141,10 +145,13 @@ public class EnterOtpActivity extends AppCompatActivity {
                         Utility.dismissProgress(EnterOtpActivity.this);
                         if (response.code() == 200) {
                             LoginModel loginModel = response.body().get(0);
+                            preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+
                             if (loginModel.getStatus().toLowerCase().contains("success")) {
-//                                Constants.TOKEN = loginModel.getToken();
-                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class)
-                                        .putExtra("email", getIntent().getStringExtra("email")));
+                                Constants.TOKEN = loginModel.getToken();
+//                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class);
+//                                        .putExtra("email", getIntent().getStringExtra("email")));
+                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class));
 
                             } else {
                                 Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");

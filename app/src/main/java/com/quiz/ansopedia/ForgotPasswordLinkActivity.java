@@ -86,7 +86,7 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
     private void sendNewPassword() {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
         loginRequestModel.setPassword(password.getText().toString().trim());
-        loginRequestModel.setEmail(getIntent().getStringExtra("email").toString().trim());
+//        loginRequestModel.setEmail(getIntent().getStringExtra("email").toString().trim());
         loginRequestModel.setPassword_confirmation(confirmPassword.getText().toString().trim());
         Utility.showProgress(this);
         if (Utility.isNetConnected(this)) {

@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ContentApiImplementer {
     private static Retrofit retrofit;
     public static String BASE_URL = "https://api.ansopedia.com/api/";
-//    private static String BASE_URL = "http://192.168.185.148:8000/api/";
+//    private static String BASE_URL = "http://192.168.10.148:8000/api/";
 
     private static Retrofit getRetrofit() {
         if (retrofit == null) {

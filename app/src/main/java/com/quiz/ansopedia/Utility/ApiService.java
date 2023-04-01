@@ -37,7 +37,7 @@ public interface ApiService {
     @POST("user/verify-otp")
     Call<List<LoginModel>> sendOTPResetPassword(@Body LoginRequestModel loginRequestModel);
 
-    @POST("user/changepassword")
+    @POST("user/reset-password")
     Call<List<LoginModel>> sendNewPasswordResetPassword(@Body LoginRequestModel loginRequestModel);
 
     @POST("contact")

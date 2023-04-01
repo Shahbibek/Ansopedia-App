@@ -12,10 +12,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.models.Contents;
@@ -30,6 +35,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class IntroActivity extends AppCompatActivity {
+    SharedPreferences preferences;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +58,38 @@ public class IntroActivity extends AppCompatActivity {
         catch(Exception e){
             e.printStackTrace();
         }
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         if (preferences.getBoolean(Constants.isLogin, false)) {
-            Utility.getUserDetail(this);
-            Utility.getLogin(this);
-            getContent();
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                @Override
+                public void onSuccess(GetTokenResult getTokenResult) {
+                    Constants.TOKEN = getTokenResult.getToken();
+                    updateUI(currentUser);
+                }
+            });
         } else {
             startActivity(new Intent(this, SignInActivity.class));
+            finish();
+        }
+//        if (preferences.getBoolean(Constants.isLogin, false)) {
+//            Utility.getUserDetail(this);
+//            Utility.getLogin(this);
+//            getContent();
+//        } else {
+
+//            startActivity(new Intent(this, SignInActivity.class));
+//            finish();
+//        }
+    }
+    private void updateUI(FirebaseUser user) {
+        if(user != null){
+            preferences.edit().putBoolean(Constants.isLogin, true).apply();
+            preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
+            //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d("TAG", "GetTokenResult result = " + Constants.TOKEN);
+            startActivity(new Intent(IntroActivity.this, MainActivity.class));
             finish();
         }
     }

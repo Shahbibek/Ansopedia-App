@@ -3,6 +3,7 @@ package com.quiz.ansopedia;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,7 +34,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.models.LoginModel;
@@ -53,7 +58,8 @@ public class SignInActivity extends AppCompatActivity {
     SharedPreferences preferences;
     CheckBox checkbox;
     TextView textViewForgetPassword, textViewSignUp;
-    SignInButton sign_in_button;
+//    SignInButton sign_in_button;
+    ImageView sign_in_button;
     RelativeLayout svMain;
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
 
@@ -73,8 +79,15 @@ public class SignInActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         if (preferences.getBoolean(Constants.isLogin, false)) {
+            Utility.showProgress(this);
             FirebaseUser currentUser = mAuth.getCurrentUser();
-            updateUI(currentUser);
+            currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                @Override
+                public void onSuccess(GetTokenResult getTokenResult) {
+                    Constants.TOKEN = getTokenResult.getToken();
+                    updateUI(currentUser);
+                }
+            });
         }
     }
     // [END on_start_check_user]
@@ -174,7 +187,35 @@ public class SignInActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
+                mAuth.fetchSignInMethodsForEmail(account.getEmail())
+                                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                                        if(task.isSuccessful()){
+                                            SignInMethodQueryResult result = task.getResult();
+                                            List<String> signinMethod = result.getSignInMethods();
+                                            System.out.println(signinMethod);
+                                            if (signinMethod.contains("google.com")) {
+                                                firebaseAuthWithGoogle(account.getIdToken());
+                                            } else {
+                                                mGoogleSignInClient.signOut()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                Constants.TOKEN = "";
+                                                                preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                                                                preferences.edit().putString(Constants.token, "").apply();
+                                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Your have signup by email and Password, Please try that method !!..");
+                                                                updateUI(null);
+                                                            }
+                                                        });
+                                            }
+                                        }else{
+                                            Utility.showAlertDialog(SignInActivity.this, "Error", "Bad Request, Please try Again !!..");
+                                        }
+                                    }
+                                });
+
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -204,12 +245,12 @@ public class SignInActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
                                         if (response.code() == 200) {
+                                            preferences.getBoolean(Constants.isLogin, true);
                                             updateUI(user);
                                         } else {
                                             updateUI(null);
                                         }
                                     }
-
                                     @Override
                                     public void onFailure(Call<List<LoginModel>> call, Throwable t) {
                                         updateUI(null);
@@ -217,7 +258,7 @@ public class SignInActivity extends AppCompatActivity {
                                 });
 
                             });
-                            Toast.makeText(SignInActivity.this, ""+user, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(SignInActivity.this, ""+user, Toast.LENGTH_SHORT).show();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -231,8 +272,8 @@ public class SignInActivity extends AppCompatActivity {
 
     // ############################# START Signin #############################
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     // ###################################### END Signin ##############################
 
@@ -272,47 +313,105 @@ public class SignInActivity extends AppCompatActivity {
             preferences.edit().putString(Constants.username, etUsername.getText().toString().trim()).apply();
             preferences.edit().putString(Constants.password, etPassword.getText().toString().trim()).apply();
         }
+
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
-                    @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(SignInActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = (LoginModel) response.body().get(0);
-                            if (loginModel.getStatus().equalsIgnoreCase("success")) {
-                                Constants.TOKEN = loginModel.getToken();
-                                preferences.edit().putBoolean(Constants.isLogin, true).apply();
-                                preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-                                Toast.makeText(SignInActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                                finish();
-                            } else {
-                                Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
-                            }
-                        }
-                        else if(response.code() == 500){
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
-                        } else if(response.code() == 404){
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
-                        } else if(response.code() == 401){
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Credentials..!!");
-                        } else if(response.code() == 403){
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
-                        } else if(response.code() == 429){
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
-                        } else {
-                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again..");
-                        }
-                    }
+                mAuth.signInWithEmailAndPassword(etUsername.getText().toString().trim(),etPassword.getText().toString().trim())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    user.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                                        @Override
+                                        public void onSuccess(GetTokenResult getTokenResult) {
+                                            Constants.TOKEN = getTokenResult.getToken();
+                                            updateUI(user);
+                                        }
+                                    });
+                                }else{
+                                        ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
+                                        @Override
+                                        public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                                            Utility.dismissProgress(SignInActivity.this);
+                                            if (response.code() == 200) {
+                                                LoginModel loginModel = (LoginModel) response.body().get(0);
+                                                if (loginModel.getStatus().equalsIgnoreCase("success")) {
+                                                    Constants.TOKEN = loginModel.getToken();
+                                                    preferences.edit().putBoolean(Constants.isLogin, true).apply();
+                                                    preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+                                                    Toast.makeText(SignInActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                                    finish();
+                                                } else {
+                                                    Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                                                }
+                                            }
+                                            else if(response.code() == 500){
+                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
+                                            } else if(response.code() == 404){
+                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
+                                            } else if(response.code() == 401){
+                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Credentials..!!");
+                                            } else if(response.code() == 403){
+                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
+                                            } else if(response.code() == 429){
+                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
+                                            } else {
+                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again..");
+                                            }
+                                        }
 
-                    @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(SignInActivity.this);
-                        t.printStackTrace();
-                        Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
-                    }
-                });
+                                        @Override
+                                        public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                                            Utility.dismissProgress(SignInActivity.this);
+                                            t.printStackTrace();
+                                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+//                ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                        Utility.dismissProgress(SignInActivity.this);
+//                        if (response.code() == 200) {
+//                            LoginModel loginModel = (LoginModel) response.body().get(0);
+//                            if (loginModel.getStatus().equalsIgnoreCase("success")) {
+//                                Constants.TOKEN = loginModel.getToken();
+//                                preferences.edit().putBoolean(Constants.isLogin, true).apply();
+//                                preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+//                                Toast.makeText(SignInActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//                                finish();
+//                            } else {
+//                                Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
+//                            }
+//                        }
+//                        else if(response.code() == 500){
+//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
+//                        } else if(response.code() == 404){
+//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
+//                        } else if(response.code() == 401){
+//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Credentials..!!");
+//                        } else if(response.code() == 403){
+//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
+//                        } else if(response.code() == 429){
+//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
+//                        } else {
+//                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again..");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                        Utility.dismissProgress(SignInActivity.this);
+//                        t.printStackTrace();
+//                        Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();

@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="44dp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="20dp"
                     android:clickable="true"
                     android:drawableEnd="@drawable/ic_baseline_email_24"
@@ -110,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="44dp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="20dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -171,6 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -207,9 +208,9 @@
             <LinearLayout
                 android:id="@+id/GmailSignIn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -217,13 +218,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
                 app:layout_constraintVertical_bias="0.132">
 
-                <com.google.android.gms.common.SignInButton
+                <ImageView
                     android:id="@+id/sign_in_button"
-                    android:layout_width="260dp"
-                    android:layout_height="60dp"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:paddingVertical="8dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@color/black"
-                    android:backgroundTint="@color/black" />
+                    android:background="@drawable/google_btn" />
 
             </LinearLayout>
 
@@ -233,7 +234,7 @@
                 android:layout_marginTop="28dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="80dp"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

@@ -12,61 +12,80 @@
         <LinearLayout
             android:id="@+id/tvSixth"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/rank_bg"
-            android:gravity="center">
+            android:background="@drawable/rankers_bg"
+            >
 
-            <TextView
-                android:id="@+id/tvRankCount"
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:fontFamily="@font/poppins_regular"
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="1."
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:background="@drawable/rankers_no"
+                >
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivRankerImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="8dp"
-                android:src="@drawable/ic_home"
-                app:shapeAppearanceOverlay="@style/rank4imageview"
-                app:strokeColor="@color/contact_shape"
-                app:strokeWidth="2px" />
+                <TextView
+                    android:id="@+id/tvRankCount"
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="1."
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/tvRankerName"
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="center"
-                android:text="Bibek"
+            </RelativeLayout>
 
-                android:textColor="@color/black"
-                android:textSize="17sp" />
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivRankerImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="8dp"
+                    android:src="@drawable/ic_home"
+                    app:shapeAppearanceOverlay="@style/rank4imageview"
+                    app:strokeColor="@color/contact_shape"
+                    app:strokeWidth="2px" />
+
+                <TextView
+                    android:id="@+id/tvRankerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_gravity="center_vertical|center"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="start"
+                    android:text="Bibek"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/tvRankerScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center|end"
+                    android:text="844"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </RelativeLayout>
 
 
-            <TextView
-                android:id="@+id/tvRankerScore"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:gravity="end"
-                android:text="844"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+
+
+
 
         </LinearLayout>
     </RelativeLayout>
