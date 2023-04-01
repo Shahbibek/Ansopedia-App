@@ -154,8 +154,23 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.navhome) {
                     loadFrag(new HomeFragment());
                 } else if (id == R.id.navProfile) {
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-
+                    Utility.showProgress(MainActivity.this);
+                    if (Utility.isNetConnected(MainActivity.this)) {
+                        Utility.getUserDetailAwait(MainActivity.this, new Utility.onResponseFromServer() {
+                            @Override
+                            public void iOnResponseFromServer(int responseCode, String msg) {
+                                Utility.dismissProgress(MainActivity.this);
+                                if (responseCode == 200) {
+                                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                }else{
+                                    Utility.showAlertDialog(MainActivity.this, "Failed", "Something went wrong, Please Try Again..");
+                                }
+                            }
+                        });
+                    }else{
+                        Utility.dismissProgress(MainActivity.this);
+                        Utility.showAlertDialog(MainActivity.this, "Failed", "Please connect Internet, And Try Again..");
+                    }
 
                 } else if (id == R.id.navAboutUs) {
                     startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
@@ -188,7 +203,23 @@ public class MainActivity extends AppCompatActivity {
         profileMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                Utility.showProgress(MainActivity.this);
+                if (Utility.isNetConnected(MainActivity.this)) {
+                    Utility.getUserDetailAwait(MainActivity.this, new Utility.onResponseFromServer() {
+                        @Override
+                        public void iOnResponseFromServer(int responseCode, String msg) {
+                            Utility.dismissProgress(MainActivity.this);
+                            if (responseCode == 200) {
+                                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                            }else{
+                                Utility.showAlertDialog(MainActivity.this, "Failed", "Something went wrong, Please Try Again..");
+                            }
+                        }
+                    });
+                }else{
+                    Utility.dismissProgress(MainActivity.this);
+                    Utility.showAlertDialog(MainActivity.this, "Failed", "Please connect Internet, And Try Again..");
+                }
             }
         });
 //        ########################### User profile Icon End #############################################

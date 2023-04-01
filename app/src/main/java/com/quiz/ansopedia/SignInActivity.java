@@ -178,6 +178,7 @@ public class SignInActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
+                e.printStackTrace();
             }
         }
     }
@@ -194,8 +195,8 @@ public class SignInActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
                             user.getIdToken(true).addOnSuccessListener(result -> {
-//                                String idToken = result.getToken();
-                                //Do whatever
+//                              String idToken = result.getToken();
+//                              Do whatever
                                 Constants.TOKEN = result.getToken();
                                 Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
                                 Log.d(TAG, "GetTokenResult result = " + user);
@@ -204,6 +205,8 @@ public class SignInActivity extends AppCompatActivity {
                                     public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
                                         if (response.code() == 200) {
                                             updateUI(user);
+                                        } else {
+                                            updateUI(null);
                                         }
                                     }
 
@@ -226,22 +229,21 @@ public class SignInActivity extends AppCompatActivity {
     // [END auth_with_google]
     // [END onactivityresult]
 
-    // [START signin]
+    // ############################# START Signin #############################
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-    // [END signin]
+    // ###################################### END Signin ##############################
 
     private void updateUI(FirebaseUser user) {
         Utility.dismissProgress(this);
         if(user != null){
             preferences.edit().putBoolean(Constants.isLogin, true).apply();
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
-    //                                Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
+    //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
-//            startActivity(new Intent(this, MainActivity.class));
             finish();
         }
     }
