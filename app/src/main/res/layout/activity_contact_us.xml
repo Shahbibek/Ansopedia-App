@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AboutUsActivity">
     <RelativeLayout
+        android:id="@+id/svMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -127,26 +128,40 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tvEditText"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/t1"
                     android:layout_width="match_parent"
-                    android:layout_height="123dp"
-                    android:layout_below="@+id/conDesc"
-                    android:inputType="textMultiLine"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/textbox_corner_radius"
-                    android:drawablePadding="20dp"
-                    android:fontFamily="verdana"
-                    android:hint="Write a message..."
-                    android:padding="15dp"
-                    android:textColorHint="@color/lightWhite"
-                    android:textSize="18dp"
-                    android:textStyle="normal"
-                    tools:layout_editor_absoluteX="2dp" />
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/conDesc">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="123dp"
+                        android:layout_below="@+id/conDesc"
+                        android:inputType="textMultiLine"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/textbox_corner_radius"
+                        android:drawablePadding="20dp"
+                        android:fontFamily="verdana"
+                        android:hint="Write a message..."
+                        android:padding="15dp"
+                        android:textColorHint="@color/lightWhite"
+                        android:textSize="18dp"
+                        android:textStyle="normal"
+                        tools:layout_editor_absoluteX="2dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 

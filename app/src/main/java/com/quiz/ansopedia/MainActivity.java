@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                                 Utility.dismissProgress(MainActivity.this);
                                 if (responseCode == 200) {
                                     startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                    finish();
                                 }else{
                                     Utility.showAlertDialog(MainActivity.this, "Failed", "Something went wrong, Please Try Again..");
                                 }
@@ -174,10 +175,12 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (id == R.id.navAboutUs) {
                     startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
+                    finish();
 
 
                 } else if (id == R.id.navContactUs) {
                     startActivity(new Intent(MainActivity.this, ContactUsActivity.class));
+                    finish();
 
                 } else if (id == R.id.navlogout) {
 //                    FirebaseAuth.getInstance().signOut();
@@ -211,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
                             Utility.dismissProgress(MainActivity.this);
                             if (responseCode == 200) {
                                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                finish();
                             }else{
                                 Utility.showAlertDialog(MainActivity.this, "Failed", "Something went wrong, Please Try Again..");
                             }

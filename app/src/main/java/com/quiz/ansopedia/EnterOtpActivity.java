@@ -152,6 +152,7 @@ public class EnterOtpActivity extends AppCompatActivity {
 //                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class);
 //                                        .putExtra("email", getIntent().getStringExtra("email")));
                                 startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class));
+                                finish();
 
                             } else {
                                 Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");

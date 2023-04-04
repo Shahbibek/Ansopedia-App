@@ -78,16 +78,20 @@ public class SignInActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        if (preferences.getBoolean(Constants.isLogin, false)) {
-            Utility.showProgress(this);
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-                @Override
-                public void onSuccess(GetTokenResult getTokenResult) {
-                    Constants.TOKEN = getTokenResult.getToken();
-                    updateUI(currentUser);
-                }
-            });
+        try{
+            if (preferences.getBoolean(Constants.isLogin, false)) {
+//                Utility.showProgress(this);
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                    @Override
+                    public void onSuccess(GetTokenResult getTokenResult) {
+                        Constants.TOKEN = getTokenResult.getToken();
+                        updateUI(currentUser);
+                    }
+                });
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
     // [END on_start_check_user]
@@ -140,7 +144,6 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignInActivity.this, SignupActivity.class));
-                finish();
             }
         });
         svMain.setOnClickListener(new View.OnClickListener() {

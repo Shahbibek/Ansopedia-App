@@ -21,7 +21,10 @@ import com.quiz.ansopedia.ReadQuestionsActivity;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.models.Questions;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapter1.ViewHolder> {
     private Context context;
@@ -52,14 +55,32 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
         int i = holder.getAdapterPosition();
         int j = holder.getAdapterPosition() + ReadQuestionsActivity.lower + 1;
         if (count <= arrayList.size()) {
+            List<TextView> tvOptionsList = new ArrayList<TextView>();
+            tvOptionsList.add(holder.option1);
+            tvOptionsList.add(holder.option2);
+            tvOptionsList.add(holder.option3);
+            tvOptionsList.add(holder.option4);
+            for(TextView tvOption: tvOptionsList){
+                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                tvOption.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView clickedTvOption = (TextView)view;
+                        int clickedTvOptionTag = Integer.parseInt(view.getTag().toString());
+                        updateOption(clickedTvOptionTag, tvOptionsList, i);
+                    }
+                });
+            }
+
+
             holder.colorOptions.getBackground().setTint(Color.parseColor(Constants.COLOR));
 //            holder.nextquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
 //            holder.previousquestion.getBackground().setTint(Color.parseColor(Constants.COLOR));
             holder.cvDescription.setVisibility(View.GONE);
-            holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
             holder.srNoQuestion.setText(j + ". ");
             holder.quiz_questions.setText(arrayList.get(holder.getAdapterPosition()).getQuestion_title());
@@ -105,77 +126,77 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             });
 
 //            ##############################  Check Question Answer Start ###########################
-            holder.option1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!isShowingAnswer) {
-                        isShowingAnswer = true;
-                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt1().trim())) {
-                            holder.option1.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else {
-                            holder.option1.setBackgroundColor(Color.parseColor("#D94E00"));
-                        }
-                    }else{
-                        isShowingAnswer = false;
-                        holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    }
-
-                }
-            });
-
-            holder.option2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!isShowingAnswer) {
-                        isShowingAnswer = true;
-                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt2().trim())) {
-                            holder.option2.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else {
-                            holder.option2.setBackgroundColor(Color.parseColor("#D94E00"));
-                        }
-                    }else{
-                        isShowingAnswer = false;
-                        holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    }
-
-                }
-            });
-
-            holder.option3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!isShowingAnswer) {
-                        isShowingAnswer = true;
-                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt3().trim())) {
-                            holder.option3.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else {
-                            holder.option3.setBackgroundColor(Color.parseColor("#D94E00"));
-                        }
-                    }else{
-                        isShowingAnswer = false;
-                        holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    }
-
-                }
-            });
-
-            holder.option4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!isShowingAnswer) {
-                        isShowingAnswer = true;
-                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt4().trim())) {
-                            holder.option4.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else {
-                            holder.option4.setBackgroundColor(Color.parseColor("#D94E00"));
-                        }
-                    }else{
-                        isShowingAnswer = false;
-                        holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    }
-
-                }
-            });
+//            holder.option1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (!isShowingAnswer) {
+//                        isShowingAnswer = true;
+//                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt1().trim())) {
+//                            holder.option1.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                        } else {
+//                            holder.option1.setBackgroundColor(Color.parseColor("#D94E00"));
+//                        }
+//                    }else{
+//                        isShowingAnswer = false;
+//                        holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                    }
+//
+//                }
+//            });
+//
+//            holder.option2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (!isShowingAnswer) {
+//                        isShowingAnswer = true;
+//                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt2().trim())) {
+//                            holder.option2.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                        } else {
+//                            holder.option2.setBackgroundColor(Color.parseColor("#D94E00"));
+//                        }
+//                    }else{
+//                        isShowingAnswer = false;
+//                        holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                    }
+//
+//                }
+//            });
+//
+//            holder.option3.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (!isShowingAnswer) {
+//                        isShowingAnswer = true;
+//                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt3().trim())) {
+//                            holder.option3.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                        } else {
+//                            holder.option3.setBackgroundColor(Color.parseColor("#D94E00"));
+//                        }
+//                    }else{
+//                        isShowingAnswer = false;
+//                        holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                    }
+//
+//                }
+//            });
+//
+//            holder.option4.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (!isShowingAnswer) {
+//                        isShowingAnswer = true;
+//                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt4().trim())) {
+//                            holder.option4.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                        } else {
+//                            holder.option4.setBackgroundColor(Color.parseColor("#D94E00"));
+//                        }
+//                    }else{
+//                        isShowingAnswer = false;
+//                        holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                    }
+//
+//                }
+//            });
 
 //            ##############################  Check Question Answer End ###########################
 
@@ -242,6 +263,61 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             });
         }
 
+    }
+
+    private void updateOption(int clickedTvOptionTag, List<TextView> tvOptionsList, int questionNo) {
+        int index = 0;
+        for(TextView tvOption: tvOptionsList){
+//            if(index < clickedTvOptionTag){
+            if(index == clickedTvOptionTag){
+                String correctAns = arrayList.get(questionNo).getOptions().get(0).getCorrectAnswer().trim();
+                String opt = tvOption.getText().toString().substring(2, tvOption.getText().length()).trim();
+//                String opt1 = arrayList.get(questionNo).getOptions().get(0).getOpt1().trim();
+//                String opt2 = arrayList.get(questionNo).getOptions().get(0).getOpt2().trim();
+//                String opt3 = arrayList.get(questionNo).getOptions().get(0).getOpt3().trim();
+//                String opt4 = arrayList.get(questionNo).getOptions().get(0).getOpt4().trim();
+//                if(correctAns.equalsIgnoreCase(opt1)){
+//                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                }
+//                else if(correctAns.equalsIgnoreCase(opt2)){
+//                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                }else if(correctAns.equalsIgnoreCase(opt3)){
+//                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                }else if(correctAns.equalsIgnoreCase(opt4)){
+//                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                }
+                if(correctAns.equalsIgnoreCase(opt)){
+                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+                }
+                else {
+                    tvOption.setBackgroundColor(Color.parseColor("#D94E00"));
+                }
+            }else{
+                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            }
+
+//                if (.equalsIgnoreCase(arrayList.get(index)
+//                                .getOptions().get(0).getOpt1().trim())) {
+//                }else{
+//                }
+//            }else{
+//                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            }
+//            if (!isShowingAnswer) {
+//                isShowingAnswer = true;
+//                if (arrayList.get(index).getOptions().get(0).getCorrectAnswer()
+//                        .trim().equalsIgnoreCase(arrayList.get(index)
+//                                .getOptions().get(0).getOpt1().trim())) {
+//                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+//                } else {
+//                    tvOption.setBackgroundColor(Color.parseColor("#D94E00"));
+//                }
+//            }else{
+//                isShowingAnswer = false;
+//                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            }
+            index++;
+        }
     }
 
     @Override

@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.models.LoginModel;
@@ -18,6 +21,7 @@ import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,20 +30,33 @@ import retrofit2.Response;
 public class ContactUsActivity extends AppCompatActivity {
     Button btnSendBtn;
     TextInputEditText tvEditText;
+    TextInputLayout t1;
     SharedPreferences preferences;
+    RelativeLayout svMain;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        btnSendBtn = findViewById(R.id.btnSendBtn);
-        tvEditText = findViewById(R.id.tvEditText);
+        initView();
+
         btnSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!tvEditText.getText().toString().isEmpty()) {
+                String message = Objects.requireNonNull(tvEditText.getText()).toString().trim();
+                Utility.hideSoftKeyboard(ContactUsActivity.this);
+                t1.setErrorEnabled(false);
+                if (isValidateCredentials()) {
                     sendContactMessage();
+                }else{
+                    if (message.isEmpty()) {
+                        t1.setErrorEnabled(true);
+                        t1.setError("* Please enter your query !!!..");
+                    }
                 }
+//                if (!tvEditText.getText().toString().isEmpty()) {
+//                    sendContactMessage();
+//                }
             }
         });
         ImageView ivBack = findViewById(R.id.ivBack);
@@ -47,6 +64,13 @@ public class ContactUsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        svMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.hideSoftKeyboard(ContactUsActivity.this);
             }
         });
     }
@@ -90,6 +114,17 @@ public class ContactUsActivity extends AppCompatActivity {
             Utility.dismissProgress(this);
             Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
         }
+    }
+
+    private void initView() {
+        t1 = findViewById(R.id.t1);
+        svMain = findViewById(R.id.svMain);
+        btnSendBtn = findViewById(R.id.btnSendBtn);
+        tvEditText = findViewById(R.id.tvEditText);
+    }
+    private boolean isValidateCredentials() {
+        String message = Objects.requireNonNull(tvEditText.getText()).toString().trim();
+        return !message.isEmpty();
     }
 
 }

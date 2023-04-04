@@ -280,25 +280,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
         ContentApiImplementer.uploadImage(partImage, new Callback<List<LoginModel>>() {
             @Override
             public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                Utility.dismissProgress(UpdateProfileActivity.this);
                 if (response.code() == 200) {
                     LoginModel loginModel = (LoginModel) response.body().get(0);
                     Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
                         @Override
                         public void iOnResponseFromServer(int responseCode, String msg) {
-
-                            Utility.dismissProgress(UpdateProfileActivity.this);
+//                            Utility.dismissProgress(UpdateProfileActivity.this);
                             Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Picture Uploaded Successfully !!");
-
                         }
                     });
                 } else if (response.code() == 500) {
-                    Utility.dismissProgress(UpdateProfileActivity.this);
                     Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Server Error, Please Try Again..");
                 } else if (response.code() == 400) {
-                    Utility.dismissProgress(UpdateProfileActivity.this);
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File size too large, Please Try Again..");
+                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File size too large, size must be less than 1000kb !!..");
                 } else {
-                    Utility.dismissProgress(UpdateProfileActivity.this);
                     Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again..");
                 }
             }
@@ -323,31 +319,26 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 ContentApiImplementer.updateUserDetail(userDetail, new Callback<List<LoginModel>>() {
                     @Override
                     public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                        Utility.dismissProgress(UpdateProfileActivity.this);
                         if (response.code() == 200) {
                             LoginModel loginModel = (LoginModel) response.body().get(0);
                             if (loginModel.getStatus().equalsIgnoreCase("success")) {
                                 Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
                                     @Override
                                     public void iOnResponseFromServer(int responseCode, String msg) {
-                                        Utility.dismissProgress(UpdateProfileActivity.this);
+//                                        Utility.dismissProgress(UpdateProfileActivity.this);
                                         Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Details Uploaded Successfully !!");
-                                        startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
-                                        finish();
+//                                        startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
+//                                        finish();
                                     }
                                 });
                             }
                         }else if(response.code() == 304){
-                            Utility.dismissProgress(UpdateProfileActivity.this);
-                            LoginModel loginModel = (LoginModel) response.body().get(0);
-                            Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                            Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Nothing to update !!..");
                         }else if(response.code() == 422){
-                            Utility.dismissProgress(UpdateProfileActivity.this);
-                            LoginModel loginModel = (LoginModel) response.body().get(0);
-                            Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                            Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Invalid Name !!..");
                         }else if(response.code() == 500){
-                            Utility.dismissProgress(UpdateProfileActivity.this);
-                            LoginModel loginModel = (LoginModel) response.body().get(0);
-                            Utility.showAlertDialog(UpdateProfileActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                            Utility.showAlertDialog(UpdateProfileActivity.this, "Error", "Server Error !!..");
                         }else{
                             Utility.dismissProgress(UpdateProfileActivity.this);
                             Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again");

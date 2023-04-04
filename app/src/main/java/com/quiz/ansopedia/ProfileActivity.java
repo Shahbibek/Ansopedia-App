@@ -95,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ProfileActivity.this, BadgesActivity.class));
+                finish();
             }
         });
 
@@ -105,6 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.putExtra(Constants.fragment, "LeaderBoardFragment");
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -115,6 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.putExtra(Constants.fragment, "QuizFragment");
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
             }
         });
 

@@ -52,6 +52,7 @@
             android:gravity="left"
             android:orientation="vertical">
 
+
             <TextView
                 android:id="@+id/option1"
                 android:layout_width="match_parent"
@@ -63,6 +64,7 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
                 android:text="a. option 1"
+                android:tag="0"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -78,6 +80,7 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
                 android:text="b. option 2"
+                android:tag="1"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -93,6 +96,7 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
                 android:text="c. option 3"
+                android:tag="2"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -108,6 +112,7 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
                 android:text="d. option 4"
+                android:tag="3"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
