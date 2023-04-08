@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 import com.quiz.ansopedia.sqlite.CoursesHelper;
@@ -97,12 +98,12 @@ public class IntroActivity extends AppCompatActivity {
 //        Utility.showProgressGif(getContext());
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.getContent(new Callback<List<Contents>>() {
+                ContentApiImplementer.getContent(new Callback<ApiResponse<List<Contents>>>() {
                     @Override
-                    public void onResponse(Call<List<Contents>> call, Response<List<Contents>> response) {
-                        if (response.code() == 200) {
-                            if (response.body().size() != 0) {
-                                contents = response.body().get(0);
+                    public void onResponse(Call<ApiResponse<List<Contents>>> call, Response<ApiResponse<List<Contents>>> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body().getData().size() != 0) {
+                                contents = (Contents) response.body().getData().get(0);
                                 startActivity(new Intent(IntroActivity.this, MainActivity.class));
                                 finish();
                             }
@@ -114,7 +115,7 @@ public class IntroActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Contents>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<Contents>>> call, Throwable t) {
                         t.printStackTrace();
                         showTryAgainDialog("Error", "Something went wrong, Please Try Again");
                     }

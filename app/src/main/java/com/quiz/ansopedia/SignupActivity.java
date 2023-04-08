@@ -1,8 +1,8 @@
 package com.quiz.ansopedia;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,12 +18,18 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -73,39 +79,50 @@ public class SignupActivity extends AppCompatActivity {
                     if (uName.isEmpty()) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("* Please Enter Name");
-                    } else if (!uName.matches("[a-zA-Z ]+")) {
+                    }
+                    if (!uName.matches("[a-zA-Z ]+")) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("* Enter Valid Name");
-                    } else if (!uName.matches(".{3,}")) {
+                    }
+                    if (!uName.matches(".{3,}")) {
                         userNameTextField.setErrorEnabled(true);
                         userNameTextField.setError("* Name must be of at least 3 character");
-                    } else if (uUserName.isEmpty()) {
+                    }
+                    if (uUserName.isEmpty()) {
                         t2.setErrorEnabled(true);
                         t2.setError("* Please Enter Name");
-                    } else if (!uUserName.matches(".{3,}")) {
+                    }
+                    if (!uUserName.matches(".{3,}")) {
                         t2.setErrorEnabled(true);
                         t2.setError("* Username must be of at least 3 character");
-                    } else if (uEmail.isEmpty()) {
+                    }
+                    if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
+                        t3.setErrorEnabled(true);
+                        t3.setError("* Invalid Email");
+                    }
+                    if (uEmail.isEmpty()) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Please Enter Email");
-                    } else if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
-                        t3.setErrorEnabled(true);
-                        t3.setError("* Please Enter Valid Email");
-                    } else if (pass.isEmpty()) {
-                        passwordTextField.setErrorEnabled(true);
-                        passwordTextField.setError("* Please Enter Password");
-                    } else if (!pass.matches(".{8,}")) {
+                    }
+                    if (!pass.matches(".{8,}")) {
                         passwordTextField.setErrorEnabled(true);
                         passwordTextField.setError("* Password must be of 8 digit");
-                    } else if (!Utility.isValidPassword(pass)) {
+                    }
+                    if (!Utility.isValidPassword(pass)) {
                         passwordTextField.setErrorEnabled(true);
                         passwordTextField.setError("* password must contain uppercase, lowercase, one digit and one special character");
-                    } else if (confirmPass.isEmpty()) {
-                        confirmPasswordTextField.setErrorEnabled(true);
-                        confirmPasswordTextField.setError("* Please Enter Password");
-                    } else if (!confirmPass.matches(pass)) {
+                    }
+                    if (pass.isEmpty()) {
+                        passwordTextField.setErrorEnabled(true);
+                        passwordTextField.setError("* Please Enter Password");
+                    }
+                    if (!confirmPass.matches(pass)) {
                         confirmPasswordTextField.setErrorEnabled(true);
                         confirmPasswordTextField.setError("* Password must be same");
+                    }
+                    if (confirmPass.isEmpty()) {
+                        confirmPasswordTextField.setErrorEnabled(true);
+                        confirmPasswordTextField.setError("* Please Enter Confirm Password");
                     }
                 }
             }
@@ -145,36 +162,53 @@ public class SignupActivity extends AppCompatActivity {
         loginRequestModel.setTc(true);
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.getRegister(loginRequestModel, new Callback<List<LoginModel>>() {
-                    @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(SignupActivity.this);
-                        if (response.code() == 201) {
-                            LoginModel loginModel = response.body().get(0);
-                            Constants.TOKEN = loginModel.getToken();
-                            preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-                            preferences.edit().putString(Constants.username, uEmail).apply();
-                            preferences.edit().putString(Constants.name, uName).apply();
-                            preferences.edit().putString(Constants.password, confirmPass).apply();
-                            preferences.edit().putBoolean(Constants.isLogin, true).apply();
-                            Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignupActivity.this, SignInActivity.class));
-                            finish();
-                        } else if (response.code() == 403) {
-                            Utility.showAlertDialog(SignupActivity.this, "Failed", "Email already exists!!");
-                        } else if (response.code() == 500) {
-                            Utility.showAlertDialog(SignupActivity.this, "Failed", "Server Error, Please Try Again!!");
-                        } else {
+                    ContentApiImplementer.getRegister(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                            Utility.dismissProgress(SignupActivity.this);
+                            if (response.isSuccessful()) {
+                                LoginModel loginModel = response.body().getData();
+//                                Constants.TOKEN = loginModel.getToken();
+//                                preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+                                preferences.edit().putString(Constants.username, uEmail).apply();
+                                preferences.edit().putString(Constants.name, uName).apply();
+                                preferences.edit().putString(Constants.password, confirmPass).apply();
+                                preferences.edit().putBoolean(Constants.isLogin, false).apply();
+//                                Utility.showAlertDialog(SignupActivity.this, loginModel.getStatus() , loginModel.getMessage());
+//                                Utility.showAlertDialog(SignupActivity.this, response.body().getStatus().toString().trim() , response.body().getMessage().toString().trim());
+//                                Toast.makeText(SignupActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
+                                new AlertDialog.Builder(SignupActivity.this)
+                                        .setTitle(response.body().getStatus().toString().trim())
+                                        .setMessage(response.body().getMessage().toString().trim())
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.dismiss();
+                                                startActivity(new Intent(SignupActivity.this, SignInActivity.class));
+                                                finish();
+                                            }
+                                        })
+                                        .create().show();
+                            }
+                            if(response.errorBody() != null){
+                                try {
+                                    JSONObject Error = new JSONObject(response.errorBody().string());
+                                    Utility.showAlertDialog(SignupActivity.this, Error.getString("status") , Error.getString("message"));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                            Utility.dismissProgress(SignupActivity.this);
                             Utility.showAlertDialog(SignupActivity.this, "Error", "Something went wrong, Please Try Again");
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(SignupActivity.this);
-                        Utility.showAlertDialog(SignupActivity.this, "Error", "Something went wrong, Please Try Again");
-                    }
-                });
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
                 Utility.dismissProgress(this);
@@ -191,11 +225,22 @@ public class SignupActivity extends AppCompatActivity {
         uEmail = userEmail.getText().toString().trim();
         pass = password.getText().toString();
         confirmPass = confirmPassword.getText().toString();
-        if (!uUserName.isEmpty() && uUserName.matches(".{3,}") && !uName.isEmpty() && uName.matches(".{3,}") && !uEmail.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches() && pass.matches(".{8,}") && (confirmPass.matches(pass)) && uName.matches("[a-zA-Z ]+") && Utility.isValidPassword(pass)) {
+        if (!uUserName.isEmpty()
+                && uUserName.matches(".{3,}")
+                && !uName.isEmpty()
+                && uName.matches(".{3,}")
+                && !uEmail.isEmpty()
+                && !pass.isEmpty()
+                && !confirmPass.isEmpty()
+                && Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()
+                && pass.matches(".{8,}")
+                && (confirmPass.matches(pass))
+                && uName.matches("[a-zA-Z ]+")
+                && Utility.isValidPassword(pass)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+
     }
 
 }

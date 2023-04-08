@@ -32,11 +32,13 @@ import com.quiz.ansopedia.MainActivity;
 import com.quiz.ansopedia.ProfileActivity;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.SignInActivity;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.models.UserDetail;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -190,11 +192,11 @@ public class Utility {
 
         if (Utility.isNetConnected(context)) {
             try {
-                ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
+                ContentApiImplementer.getLogin(loginRequestModel, new Callback<ApiResponse<List<LoginModel>>>() {
                     @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        if (response.code() == 200) {
-                            LoginModel loginModel = (LoginModel) response.body().get(0);
+                    public void onResponse(Call<ApiResponse<List<LoginModel>>> call, Response<ApiResponse<List<LoginModel>>> response) {
+                        if (response.isSuccessful()) {
+                            LoginModel loginModel = (LoginModel) response.body().getData().get(0);
                             if (loginModel.getStatus().equalsIgnoreCase("success")) {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putBoolean(Constants.isLogin, true).apply();
@@ -218,7 +220,7 @@ public class Utility {
                     }
 
                     @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<LoginModel>>> call, Throwable t) {
                         Constants.TOKEN = "";
                         preferences.edit().putBoolean(Constants.isLogin, false).apply();
                         preferences.edit().putString(Constants.token, "").apply();
@@ -255,30 +257,40 @@ public class Utility {
     public static UserDetail userDetail;
     public static void getUserDetail(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-        ContentApiImplementer.getUserDetail(new Callback<List<UserDetail>>() {
+        ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
             @Override
-            public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
-                if (response.code() == 200) {
+            public void onResponse(Call<ApiResponse<UserDetail>> call, Response<ApiResponse<UserDetail>> response) {
+                if (response.isSuccessful()) {
                     userDetail = new UserDetail();
-                    userDetail = response.body().get(0);
+                    userDetail = response.body().getData();
                     preferences.edit().putString(Constants.name, userDetail.getName()).apply();
                 }
+                if(response.errorBody() != null){
+                    try {
+                        JSONObject Error = new JSONObject(response.errorBody().string());
+                        Utility.showAlertDialog(context, Error.getString("status").toString().trim(), Error.getString("message").toString().trim());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
-
             @Override
-            public void onFailure(Call<List<UserDetail>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<UserDetail>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
+
     }
     public static void getUserDetailAwait(Context context, final onResponseFromServer responseFromServer) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-        ContentApiImplementer.getUserDetail(new Callback<List<UserDetail>>() {
+        ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
             @Override
-            public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
-                if (response.code() == 200) {
+            public void onResponse(Call<ApiResponse<UserDetail>> call, Response<ApiResponse<UserDetail>> response) {
+                if (response.isSuccessful()) {
                     userDetail = new UserDetail();
-                    userDetail = response.body().get(0);
+                    userDetail = response.body().getData();
                     preferences.edit().putString(Constants.name, userDetail.getName()).apply();
                     responseFromServer.iOnResponseFromServer(response.code(), "Success");
                 } else {
@@ -287,7 +299,7 @@ public class Utility {
             }
 
             @Override
-            public void onFailure(Call<List<UserDetail>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<UserDetail>> call, Throwable t) {
                 t.printStackTrace();
                 responseFromServer.iOnResponseFromServer(500, "Server error");
             }

@@ -22,6 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.CourseAdapter;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.Branch;
 import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.models.Subjects;
@@ -131,27 +132,27 @@ public class HomeFragment extends Fragment {
 //        Utility.showProgressGif(getContext());
         if (Utility.isNetConnected(getContext())) {
             try {
-                ContentApiImplementer.getContent(new Callback<List<Contents>>() {
+                ContentApiImplementer.getContent(new Callback<ApiResponse<List<Contents>>>() {
                     @Override
-                    public void onResponse(Call<List<Contents>> call, Response<List<Contents>> response) {
+                    public void onResponse(Call<ApiResponse<List<Contents>>> call, Response<ApiResponse<List<Contents>>> response) {
 //                        Utility.dismissProgressGif();
                         rvContent.setVisibility(View.VISIBLE);
                         ivProgress.setVisibility(View.GONE);
-                        if (response.code() == 200) {
-                            if (response.body().size() != 0) {
-                                contents = response.body().get(0);
+                        if (response.isSuccessful()) {
+                            if (response.body().getData().size() != 0) {
+                                contents = (Contents) response.body().getData().get(0);
                                 setTabLayout(contents.getBranch().get(0).getBranch_name());
                                 setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
                             }
-                        }else if(response.code() == 500) {
-                            Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
+//                        }else if(response.code() == 500) {
+//                            Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
                         }else{
                             Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Contents>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<Contents>>> call, Throwable t) {
 //                        Utility.dismissProgressGif();
                         rvContent.setVisibility(View.VISIBLE);
                         ivProgress.setVisibility(View.GONE);

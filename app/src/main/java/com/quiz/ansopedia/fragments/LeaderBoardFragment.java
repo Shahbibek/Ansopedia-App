@@ -18,9 +18,14 @@ import com.quiz.ansopedia.SignInActivity;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.RankersAdapter;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.UserDetail;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,24 +68,56 @@ public class LeaderBoardFragment extends Fragment {
     private void getRankers() {
         if (Utility.isNetConnected(getContext())) {
             Utility.showProgress(getContext());
-            ContentApiImplementer.getRankers(new Callback<List<UserDetail>>() {
-                @Override
-                public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
-                    Utility.dismissProgress(getContext());
-                    if (response.code() == 200) {
-                        arrayList = (ArrayList<UserDetail>) response.body();
-                        setRecyclerView();
-                    }else if(response.code() == 500) {
-                        Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
+            try{
+                ContentApiImplementer.getRankers(new Callback<ApiResponse<List<UserDetail>>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<List<UserDetail>>> call, Response<ApiResponse<List<UserDetail>>> response) {
+                        Utility.dismissProgress(getContext());
+                        if (response.isSuccessful()) {
+                            if(response.body().getData() != null) {
+                                arrayList = (ArrayList<UserDetail>) response.body().getData();
+                                setRecyclerView();
+                            }
+                        }
+                        if(response.errorBody() != null){
+                            try {
+                                JSONObject Error = new JSONObject(response.errorBody().string());
+                                Utility.showAlertDialog(getContext(), Error.getString("status") , Error.getString("message"));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<List<UserDetail>> call, Throwable t) {
-                    Utility.dismissProgress(getContext());
-                    t.printStackTrace();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ApiResponse<List<UserDetail>>> call, Throwable t) {
+                        Utility.dismissProgress(getContext());
+                        t.printStackTrace();
+                    }
+                });
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+//            ContentApiImplementer.getRankers(new Callback<List<UserDetail>>() {
+//                @Override
+//                public void onResponse(Call<List<UserDetail>> call, Response<List<UserDetail>> response) {
+//                    Utility.dismissProgress(getContext());
+//                    if (response.code() == 200) {
+//                        arrayList = (ArrayList<UserDetail>) response.body();
+//                        setRecyclerView();
+//                    }else if(response.code() == 500) {
+//                        Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<List<UserDetail>> call, Throwable t) {
+//                    Utility.dismissProgress(getContext());
+//                    t.printStackTrace();
+//                }
+//            });
         }else{
             Utility.dismissProgress(getContext());
             Utility.showAlertDialog(getContext(), "Error", "Please Connect to Internet..!!");

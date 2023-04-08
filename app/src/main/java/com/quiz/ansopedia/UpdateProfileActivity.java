@@ -34,10 +34,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.Contents;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.UserDetail;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -132,25 +136,30 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     btnEdit.setVisibility(View.VISIBLE);
                     btnUpdate.setVisibility(View.GONE);
                 } else  {
+                    if(!userName.matches("[a-zA-Z ]+")){
+                        t1.setErrorEnabled(true);
+                        t1.setError("* Invalid Name");
+                    }
                     if((userName.isEmpty())){
                         t1.setErrorEnabled(true);
                         t1.setError("* Please Enter Name");
-                    } else if(!userName.matches("[a-zA-Z ]+")){
-                        t1.setErrorEnabled(true);
-                        t1.setError("* Invalid Name");
-                    } else if(userPhone.isEmpty()){
-                        t2.setErrorEnabled(true);
-                        t2.setError("* Please Enter Phone Number");
-                    }else if(!userPhone.matches( ".{10,10}")){
+                    }
+                    if(!userPhone.matches( ".{10,10}")){
                         t2.setErrorEnabled(true);
                         t2.setError("* Mobile no must be 10 digit");
-                    } else if(userDesignation.isEmpty()){
-                        t3.setErrorEnabled(true);
-                        t3.setError("* Please Enter Phone Number");
-                    } else if(!userDesignation.matches("[a-zA-Z ]+")) {
+                    }
+                    if(userPhone.isEmpty()){
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Please Enter Phone Number");
+                    }
+                    if(!userDesignation.matches("[a-zA-Z ]+")) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Invalid Designation");
-                    };
+                    }
+                    if(userDesignation.isEmpty()){
+                        t3.setErrorEnabled(true);
+                        t3.setError("* Please Enter Phone Number");
+                    }
                 }
             }
         });
@@ -276,35 +285,41 @@ public class UpdateProfileActivity extends AppCompatActivity {
         String name = part_image.substring(part_image.lastIndexOf("/") + 1);
         System.out.println(name);
         MultipartBody.Part partImage = MultipartBody.Part.createFormData("avatar", name, reqBody);
-
-        ContentApiImplementer.uploadImage(partImage, new Callback<List<LoginModel>>() {
-            @Override
-            public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                Utility.dismissProgress(UpdateProfileActivity.this);
-                if (response.code() == 200) {
-                    LoginModel loginModel = (LoginModel) response.body().get(0);
-                    Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
-                        @Override
-                        public void iOnResponseFromServer(int responseCode, String msg) {
-//                            Utility.dismissProgress(UpdateProfileActivity.this);
-                            Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Picture Uploaded Successfully !!");
+        try{
+            ContentApiImplementer.uploadImage(partImage, new Callback<ApiResponse<LoginModel>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                    Utility.dismissProgress(UpdateProfileActivity.this);
+                    if (response.isSuccessful()) {
+//                        LoginModel loginModel = (LoginModel) response.body().getData();
+                        Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
+                            @Override
+                            public void iOnResponseFromServer(int responseCode, String msg) {
+                                //                            Utility.dismissProgress(UpdateProfileActivity.this);
+                                Utility.showAlertDialog(UpdateProfileActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
+                            }
+                        });
+                    }
+                    if(response.errorBody() != null){
+                        try {
+                            JSONObject Error = new JSONObject(response.errorBody().string());
+                            Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
-                } else if (response.code() == 500) {
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Server Error, Please Try Again..");
-                } else if (response.code() == 400) {
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File size too large, size must be less than 1000kb !!..");
-                } else {
-                    Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again..");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                Utility.dismissProgress(UpdateProfileActivity.this);
-                t.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+
+                }
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void updateUserDetail() {
@@ -316,39 +331,38 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.updateUserDetail(userDetail, new Callback<List<LoginModel>>() {
+                ContentApiImplementer.updateUserDetail(userDetail, new Callback<ApiResponse<LoginModel>>() {
                     @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                    public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
                         Utility.dismissProgress(UpdateProfileActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = (LoginModel) response.body().get(0);
-                            if (loginModel.getStatus().equalsIgnoreCase("success")) {
+                        if (response.isSuccessful()) {
+//                            LoginModel loginModel = (LoginModel) response.body().getData();
                                 Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
                                     @Override
                                     public void iOnResponseFromServer(int responseCode, String msg) {
 //                                        Utility.dismissProgress(UpdateProfileActivity.this);
-                                        Utility.showAlertDialog(UpdateProfileActivity.this, "Success", "Profile Details Uploaded Successfully !!");
+                                        Utility.showAlertDialog(UpdateProfileActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
 //                                        startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
 //                                        finish();
                                     }
                                 });
+                        }
+                        if(response.errorBody() != null){
+                            try {
+                                JSONObject Error = new JSONObject(response.errorBody().string());
+                                Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status") , Error.getString("message"));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
                             }
-                        }else if(response.code() == 304){
-                            Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Nothing to update !!..");
-                        }else if(response.code() == 422){
-                            Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Invalid Name !!..");
-                        }else if(response.code() == 500){
-                            Utility.showAlertDialog(UpdateProfileActivity.this, "Error", "Server Error !!..");
-                        }else{
-                            Utility.dismissProgress(UpdateProfileActivity.this);
-                            Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "Something went wrong, Please Try Again");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
                         Utility.dismissProgress(UpdateProfileActivity.this);
-                        t.printStackTrace();
+//                        t.printStackTrace();
                     }
                 });
             } catch (Exception e) {
@@ -365,7 +379,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
         String userPhone = tvPhoneNo.getText().toString();
         String userDesignation = tvDesignation.getText().toString();
 
-        if (!userName.isEmpty() && userName.matches("[a-zA-Z ]+") && !userPhone.isEmpty() && !userDesignation.isEmpty() && userPhone.matches( ".{10,10}") && userDesignation.matches("[a-zA-Z ]+")) {
+        if (!userName.isEmpty()
+                && userName.matches("[a-zA-Z ]+")
+                && !userPhone.isEmpty()
+                && !userDesignation.isEmpty()
+                && userPhone.matches( ".{10,10}")
+                && userDesignation.matches("[a-zA-Z ]+")) {
             return true;
         } else {
             return false;

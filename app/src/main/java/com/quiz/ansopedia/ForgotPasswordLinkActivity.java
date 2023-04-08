@@ -2,6 +2,8 @@ package com.quiz.ansopedia;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -14,10 +16,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -91,30 +98,73 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
         Utility.showProgress(this);
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.sendNewPasswordResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
-                    @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(ForgotPasswordLinkActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = response.body().get(0);
-                            if (loginModel.getStatus().toLowerCase().contains("success")) {
-                                startActivity(new Intent(ForgotPasswordLinkActivity.this, SignInActivity.class));
-                                finish();
-                            } else {
-                                Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
+                    ContentApiImplementer.sendNewPasswordResetPassword(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                            Utility.dismissProgress(ForgotPasswordLinkActivity.this);
+                            if (response.isSuccessful()) {
+                                if (response.body().getStatus().toLowerCase().contains("success")) {
+                                    new AlertDialog.Builder(ForgotPasswordLinkActivity.this)
+                                            .setTitle(response.body().getStatus().toString().trim())
+                                            .setMessage(response.body().getMessage().toString().trim())
+                                            .setCancelable(false)
+                                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.dismiss();
+                                                    startActivity(new Intent(ForgotPasswordLinkActivity.this, SignInActivity.class));
+                                                    finish();
+                                                }
+                                            })
+                                            .create().show();
+
+                                } else {
+                                    Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
+                                }
                             }
-                        } else {
+                            if(response.errorBody() != null){
+                                try {
+                                    JSONObject Error = new JSONObject(response.errorBody().string());
+                                    Utility.showAlertDialog(ForgotPasswordLinkActivity.this, Error.getString("status") , Error.getString("message"));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                            Utility.dismissProgress(ForgotPasswordLinkActivity.this);
+                            t.printStackTrace();
                             Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(ForgotPasswordLinkActivity.this);
-                        t.printStackTrace();
-                        Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
-                    }
-                });
+                    });
+//                ContentApiImplementer.sendNewPasswordResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                        Utility.dismissProgress(ForgotPasswordLinkActivity.this);
+//                        if (response.code() == 200) {
+//                            LoginModel loginModel = response.body().get(0);
+//                            if (loginModel.getStatus().toLowerCase().contains("success")) {
+//                                startActivity(new Intent(ForgotPasswordLinkActivity.this, SignInActivity.class));
+//                                finish();
+//                            } else {
+//                                Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
+//                            }
+//                        } else {
+//                            Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                        Utility.dismissProgress(ForgotPasswordLinkActivity.this);
+//                        t.printStackTrace();
+//                        Utility.showAlertDialog(ForgotPasswordLinkActivity.this, "Error", "Something went wrong, Please Try Again");
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();

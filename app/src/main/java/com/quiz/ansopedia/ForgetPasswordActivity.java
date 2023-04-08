@@ -14,10 +14,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,32 +83,64 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         loginRequestModel.setEmail(userEmail.getText().toString().trim());
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.sendEmailResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
+                ContentApiImplementer.sendEmailResetPassword(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
                     @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                    public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
                         Utility.dismissProgress(ForgetPasswordActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = response.body().get(0);
-                            if (loginModel.getStatus().toLowerCase().contains("success")) {
+                        if (response.isSuccessful()) {
+//                            LoginModel loginModel = response.body().get(0);
+                            if (response.body().getStatus().toLowerCase().contains("success")) {
                                 startActivity(new Intent(ForgetPasswordActivity.this, EnterOtpActivity.class)
                                         .putExtra("email", userEmail.getText().toString().trim()));
                             } else {
                                 Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
                             }
-                        } else if(response.code() == 429){
-                            Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Too many request, please try after 15 minutes..!!");
-                        }else {
-                            Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
+                        }
+                        if(response.errorBody() != null){
+                            try {
+                                JSONObject Error = new JSONObject(response.errorBody().string());
+                                Utility.showAlertDialog(ForgetPasswordActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
                         Utility.dismissProgress(ForgetPasswordActivity.this);
                         t.printStackTrace();
                         Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
                     }
                 });
+//                ContentApiImplementer.sendEmailResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                        Utility.dismissProgress(ForgetPasswordActivity.this);
+//                        if (response.code() == 200) {
+//                            LoginModel loginModel = response.body().get(0);
+//                            if (loginModel.getStatus().toLowerCase().contains("success")) {
+//                                startActivity(new Intent(ForgetPasswordActivity.this, EnterOtpActivity.class)
+//                                        .putExtra("email", userEmail.getText().toString().trim()));
+//                            } else {
+//                                Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
+//                            }
+//                        } else if(response.code() == 429){
+//                            Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Too many request, please try after 15 minutes..!!");
+//                        }else {
+//                            Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                        Utility.dismissProgress(ForgetPasswordActivity.this);
+//                        t.printStackTrace();
+//                        Utility.showAlertDialog(ForgetPasswordActivity.this, "Error", "Something went wrong, Please Try Again");
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();

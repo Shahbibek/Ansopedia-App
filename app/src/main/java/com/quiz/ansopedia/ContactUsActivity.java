@@ -16,10 +16,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,29 +88,56 @@ public class ContactUsActivity extends AppCompatActivity {
         Utility.showProgress(this);
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.sendContactMessage(loginRequestModel,new Callback<List<LoginModel>>() {
-                    @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(ContactUsActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = response.body().get(0);
-                            if (loginModel.getStatus().toLowerCase().contains("success")) {
-                                Utility.showAlertDialog(ContactUsActivity.this, loginModel.getStatus(), loginModel.getMessage());
-                            } else {
-                                Utility.showAlertDialog(ContactUsActivity.this, "Error", "Something went wrong, Please Try Again");
+                    ContentApiImplementer.sendContactMessage(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                            Utility.dismissProgress(ContactUsActivity.this);
+                            if (response.isSuccessful()) {
+                                    tvEditText.setText("");
+                                    Utility.showAlertDialog(ContactUsActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
                             }
-                        } else {
+                            if(response.errorBody() != null){
+                                try {
+                                    JSONObject Error = new JSONObject(response.errorBody().string());
+                                    Utility.showAlertDialog(ContactUsActivity.this, Error.getString("status") , Error.getString("message"));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                            Utility.dismissProgress(ContactUsActivity.this);
+                            t.printStackTrace();
                             Utility.showAlertDialog(ContactUsActivity.this, "Error", "Something went wrong, Please Try Again");
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(ContactUsActivity.this);
-                        t.printStackTrace();
-                        Utility.showAlertDialog(ContactUsActivity.this, "Error", "Something went wrong, Please Try Again");
-                    }
-                });
+                    });
+//                ContentApiImplementer.sendContactMessage(loginRequestModel,new Callback<List<LoginModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                        Utility.dismissProgress(ContactUsActivity.this);
+//                        if (response.code() == 200) {
+//                            LoginModel loginModel = response.body().get(0);
+//                            if (loginModel.getStatus().toLowerCase().contains("success")) {
+//                                Utility.showAlertDialog(ContactUsActivity.this, loginModel.getStatus(), loginModel.getMessage());
+//                            } else {
+//                                Utility.showAlertDialog(ContactUsActivity.this, "Error", "Something went wrong, Please Try Again");
+//                            }
+//                        } else {
+//                            Utility.showAlertDialog(ContactUsActivity.this, "Error", "Something went wrong, Please Try Again");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                        Utility.dismissProgress(ContactUsActivity.this);
+//                        t.printStackTrace();
+//                        Utility.showAlertDialog(ContactUsActivity.this, "Error", "Something went wrong, Please Try Again");
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();

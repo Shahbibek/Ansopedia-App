@@ -103,9 +103,11 @@ public class MainActivity extends AppCompatActivity {
                 loadFrag(new NotificationFragment());
                 bottomNavigationView.setSelectedItemId(R.id.navNotification);
             } else if (fragment.equalsIgnoreCase("QuizFragment")){
+                tvToolbar.setText("My Courses");
                 loadFrag(new QuizFragment());
                 bottomNavigationView.setSelectedItemId(R.id.navList);
             } else if (fragment.equalsIgnoreCase("LeaderBoardFragment")){
+                tvToolbar.setText("Leader Board");
                 loadFrag(new LeaderBoardFragment());
                 bottomNavigationView.setSelectedItemId(R.id.navBookmark);
             }
@@ -175,12 +177,10 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (id == R.id.navAboutUs) {
                     startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
-                    finish();
 
 
                 } else if (id == R.id.navContactUs) {
                     startActivity(new Intent(MainActivity.this, ContactUsActivity.class));
-                    finish();
 
                 } else if (id == R.id.navlogout) {
 //                    FirebaseAuth.getInstance().signOut();

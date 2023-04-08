@@ -1,5 +1,6 @@
 package com.quiz.ansopedia.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,11 +18,16 @@ import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.ChapterAdapter;
 import com.quiz.ansopedia.adapter.CourseAdapter;
 import com.quiz.ansopedia.adapter.NotificationAdapter;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.Chapters;
 import com.quiz.ansopedia.models.Notification;
 import com.quiz.ansopedia.models.Subjects;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,27 +66,54 @@ public class NotificationFragment extends Fragment {
         Utility.showProgress(getContext());
         if (Utility.isNetConnected(getContext())) {
             try {
-                ContentApiImplementer.getNotification(new Callback<List<Notification>>() {
+                ContentApiImplementer.getNotification(new Callback<ApiResponse<List<Notification>>>() {
                     @Override
-                    public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
+                    public void onResponse(Call<ApiResponse<List<Notification>>> call, Response<ApiResponse<List<Notification>>> response) {
                         Utility.dismissProgress(getContext());
-                        if (response.code() == 200) {
-                            notifications = (ArrayList<Notification>) response.body();
+                        if (response.isSuccessful()) {
+                            notifications = (ArrayList<Notification>) response.body().getData();
 //                            Collections.reverse(notifications);
                             setRecyclerView();
-                        }else if(response.code() == 404){
-                            Utility.showAlertDialog(getContext(), "Failed", "Nothing to show");
-                        }else if(response.code() == 500){
-                            Utility.showAlertDialog(getContext(), "Failed", "Server error, Please Try Again");
+                        }
+                        if(response.errorBody() != null){
+                            try {
+                                JSONObject Error = new JSONObject(response.errorBody().string());
+                                Utility.showAlertDialog(getContext(), Error.getString("status") , Error.getString("message"));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Notification>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<Notification>>> call, Throwable t) {
                         Utility.dismissProgress(getContext());
-                        t.printStackTrace();
+//                        t.printStackTrace();
                     }
                 });
+//                ContentApiImplementer.getNotification(new Callback<List<Notification>>() {
+//                    @Override
+//                    public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
+//                        Utility.dismissProgress(getContext());
+//                        if (response.code() == 200) {
+//                            notifications = (ArrayList<Notification>) response.body();
+////                            Collections.reverse(notifications);
+//                            setRecyclerView();
+//                        }else if(response.code() == 404){
+//                            Utility.showAlertDialog(getContext(), "Failed", "Nothing to show");
+//                        }else if(response.code() == 500){
+//                            Utility.showAlertDialog(getContext(), "Failed", "Server error, Please Try Again");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<Notification>> call, Throwable t) {
+//                        Utility.dismissProgress(getContext());
+//                        t.printStackTrace();
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(getContext());
                 e.printStackTrace();

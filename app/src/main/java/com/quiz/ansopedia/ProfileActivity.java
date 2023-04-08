@@ -33,6 +33,9 @@ public class ProfileActivity extends AppCompatActivity {
     TextView tvBadges;
     TextView tvLeadershipBoard;
     TextView tvCourses;
+    ImageView ivBack;
+    Button btnLogoutButton;
+    TextView tvToolbar;
     SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,20 +43,16 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        Button btnLogoutButton = (Button)findViewById(R.id.btnLogoutButton);
-        ImageView ivBack = findViewById(R.id.ivBack);
-        ivChangeImage = findViewById(R.id.ivChangeImage);
-        tvCoin = findViewById(R.id.tvCoin);
-        tvUserEmail = findViewById(R.id.tvUserEmail);
-        tvUserName = findViewById(R.id.tvUserName);
-        tvEditSetting = findViewById(R.id.tvEditSetting);
-        tvBadges = findViewById(R.id.tvBadges);
-        tvLeadershipBoard = findViewById(R.id.tvLeadershipBoard);
-        tvCourses = findViewById(R.id.tvCourses);
+        initView();
         tvEditProfile = findViewById(R.id.tvEditProfile);
-        if (Utility.userDetail == null) {
-            Utility.getUserDetail(this);
+        try{
+            if (Utility.userDetail == null) {
+                Utility.getUserDetail(this);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
+
         btnLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -91,13 +91,13 @@ public class ProfileActivity extends AppCompatActivity {
 //            }
 //        });
 
-        tvBadges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this, BadgesActivity.class));
-                finish();
-            }
-        });
+//        tvBadges.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(ProfileActivity.this, BadgesActivity.class));
+//                finish();
+//            }
+//        });
 
         tvLeadershipBoard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +136,28 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
 
+    private void initView() {
+        btnLogoutButton = findViewById(R.id.btnLogoutButton);
+        ivBack = findViewById(R.id.ivBack);
+        ivChangeImage = findViewById(R.id.ivChangeImage);
+        tvCoin = findViewById(R.id.tvCoin);
+        tvUserEmail = findViewById(R.id.tvUserEmail);
+        tvUserName = findViewById(R.id.tvUserName);
+        tvEditSetting = findViewById(R.id.tvEditSetting);
+        tvBadges = findViewById(R.id.tvBadges);
+        tvLeadershipBoard = findViewById(R.id.tvLeadershipBoard);
+        tvCourses = findViewById(R.id.tvCourses);
+        tvToolbar = findViewById(R.id.tvToolbar);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+        finish();
     }
 
 }

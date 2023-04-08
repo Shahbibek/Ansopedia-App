@@ -17,10 +17,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -98,30 +103,63 @@ public class EnterOtpActivity extends AppCompatActivity {
         loginRequestModel.setEmail(email);
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.sendEmailResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
-                    @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(EnterOtpActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = response.body().get(0);
-                            Constants.TOKEN = loginModel.getToken();
-                            if (loginModel.getStatus().toLowerCase().contains("success")) {
-                                timer();
-                            } else {
-                                Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+                    ContentApiImplementer.sendEmailResetPassword(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                            Utility.dismissProgress(EnterOtpActivity.this);
+                            if (response.isSuccessful()) {
+//                                LoginModel loginModel = response.body().getData();
+//                                Constants.TOKEN = loginModel.getToken();
+                                if (response.body().getStatus().toLowerCase().contains("success")) {
+                                    timer();
+                                } else {
+                                    Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+                                }
                             }
-                        } else {
+                            if(response.errorBody() != null){
+                                try {
+                                    JSONObject Error = new JSONObject(response.errorBody().string());
+                                    Utility.showAlertDialog(EnterOtpActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                            Utility.dismissProgress(EnterOtpActivity.this);
+                            t.printStackTrace();
                             Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(EnterOtpActivity.this);
-                        t.printStackTrace();
-                        Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
-                    }
-                });
+                    });
+//                ContentApiImplementer.sendEmailResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                        Utility.dismissProgress(EnterOtpActivity.this);
+//                        if (response.code() == 200) {
+//                            LoginModel loginModel = response.body().get(0);
+//                            Constants.TOKEN = loginModel.getToken();
+//                            if (loginModel.getStatus().toLowerCase().contains("success")) {
+//                                timer();
+//                            } else {
+//                                Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+//                            }
+//                        } else {
+//                            Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                        Utility.dismissProgress(EnterOtpActivity.this);
+//                        t.printStackTrace();
+//                        Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();
@@ -139,36 +177,70 @@ public class EnterOtpActivity extends AppCompatActivity {
         Utility.showProgress(this);
         if (Utility.isNetConnected(this)) {
             try {
-                ContentApiImplementer.sendOTPResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
-                    @Override
-                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-                        Utility.dismissProgress(EnterOtpActivity.this);
-                        if (response.code() == 200) {
-                            LoginModel loginModel = response.body().get(0);
-                            preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-
-                            if (loginModel.getStatus().toLowerCase().contains("success")) {
-                                Constants.TOKEN = loginModel.getToken();
-//                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class);
-//                                        .putExtra("email", getIntent().getStringExtra("email")));
-                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class));
-                                finish();
-
-                            } else {
-                                Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+                    ContentApiImplementer.sendOTPResetPassword(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                            Utility.dismissProgress(EnterOtpActivity.this);
+                            if (response.isSuccessful()) {
+                                LoginModel loginModel = response.body().getData();
+                                preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+                                if (response.body().getStatus().toLowerCase().contains("success")) {
+                                    Constants.TOKEN = loginModel.getToken();
+    //                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class);
+    //                                        .putExtra("email", getIntent().getStringExtra("email")));
+                                    startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class));
+                                    finish();
+                                }
                             }
-                        } else {
+                            if(response.errorBody() != null){
+                                try {
+                                    JSONObject Error = new JSONObject(response.errorBody().string());
+                                    Utility.showAlertDialog(EnterOtpActivity.this, Error.getString("status") , Error.getString("message"));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                            Utility.dismissProgress(EnterOtpActivity.this);
+                            t.printStackTrace();
                             Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-                        Utility.dismissProgress(EnterOtpActivity.this);
-                        t.printStackTrace();
-                        Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
-                    }
-                });
+                    });
+//                ContentApiImplementer.sendOTPResetPassword(loginRequestModel,new Callback<List<LoginModel>>() {
+//                    @Override
+//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+//                        Utility.dismissProgress(EnterOtpActivity.this);
+//                        if (response.code() == 200) {
+//                            LoginModel loginModel = response.body().get(0);
+//                            preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
+//
+//                            if (loginModel.getStatus().toLowerCase().contains("success")) {
+//                                Constants.TOKEN = loginModel.getToken();
+////                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class);
+////                                        .putExtra("email", getIntent().getStringExtra("email")));
+//                                startActivity(new Intent(EnterOtpActivity.this, ForgotPasswordLinkActivity.class));
+//                                finish();
+//
+//                            } else {
+//                                Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+//                            }
+//                        } else {
+//                            Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+//                        Utility.dismissProgress(EnterOtpActivity.this);
+//                        t.printStackTrace();
+//                        Utility.showAlertDialog(EnterOtpActivity.this, "Error", "Something went wrong, Please Try Again");
+//                    }
+//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();

@@ -37,12 +37,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.gson.JsonObject;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
+import com.quiz.ansopedia.api.ApiResponse;
 import com.quiz.ansopedia.models.LoginModel;
 import com.quiz.ansopedia.models.LoginRequestModel;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -115,21 +121,21 @@ public class SignInActivity extends AppCompatActivity {
                 if (isValidateCredentials()) {
                     getLogin();
                 } else {
-                    if (username.isEmpty()) {
-                        t1.setErrorEnabled(true);
-                        t1.setError("* Please Enter Email");
-                    } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()){
+                    if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
                         t1.setErrorEnabled(true);
                         t1.setError("* Invalid Email");
-                    }else if (password.isEmpty()){
-                        t2.setErrorEnabled(true);
-                        t2.setError("* Please Enter Password");
-                    }else if(!password.matches( ".{8,}")){
+                    }if (username.isEmpty()) {
+                        t1.setErrorEnabled(true);
+                        t1.setError("* Please Enter Email");
+                    }if(!password.matches( ".{8,}")){
                         t2.setErrorEnabled(true);
                         t2.setError("* Password must be of 8 digit");
-                    }else if (!Utility.isValidPassword(password)){
+                    }if (!Utility.isValidPassword(password)){
                         t2.setErrorEnabled(true);
                         t2.setError("* Invalid Password");
+                    }if (password.isEmpty()){
+                        t2.setErrorEnabled(true);
+                        t2.setError("* Please Enter Password");
                     };
                 }
             }
@@ -333,40 +339,38 @@ public class SignInActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else{
-                                        ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
+
+                                    ContentApiImplementer.getLogin(loginRequestModel, new Callback<ApiResponse<List<LoginModel>>>() {
                                         @Override
-                                        public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                                        public void onResponse(Call<ApiResponse<List<LoginModel>>> call, Response<ApiResponse<List<LoginModel>>> response) {
                                             Utility.dismissProgress(SignInActivity.this);
-                                            if (response.code() == 200) {
-                                                LoginModel loginModel = (LoginModel) response.body().get(0);
+                                            if (response.isSuccessful()) {
+                                                LoginModel loginModel = (LoginModel) response.body().getData().get(0);
                                                 if (loginModel.getStatus().equalsIgnoreCase("success")) {
                                                     Constants.TOKEN = loginModel.getToken();
                                                     preferences.edit().putBoolean(Constants.isLogin, true).apply();
                                                     preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-                                                    Toast.makeText(SignInActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(SignInActivity.this, "" + response.body().getMessage().toString().trim(), Toast.LENGTH_SHORT).show();
                                                     startActivity(new Intent(SignInActivity.this, MainActivity.class));
                                                     finish();
                                                 } else {
                                                     Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
                                                 }
                                             }
-                                            else if(response.code() == 500){
-                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
-                                            } else if(response.code() == 404){
-                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
-                                            } else if(response.code() == 401){
-                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Credentials..!!");
-                                            } else if(response.code() == 403){
-                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
-                                            } else if(response.code() == 429){
-                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
-                                            } else {
-                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again..");
+                                            if(response.errorBody() != null){
+                                                    try {
+                                                        JSONObject Error = new JSONObject(response.errorBody().string());
+                                                        Utility.showAlertDialog(SignInActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
+                                                    } catch (IOException e) {
+                                                        throw new RuntimeException(e);
+                                                    } catch (JSONException e) {
+                                                        throw new RuntimeException(e);
+                                                    }
                                             }
                                         }
 
                                         @Override
-                                        public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                                        public void onFailure(Call<ApiResponse<List<LoginModel>>> call, Throwable t) {
                                             Utility.dismissProgress(SignInActivity.this);
                                             t.printStackTrace();
                                             Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
@@ -375,46 +379,6 @@ public class SignInActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
-//                ContentApiImplementer.getLogin(loginRequestModel, new Callback<List<LoginModel>>() {
-//                    @Override
-//                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
-//                        Utility.dismissProgress(SignInActivity.this);
-//                        if (response.code() == 200) {
-//                            LoginModel loginModel = (LoginModel) response.body().get(0);
-//                            if (loginModel.getStatus().equalsIgnoreCase("success")) {
-//                                Constants.TOKEN = loginModel.getToken();
-//                                preferences.edit().putBoolean(Constants.isLogin, true).apply();
-//                                preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-//                                Toast.makeText(SignInActivity.this, "" + loginModel.getMessage(), Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
-//                                finish();
-//                            } else {
-//                                Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
-//                            }
-//                        }
-//                        else if(response.code() == 500){
-//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Server Error, Please Try Again..");
-//                        } else if(response.code() == 404){
-//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exist..!!");
-//                        } else if(response.code() == 401){
-//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Credentials..!!");
-//                        } else if(response.code() == 403){
-//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "You have not verified your email. Please Verify your email to login..");
-//                        } else if(response.code() == 429){
-//                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Too many request, Please Try Again after 15 minutes..");
-//                        } else {
-//                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again..");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
-//                        Utility.dismissProgress(SignInActivity.this);
-//                        t.printStackTrace();
-//                        Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
-//                    }
-//                });
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();
@@ -428,6 +392,9 @@ public class SignInActivity extends AppCompatActivity {
     private boolean isValidateCredentials() {
         String username = Objects.requireNonNull(etUsername.getText()).toString().trim();
         String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
-        return !username.isEmpty() && !password.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(username).matches() && password.matches(".{8,}") && Utility.isValidPassword(password);
+        return !username.isEmpty() && !password.isEmpty()
+                && Patterns.EMAIL_ADDRESS.matcher(username).matches()
+                && password.matches(".{8,}")
+                && Utility.isValidPassword(password);
     }
 }
