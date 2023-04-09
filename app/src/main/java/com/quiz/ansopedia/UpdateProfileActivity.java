@@ -258,7 +258,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     part_image = cursor.getString(indexImage);
                     System.out.println(part_image);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
                     byte[] imageInByte = stream.toByteArray();
                     long lengthbmp = imageInByte.length;
                     System.out.println(lengthbmp);
@@ -304,10 +304,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         try {
                             JSONObject Error = new JSONObject(response.errorBody().string());
                             Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -352,9 +350,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status") , Error.getString("message"));
                             } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(UpdateProfileActivity.this);
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(UpdateProfileActivity.this);
                             }
                         }
                     }

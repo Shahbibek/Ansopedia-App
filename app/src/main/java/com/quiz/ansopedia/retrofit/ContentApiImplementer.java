@@ -54,10 +54,10 @@ public class ContentApiImplementer {
         return retrofit;
     }
 
-    public static void getLogin(LoginRequestModel loginRequestModel, Callback<ApiResponse<List<LoginModel>>> cb) {
+    public static void getLogin(LoginRequestModel loginRequestModel, Callback<ApiResponse<LoginModel>> cb) {
         ApiService apiService = getRetrofit().create(ApiService.class);
 //        Call<List<LoginModel>> call = apiService.getLogin(loginRequestModel);
-        Call<ApiResponse<List<LoginModel>>> call = apiService.getLogin(loginRequestModel);
+        Call<ApiResponse<LoginModel>> call = apiService.getLogin(loginRequestModel);
         call.enqueue(cb);
     }
 
@@ -133,9 +133,9 @@ public class ContentApiImplementer {
         call.enqueue(cb);
     }
 
-    public static void signInWithGoogle(Callback<List<LoginModel>> cb) {
+    public static void signInWithGoogle(Callback<ApiResponse<LoginModel>> cb) {
         ApiService apiService = getRetrofit().create(ApiService.class);
-        Call<List<LoginModel>> call = apiService.signInWithGoogle();
+        Call<ApiResponse<LoginModel>> call = apiService.signInWithGoogle();
         call.enqueue(cb);
     }
 }

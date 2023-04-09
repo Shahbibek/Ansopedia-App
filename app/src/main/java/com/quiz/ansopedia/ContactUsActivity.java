@@ -101,9 +101,11 @@ public class ContactUsActivity extends AppCompatActivity {
                                     JSONObject Error = new JSONObject(response.errorBody().string());
                                     Utility.showAlertDialog(ContactUsActivity.this, Error.getString("status") , Error.getString("message"));
                                 } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
+                                    Utility.dismissProgress(ContactUsActivity.this);
                                 } catch (JSONException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
+                                    Utility.dismissProgress(ContactUsActivity.this);
                                 }
                             }
                         }

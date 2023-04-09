@@ -192,11 +192,11 @@ public class Utility {
 
         if (Utility.isNetConnected(context)) {
             try {
-                ContentApiImplementer.getLogin(loginRequestModel, new Callback<ApiResponse<List<LoginModel>>>() {
+                ContentApiImplementer.getLogin(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<List<LoginModel>>> call, Response<ApiResponse<List<LoginModel>>> response) {
+                    public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
                         if (response.isSuccessful()) {
-                            LoginModel loginModel = (LoginModel) response.body().getData().get(0);
+                            LoginModel loginModel = (LoginModel) response.body().getData();
                             if (loginModel.getStatus().equalsIgnoreCase("success")) {
                                 Constants.TOKEN = loginModel.getToken();
                                 preferences.edit().putBoolean(Constants.isLogin, true).apply();
@@ -220,7 +220,7 @@ public class Utility {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<List<LoginModel>>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
                         Constants.TOKEN = "";
                         preferences.edit().putBoolean(Constants.isLogin, false).apply();
                         preferences.edit().putString(Constants.token, "").apply();
@@ -270,9 +270,11 @@ public class Utility {
                         JSONObject Error = new JSONObject(response.errorBody().string());
                         Utility.showAlertDialog(context, Error.getString("status").toString().trim(), Error.getString("message").toString().trim());
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Utility.dismissProgress(context);
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        Utility.dismissProgress(context);
                     }
                 }
             }

@@ -101,9 +101,11 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(ForgetPasswordActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
                             } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(ForgetPasswordActivity.this);
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(ForgetPasswordActivity.this);
                             }
                         }
                     }

@@ -22,7 +22,7 @@ import retrofit2.http.Part;
 public interface ApiService {
     @POST("user/login")
 //    Call<List<LoginModel>> getLogin(@Body LoginRequestModel loginRequestModel);
-    Call<ApiResponse<List<LoginModel>>> getLogin(@Body LoginRequestModel loginRequestModel);
+    Call<ApiResponse<LoginModel>> getLogin(@Body LoginRequestModel loginRequestModel);
 
     @POST("user/register")
 //    Call<List<LoginModel>> getRegister(@Body LoginRequestModel loginRequestModel);
@@ -72,5 +72,5 @@ public interface ApiService {
     Call<ApiResponse<List<UserDetail>>> getRankers();
 
     @GET("user/sign-in-with-google")
-    Call<List<LoginModel>> signInWithGoogle();
+    Call<ApiResponse<LoginModel>> signInWithGoogle();
 }

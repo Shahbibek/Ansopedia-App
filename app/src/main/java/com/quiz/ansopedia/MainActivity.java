@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 //        Utility.getLogin(this);
         bottomNavigationView.setSelectedItemId(R.id.navhome);
+        Constants.TOKEN = preferences.getString(Constants.token, "");
         try {
             String fragment = getIntent().getStringExtra("fragment");
             if (fragment.equalsIgnoreCase("HomeFragment")) {

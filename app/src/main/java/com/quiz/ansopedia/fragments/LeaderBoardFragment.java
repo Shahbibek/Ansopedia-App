@@ -57,12 +57,16 @@ public class LeaderBoardFragment extends Fragment {
         // Inflate the layout for this fragment
       View view = inflater.inflate(R.layout.fragment_leader_board, container, false);
       rvLeaderBoard = view.findViewById(R.id.rvLeaderBoard);
+      initView();
       ivRankerImage = view.findViewById(R.id.ivRankerImage);
       tvRankCount = view.findViewById(R.id.tvRankCount);
       tvRankerName = view.findViewById(R.id.tvRankerName);
       tvRankerScore = view.findViewById(R.id.tvRankerScore);
       getRankers();
       return view;
+    }
+
+    private void initView() {
     }
 
     private void getRankers() {
@@ -84,9 +88,11 @@ public class LeaderBoardFragment extends Fragment {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(getContext(), Error.getString("status") , Error.getString("message"));
                             } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(getContext());
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(getContext());
                             }
                         }
                     }

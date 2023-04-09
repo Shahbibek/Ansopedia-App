@@ -196,9 +196,11 @@ public class SignupActivity extends AppCompatActivity {
                                     JSONObject Error = new JSONObject(response.errorBody().string());
                                     Utility.showAlertDialog(SignupActivity.this, Error.getString("status") , Error.getString("message"));
                                 } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
+                                    Utility.dismissProgress(SignupActivity.this);
                                 } catch (JSONException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
+                                    Utility.dismissProgress(SignupActivity.this);
                                 }
                             }
                         }

@@ -37,6 +37,26 @@ public class ProfileActivity extends AppCompatActivity {
     Button btnLogoutButton;
     TextView tvToolbar;
     SharedPreferences preferences;
+
+    @Override
+    protected void onStart() {
+        try {
+            if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
+                try {
+                    Glide.with(this)
+                            .load(Utility.userDetail.getAvatar())
+                            .into(ivChangeImage);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStart();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView tvEditProfile;

@@ -80,9 +80,11 @@ public class NotificationFragment extends Fragment {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(getContext(), Error.getString("status") , Error.getString("message"));
                             } catch (IOException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(getContext());
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
+                                Utility.dismissProgress(getContext());
                             }
                         }
                     }

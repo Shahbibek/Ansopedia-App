@@ -204,8 +204,22 @@ public class SignInActivity extends AppCompatActivity {
                                             SignInMethodQueryResult result = task.getResult();
                                             List<String> signinMethod = result.getSignInMethods();
                                             System.out.println(signinMethod);
-                                            if (signinMethod.contains("google.com")) {
+                                            if (signinMethod.size() == 0) {
                                                 firebaseAuthWithGoogle(account.getIdToken());
+                                            } else if (signinMethod.contains("google.com")) {
+                                                firebaseAuthWithGoogle(account.getIdToken());
+                                            } else if (signinMethod.contains("password")){
+                                                mGoogleSignInClient.signOut()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                Constants.TOKEN = "";
+                                                                preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                                                                preferences.edit().putString(Constants.token, "").apply();
+                                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Your have signup by email and Password, Please try with that method !!..");
+                                                                updateUI(null);
+                                                            }
+                                                        });
                                             } else {
                                                 mGoogleSignInClient.signOut()
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -214,22 +228,35 @@ public class SignInActivity extends AppCompatActivity {
                                                                 Constants.TOKEN = "";
                                                                 preferences.edit().putBoolean(Constants.isLogin, false).apply();
                                                                 preferences.edit().putString(Constants.token, "").apply();
-                                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Your have signup by email and Password, Please try that method !!..");
+                                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, please try again !!..");
                                                                 updateUI(null);
                                                             }
                                                         });
                                             }
                                         }else{
-                                            Utility.showAlertDialog(SignInActivity.this, "Error", "Bad Request, Please try Again !!..");
+                                            mGoogleSignInClient.signOut()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            Constants.TOKEN = "";
+                                                            preferences.edit().putBoolean(Constants.isLogin, false).apply();
+                                                            preferences.edit().putString(Constants.token, "").apply();
+                                                            Utility.dismissProgress(SignInActivity.this);
+                                                            Utility.showAlertDialog(SignInActivity.this, "Error", "Bad Request, Please try Again !!..");
+                                                        }
+                                                    });
                                         }
                                     }
                                 });
 
             } catch (ApiException e) {
+                Utility.dismissProgress(this);
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 e.printStackTrace();
             }
+        } else {
+            Utility.dismissProgress(this);
         }
     }
     // [START auth_with_google]
@@ -250,19 +277,22 @@ public class SignInActivity extends AppCompatActivity {
                                 Constants.TOKEN = result.getToken();
                                 Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
                                 Log.d(TAG, "GetTokenResult result = " + user);
-                                ContentApiImplementer.signInWithGoogle(new Callback<List<LoginModel>>() {
+                                ContentApiImplementer.signInWithGoogle(new Callback<ApiResponse<LoginModel>>() {
                                     @Override
-                                    public void onResponse(Call<List<LoginModel>> call, Response<List<LoginModel>> response) {
+                                    public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
                                         if (response.code() == 200) {
                                             preferences.getBoolean(Constants.isLogin, true);
                                             updateUI(user);
                                         } else {
                                             updateUI(null);
+                                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Something went wrong, please try again !!..");
                                         }
                                     }
                                     @Override
-                                    public void onFailure(Call<List<LoginModel>> call, Throwable t) {
+                                    public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
                                         updateUI(null);
+                                        Utility.dismissProgress(SignInActivity.this);
+                                        Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
                                     }
                                 });
 
@@ -272,6 +302,8 @@ public class SignInActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             updateUI(null);
+                            Utility.dismissProgress(SignInActivity.this);
+                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
                         }
                     }
                 });
@@ -287,14 +319,22 @@ public class SignInActivity extends AppCompatActivity {
     // ###################################### END Signin ##############################
 
     private void updateUI(FirebaseUser user) {
-        Utility.dismissProgress(this);
         if(user != null){
+            try{
+                Utility.getUserDetail(this);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             preferences.edit().putBoolean(Constants.isLogin, true).apply();
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
     //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
+            Utility.dismissProgress(this);
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
+        } else{
+            Utility.dismissProgress(this);
+            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
         }
     }
 
@@ -325,57 +365,78 @@ public class SignInActivity extends AppCompatActivity {
 
         if (Utility.isNetConnected(this)) {
             try {
-                mAuth.signInWithEmailAndPassword(etUsername.getText().toString().trim(),etPassword.getText().toString().trim())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                mAuth.fetchSignInMethodsForEmail(etUsername.getText().toString().trim())
+                        .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    user.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-                                        @Override
-                                        public void onSuccess(GetTokenResult getTokenResult) {
-                                            Constants.TOKEN = getTokenResult.getToken();
-                                            updateUI(user);
-                                        }
-                                    });
-                                }else{
+                            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                                if(task.isSuccessful()) {
+                                    SignInMethodQueryResult result = task.getResult();
+                                    List<String> signinMethod = result.getSignInMethods();
+                                    System.out.println(signinMethod);
+                                    if (signinMethod.size() == 0) {
+                                        Utility.showAlertDialog(SignInActivity.this, "Failed", "Account doesn't exists, Please Signup !!..");
+                                        Utility.dismissProgress(SignInActivity.this);
+                                    }
+                                     if (signinMethod.contains("google.com")) {
+                                        Utility.showAlertDialog(SignInActivity.this, "Failed", "Account Created with Google SignIn, Please try with that method !!..");
+                                        Utility.dismissProgress(SignInActivity.this);
+                                    } else if (signinMethod.contains("password")){
+                                        ContentApiImplementer.getLogin(loginRequestModel, new Callback<ApiResponse<LoginModel>>() {
+                                            @Override
+                                            public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
 
-                                    ContentApiImplementer.getLogin(loginRequestModel, new Callback<ApiResponse<List<LoginModel>>>() {
-                                        @Override
-                                        public void onResponse(Call<ApiResponse<List<LoginModel>>> call, Response<ApiResponse<List<LoginModel>>> response) {
-                                            Utility.dismissProgress(SignInActivity.this);
-                                            if (response.isSuccessful()) {
-                                                LoginModel loginModel = (LoginModel) response.body().getData().get(0);
-                                                if (loginModel.getStatus().equalsIgnoreCase("success")) {
-                                                    Constants.TOKEN = loginModel.getToken();
-                                                    preferences.edit().putBoolean(Constants.isLogin, true).apply();
-                                                    preferences.edit().putString(Constants.token, loginModel.getToken()).apply();
-                                                    Toast.makeText(SignInActivity.this, "" + response.body().getMessage().toString().trim(), Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                                                    finish();
-                                                } else {
-                                                    Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                                                if (response.isSuccessful()) {
+                                                    LoginModel loginModel = (LoginModel) response.body().getData();
+                                                    if (response.body().getStatus().equalsIgnoreCase("success")) {
+                                                        mAuth.signInWithEmailAndPassword(etUsername.getText().toString().trim(),etPassword.getText().toString().trim())
+                                                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            FirebaseUser user = mAuth.getCurrentUser();
+                                                                            user.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                                                                                @Override
+                                                                                public void onSuccess(GetTokenResult getTokenResult) {
+                                                                                    Constants.TOKEN = getTokenResult.getToken();
+                                                                                    updateUI(user);
+                                                                                }
+                                                                            });
+                                                                        } else{
+                                                                            Utility.dismissProgress(SignInActivity.this);
+                                                                            Utility.showAlertDialog(SignInActivity.this, "Error", "Bad Request, Please try Again !!..");
+                                                                        }
+                                                                    }
+                                                                });
+                                                    } else {
+                                                        Utility.dismissProgress(SignInActivity.this);
+                                                        Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                                                    }
                                                 }
-                                            }
-                                            if(response.errorBody() != null){
+                                                if(response.errorBody() != null){
+                                                    Utility.dismissProgress(SignInActivity.this);
                                                     try {
                                                         JSONObject Error = new JSONObject(response.errorBody().string());
                                                         Utility.showAlertDialog(SignInActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
                                                     } catch (IOException e) {
-                                                        throw new RuntimeException(e);
+                                                        e.printStackTrace();
+                                                        Utility.dismissProgress(SignInActivity.this);
                                                     } catch (JSONException e) {
-                                                        throw new RuntimeException(e);
+                                                        e.printStackTrace();
+                                                        Utility.dismissProgress(SignInActivity.this);
                                                     }
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<ApiResponse<List<LoginModel>>> call, Throwable t) {
-                                            Utility.dismissProgress(SignInActivity.this);
-                                            t.printStackTrace();
-                                            Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
-                                        }
-                                    });
+                                            @Override
+                                            public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                                                Utility.dismissProgress(SignInActivity.this);
+                                                t.printStackTrace();
+                                                Utility.showAlertDialog(SignInActivity.this, "Error", "Something went wrong, Please Try Again");
+                                            }
+                                        });
+                                    }
+                                }else{
+                                    Utility.showAlertDialog(SignInActivity.this, "Error", "Bad Request, Please try Again !!..");
                                 }
                             }
                         });

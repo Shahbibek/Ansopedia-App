@@ -127,9 +127,11 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
                                     JSONObject Error = new JSONObject(response.errorBody().string());
                                     Utility.showAlertDialog(ForgotPasswordLinkActivity.this, Error.getString("status") , Error.getString("message"));
                                 } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
+                                    Utility.dismissProgress(ForgotPasswordLinkActivity.this);
                                 } catch (JSONException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
+                                    Utility.dismissProgress(ForgotPasswordLinkActivity.this);
                                 }
                             }
                         }

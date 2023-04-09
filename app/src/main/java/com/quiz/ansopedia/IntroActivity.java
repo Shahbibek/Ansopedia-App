@@ -90,14 +90,16 @@ public class IntroActivity extends AppCompatActivity {
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
             //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d("TAG", "GetTokenResult result = " + Constants.TOKEN);
-            startActivity(new Intent(IntroActivity.this, MainActivity.class));
-            finish();
+//            startActivity(new Intent(IntroActivity.this, MainActivity.class));
+//            finish();
+            getContent();
         }
     }
     private void getContent() {
 //        Utility.showProgressGif(getContext());
         if (Utility.isNetConnected(this)) {
             try {
+                Utility.getUserDetail(this);
                 ContentApiImplementer.getContent(new Callback<ApiResponse<List<Contents>>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<List<Contents>>> call, Response<ApiResponse<List<Contents>>> response) {
