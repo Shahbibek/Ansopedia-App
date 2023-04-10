@@ -86,7 +86,7 @@
                     android:clickable="true"
                     android:drawableEnd="@drawable/ic_baseline_email_24"
                     android:focusable="true"
-                    android:hint="Username"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:textSize="22sp" />
             </com.google.android.material.textfield.TextInputLayout>

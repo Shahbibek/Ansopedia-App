@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Constants {
     public static String token = "token";
     public static String TOKEN = "";
+    public static String Email = "";
     public static String COLOR = "";
     public static String username = "username";
     public static String name = "name";

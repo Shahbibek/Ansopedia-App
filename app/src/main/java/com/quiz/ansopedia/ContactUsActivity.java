@@ -93,8 +93,8 @@ public class ContactUsActivity extends AppCompatActivity {
                         public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
                             Utility.dismissProgress(ContactUsActivity.this);
                             if (response.isSuccessful()) {
-                                    tvEditText.setText("");
                                     Utility.showAlertDialog(ContactUsActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
+                                    tvEditText.setText("");
                             }
                             if(response.errorBody() != null){
                                 try {

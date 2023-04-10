@@ -85,6 +85,7 @@ public class ForgotPasswordLinkActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(ForgotPasswordLinkActivity.this, EnterOtpActivity.class));
                 finish();
             }
         });

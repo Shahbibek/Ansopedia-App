@@ -48,6 +48,7 @@ import com.quiz.ansopedia.retrofit.ContentApiImplementer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -179,7 +180,17 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Utility.showProgress(SignInActivity.this);
-                signIn();
+                if (Utility.isNetConnected(SignInActivity.this)) {
+                    try{
+                        signIn();
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    Utility.dismissProgress(SignInActivity.this);
+                    Utility.showAlertDialog(SignInActivity.this, "Failed", "Please, Connect to Internet !!..");
+                }
             }
         });
 
@@ -203,10 +214,15 @@ public class SignInActivity extends AppCompatActivity {
                                         if(task.isSuccessful()){
                                             SignInMethodQueryResult result = task.getResult();
                                             List<String> signinMethod = result.getSignInMethods();
+//                                            Constants.Email= account.getEmail();
                                             System.out.println(signinMethod);
                                             if (signinMethod.size() == 0) {
+//                                                Constants.Email= account.getEmail();
+//                                                preferences.edit().putString(Constants.username,  Constants.email;
                                                 firebaseAuthWithGoogle(account.getIdToken());
                                             } else if (signinMethod.contains("google.com")) {
+//                                                Constants.Email= account.getEmail();
+//                                                preferences.edit().putString(Constants.username,  Constants.email;
                                                 firebaseAuthWithGoogle(account.getIdToken());
                                             } else if (signinMethod.contains("password")){
                                                 mGoogleSignInClient.signOut()
@@ -271,12 +287,13 @@ public class SignInActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
+
                             user.getIdToken(true).addOnSuccessListener(result -> {
 //                              String idToken = result.getToken();
 //                              Do whatever
                                 Constants.TOKEN = result.getToken();
-                                Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
-                                Log.d(TAG, "GetTokenResult result = " + user);
+//                                Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
+//                                Log.d(TAG, "GetTokenResult result = " + user);
                                 ContentApiImplementer.signInWithGoogle(new Callback<ApiResponse<LoginModel>>() {
                                     @Override
                                     public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
@@ -292,7 +309,7 @@ public class SignInActivity extends AppCompatActivity {
                                     public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
                                         updateUI(null);
                                         Utility.dismissProgress(SignInActivity.this);
-                                        Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
+                                        Utility.showAlertDialog(SignInActivity.this, "Failed", "Something went wrong, Please try Again !!..");
                                     }
                                 });
 
@@ -313,8 +330,8 @@ public class SignInActivity extends AppCompatActivity {
 
     // ############################# START Signin #############################
     private void signIn() {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     // ###################################### END Signin ##############################
 
@@ -327,6 +344,7 @@ public class SignInActivity extends AppCompatActivity {
             }
             preferences.edit().putBoolean(Constants.isLogin, true).apply();
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
+//            preferences.edit().putString(Constants.Email, Constants.Email ).apply();
     //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
             Utility.dismissProgress(this);
@@ -409,7 +427,7 @@ public class SignInActivity extends AppCompatActivity {
                                                                 });
                                                     } else {
                                                         Utility.dismissProgress(SignInActivity.this);
-                                                        Utility.showAlertDialog(SignInActivity.this, loginModel.getStatus(), loginModel.getMessage());
+                                                        Utility.showAlertDialog(SignInActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
                                                     }
                                                 }
                                                 if(response.errorBody() != null){
@@ -446,7 +464,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         } else {
             Utility.dismissProgress(this);
-            Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
+            Utility.showAlertDialog(this, "Error", "Please, Connect to Internet !!..");
         }
     }
 
