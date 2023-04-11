@@ -286,6 +286,7 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+//                            Constants.Email = user.getEmail();
                             assert user != null;
 
                             user.getIdToken(true).addOnSuccessListener(result -> {
@@ -344,9 +345,9 @@ public class SignInActivity extends AppCompatActivity {
             }
             preferences.edit().putBoolean(Constants.isLogin, true).apply();
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
-//            preferences.edit().putString(Constants.Email, Constants.Email ).apply();
-    //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
+//            preferences.edit().putString(Constants.username,  Constants.Email).apply();
+//              Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
+//            Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
             Utility.dismissProgress(this);
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();

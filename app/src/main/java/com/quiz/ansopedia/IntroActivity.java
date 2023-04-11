@@ -63,6 +63,7 @@ public class IntroActivity extends AppCompatActivity {
         if (preferences.getBoolean(Constants.isLogin, false)) {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
+            Constants.Email = currentUser.getEmail();
             currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                 @Override
                 public void onSuccess(GetTokenResult getTokenResult) {
@@ -88,9 +89,8 @@ public class IntroActivity extends AppCompatActivity {
         if(user != null){
             preferences.edit().putBoolean(Constants.isLogin, true).apply();
             preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
-            preferences.edit().putString(Constants.Email, Constants.Email ).apply();
-            //      Toast.makeText(SignInActivity.this, "" + result.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d("TAG", "GetTokenResult result = " + Constants.TOKEN);
+            preferences.edit().putString(Constants.username,  Constants.Email).apply();
+//            Log.d("TAG", "GetTokenResult result = " + Constants.TOKEN);
 //            startActivity(new Intent(IntroActivity.this, MainActivity.class));
 //            finish();
             getContent();
