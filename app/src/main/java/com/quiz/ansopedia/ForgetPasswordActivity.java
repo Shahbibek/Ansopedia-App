@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.api.ApiResponse;
@@ -100,12 +101,10 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                             try {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(ForgetPasswordActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } catch (Exception e) {
                                 Utility.dismissProgress(ForgetPasswordActivity.this);
-                            } catch (JSONException e) {
                                 e.printStackTrace();
-                                Utility.dismissProgress(ForgetPasswordActivity.this);
+                                FirebaseCrashlytics.getInstance().recordException(e);
                             }
                         }
                     }
@@ -146,6 +145,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.dismissProgress(this);

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.retrofit.ContentApiImplementer;
@@ -41,6 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         try {
+            tvUserName.setText(Utility.toCapitalizeFirstLetter(Utility.userDetail.getName()));
+            tvCoin.setText(String.valueOf(Utility.userDetail.getCoins()));
             if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
                 try {
                     Glide.with(this)
@@ -49,10 +52,12 @@ public class ProfileActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         super.onStart();
     }
@@ -71,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }catch(Exception e){
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
 
         btnLogoutButton.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvCoin.setText(String.valueOf(Utility.userDetail.getCoins()));
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
 
 //        tvEditSetting.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +125,6 @@ public class ProfileActivity extends AppCompatActivity {
 //                finish();
 //            }
 //        });
-
         tvLeadershipBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,10 +156,12 @@ public class ProfileActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
 
     }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.SignInActivity;
 import com.quiz.ansopedia.Utility.Constants;
@@ -87,11 +88,9 @@ public class LeaderBoardFragment extends Fragment {
                             try {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(getContext(), Error.getString("status") , Error.getString("message"));
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
-                                Utility.dismissProgress(getContext());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                FirebaseCrashlytics.getInstance().recordException(e);
                                 Utility.dismissProgress(getContext());
                             }
                         }
@@ -105,6 +104,7 @@ public class LeaderBoardFragment extends Fragment {
                 });
             }catch(Exception e){
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
 //            ContentApiImplementer.getRankers(new Callback<List<UserDetail>>() {
 //                @Override

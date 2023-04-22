@@ -32,6 +32,7 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.api.ApiResponse;
@@ -73,7 +74,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     TextInputEditText address1;
     SharedPreferences preferences;
     Button btnEdit;
-    TextInputLayout t1,t2,t3;
+    TextInputLayout t1, t2, t3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,17 +95,18 @@ public class UpdateProfileActivity extends AppCompatActivity {
         t2 = findViewById(R.id.t2);
         t3 = findViewById(R.id.t3);
 
-            try {
-                if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
+        try {
+            if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
 
-                    Glide.with(this).load(Utility.userDetail.getAvatar()).into(ivChangeImg);
-                }
-                address1.setText(Utility.userDetail.getName());
-                tvDesignation.setText(Utility.userDetail.getDesignation());
-                tvPhoneNo.setText(Utility.userDetail.getMobile());
-            } catch (Exception e) {
-                e.printStackTrace();
+                Glide.with(this).load(Utility.userDetail.getAvatar()).into(ivChangeImg);
             }
+            address1.setText(Utility.userDetail.getName());
+            tvDesignation.setText(Utility.userDetail.getDesignation());
+            tvPhoneNo.setText(Utility.userDetail.getMobile());
+        } catch (Exception e) {
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
 
         ivChangeBtn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -132,31 +134,36 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 t3.setErrorEnabled(false);
                 Utility.hideSoftKeyboard(UpdateProfileActivity.this);
                 if (isValidateCredentials()) {
-                    updateUserDetail();
-                    btnEdit.setVisibility(View.VISIBLE);
-                    btnUpdate.setVisibility(View.GONE);
-                } else  {
-                    if(!userName.matches("[a-zA-Z ]+")){
+                    try{
+                        updateUserDetail();
+                        btnEdit.setVisibility(View.VISIBLE);
+                        btnUpdate.setVisibility(View.GONE);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+                } else {
+                    if (!userName.matches("[a-zA-Z ]+")) {
                         t1.setErrorEnabled(true);
                         t1.setError("* Invalid Name");
                     }
-                    if((userName.isEmpty())){
+                    if ((userName.isEmpty())) {
                         t1.setErrorEnabled(true);
                         t1.setError("* Please Enter Name");
                     }
-                    if(!userPhone.matches( ".{10,10}")){
+                    if (!userPhone.matches(".{10,10}")) {
                         t2.setErrorEnabled(true);
                         t2.setError("* Mobile no must be 10 digit");
                     }
-                    if(userPhone.isEmpty()){
+                    if (userPhone.isEmpty()) {
                         t2.setErrorEnabled(true);
                         t2.setError("* Please Enter Phone Number");
                     }
-                    if(!userDesignation.matches("[a-zA-Z ]+")) {
+                    if (!userDesignation.matches("[a-zA-Z ]+")) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Invalid Designation");
                     }
-                    if(userDesignation.isEmpty()){
+                    if (userDesignation.isEmpty()) {
                         t3.setErrorEnabled(true);
                         t3.setError("* Please Enter Phone Number");
                     }
@@ -268,55 +275,61 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File Size must be less than 1000 KB !!");
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 // Log the exception
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         }
     }
 
     // Upload the image to the remote database
     public void uploadImage(String part_image) {
-        Utility.showProgress(this);
-        File imageFile = new File(part_image);
-        System.out.println(imageFile);
-        RequestBody reqBody = RequestBody.create(MediaType.parse("multipart/form-file"), imageFile);
-        System.out.println(part_image.lastIndexOf("/") + 1);
-        String name = part_image.substring(part_image.lastIndexOf("/") + 1);
-        System.out.println(name);
-        MultipartBody.Part partImage = MultipartBody.Part.createFormData("avatar", name, reqBody);
-        try{
+        try {
+            Utility.showProgress(this);
+            File imageFile = new File(part_image);
+            System.out.println(imageFile);
+            RequestBody reqBody = RequestBody.create(MediaType.parse("multipart/form-file"), imageFile);
+            System.out.println(part_image.lastIndexOf("/") + 1);
+            String name = part_image.substring(part_image.lastIndexOf("/") + 1);
+            System.out.println(name);
+            MultipartBody.Part partImage = MultipartBody.Part.createFormData("avatar", name, reqBody);
+
             ContentApiImplementer.uploadImage(partImage, new Callback<ApiResponse<LoginModel>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
-                    Utility.dismissProgress(UpdateProfileActivity.this);
+
                     if (response.isSuccessful()) {
 //                        LoginModel loginModel = (LoginModel) response.body().getData();
                         Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
                             @Override
                             public void iOnResponseFromServer(int responseCode, String msg) {
-                                //                            Utility.dismissProgress(UpdateProfileActivity.this);
+                                Utility.dismissProgress(UpdateProfileActivity.this);
                                 Utility.showAlertDialog(UpdateProfileActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
                             }
                         });
                     }
-                    if(response.errorBody() != null){
+                    if (response.errorBody() != null) {
                         try {
+                            Utility.dismissProgress(UpdateProfileActivity.this);
                             JSONObject Error = new JSONObject(response.errorBody().string());
-                            Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
-                        } catch (IOException | JSONException e) {
+                            Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status").toString().trim(), Error.getString("message").toString().trim());
+                        } catch (Exception e) {
                             e.printStackTrace();
+                            FirebaseCrashlytics.getInstance().recordException(e);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
-
+                    Utility.dismissProgress(UpdateProfileActivity.this);
+                    t.printStackTrace();
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -332,29 +345,27 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 ContentApiImplementer.updateUserDetail(userDetail, new Callback<ApiResponse<LoginModel>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
-                        Utility.dismissProgress(UpdateProfileActivity.this);
+//                        Utility.dismissProgress(UpdateProfileActivity.this);
                         if (response.isSuccessful()) {
 //                            LoginModel loginModel = (LoginModel) response.body().getData();
-                                Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
-                                    @Override
-                                    public void iOnResponseFromServer(int responseCode, String msg) {
-//                                        Utility.dismissProgress(UpdateProfileActivity.this);
-                                        Utility.showAlertDialog(UpdateProfileActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
+                            Utility.getUserDetailAwait(UpdateProfileActivity.this, new Utility.onResponseFromServer() {
+                                @Override
+                                public void iOnResponseFromServer(int responseCode, String msg) {
+                                    Utility.dismissProgress(UpdateProfileActivity.this);
+                                    Utility.showAlertDialog(UpdateProfileActivity.this, response.body().getStatus().toString().trim(), response.body().getMessage().toString().trim());
 //                                        startActivity(new Intent(UpdateProfileActivity.this, MainActivity.class));
 //                                        finish();
-                                    }
-                                });
+                                }
+                            });
                         }
-                        if(response.errorBody() != null){
+                        if (response.errorBody() != null) {
                             try {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
-                                Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status") , Error.getString("message"));
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                Utility.showAlertDialog(UpdateProfileActivity.this, Error.getString("status"), Error.getString("message"));
+                            } catch (Exception e) {
                                 Utility.dismissProgress(UpdateProfileActivity.this);
-                            } catch (JSONException e) {
                                 e.printStackTrace();
-                                Utility.dismissProgress(UpdateProfileActivity.this);
+                                FirebaseCrashlytics.getInstance().recordException(e);
                             }
                         }
                     }
@@ -362,18 +373,20 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
                         Utility.dismissProgress(UpdateProfileActivity.this);
-//                        t.printStackTrace();
+                        t.printStackTrace();
                     }
                 });
             } catch (Exception e) {
                 Utility.dismissProgress(UpdateProfileActivity.this);
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.dismissProgress(UpdateProfileActivity.this);
             Utility.showAlertDialog(this, "Error", "Please Connect to Internet");
         }
     }
+
     private boolean isValidateCredentials() {
         String userName = address1.getText().toString();
         String userPhone = tvPhoneNo.getText().toString();
@@ -383,7 +396,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 && userName.matches("[a-zA-Z ]+")
                 && !userPhone.isEmpty()
                 && !userDesignation.isEmpty()
-                && userPhone.matches( ".{10,10}")
+                && userPhone.matches(".{10,10}")
                 && userDesignation.matches("[a-zA-Z ]+")) {
             return true;
         } else {

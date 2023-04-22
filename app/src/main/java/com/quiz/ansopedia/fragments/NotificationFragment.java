@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.SignInActivity;
 import com.quiz.ansopedia.Utility.Utility;
@@ -42,6 +44,7 @@ public class NotificationFragment extends Fragment {
     RecyclerView rvNotification;
     ArrayList<Notification> notifications;
     NotificationAdapter adapter;
+    TextView tvNoData;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -58,6 +61,7 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_notification, container, false);
         rvNotification = view.findViewById(R.id.rvNotification);
+        tvNoData = view.findViewById(R.id.tvNoData);
         getNotification();
         return view;
     }
@@ -79,12 +83,10 @@ public class NotificationFragment extends Fragment {
                             try {
                                 JSONObject Error = new JSONObject(response.errorBody().string());
                                 Utility.showAlertDialog(getContext(), Error.getString("status") , Error.getString("message"));
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } catch (Exception e) {
                                 Utility.dismissProgress(getContext());
-                            } catch (JSONException e) {
                                 e.printStackTrace();
-                                Utility.dismissProgress(getContext());
+                                FirebaseCrashlytics.getInstance().recordException(e);
                             }
                         }
                     }
@@ -119,6 +121,7 @@ public class NotificationFragment extends Fragment {
             } catch (Exception e) {
                 Utility.dismissProgress(getContext());
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.dismissProgress(getContext());
@@ -127,10 +130,15 @@ public class NotificationFragment extends Fragment {
     }
 
     public void setRecyclerView() {
-        adapter = new NotificationAdapter(getContext(), notifications);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvNotification.setLayoutManager(layoutManager);
-        rvNotification.setAdapter(adapter);
-        rvNotification.setHasFixedSize(true);
+        if(notifications.isEmpty()){
+            tvNoData.setVisibility(View.VISIBLE);
+        }else{
+            adapter = new NotificationAdapter(getContext(), notifications);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            rvNotification.setLayoutManager(layoutManager);
+            rvNotification.setAdapter(adapter);
+            rvNotification.setHasFixedSize(true);
+        }
+
     }
 }

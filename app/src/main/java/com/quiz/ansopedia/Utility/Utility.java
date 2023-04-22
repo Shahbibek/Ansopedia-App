@@ -28,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.MainActivity;
 import com.quiz.ansopedia.ProfileActivity;
 import com.quiz.ansopedia.R;
@@ -84,17 +85,22 @@ public class Utility {
     }
 
     public static void showAlertDialog(Context context, String title, String msg) {
-        new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(msg)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .create().show();
+        try {
+            new AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setMessage(msg)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create().show();
+        } catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
     }
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -168,6 +174,7 @@ public class Utility {
                         } catch (Exception e) {
                             dismissProgress(context);
                             e.printStackTrace();
+                            FirebaseCrashlytics.getInstance().recordException(e);
                         }
                     }
                 })
@@ -233,6 +240,7 @@ public class Utility {
                 preferences.edit().putBoolean(Constants.isLogin, false).apply();
                 preferences.edit().putString(Constants.token, "").apply();
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.showAlertDialog(context, "Error", "Please Connect to Internet");
@@ -254,7 +262,7 @@ public class Utility {
     public static void dismissProgressGif() {
         dialog.dismiss();
     }
-    public static UserDetail userDetail;
+    public static UserDetail userDetail = null;
     public static void getUserDetail(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
         ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
@@ -268,13 +276,11 @@ public class Utility {
                 if(response.errorBody() != null){
                     try {
                         JSONObject Error = new JSONObject(response.errorBody().string());
-                        Utility.showAlertDialog(context, Error.getString("status").toString().trim(), Error.getString("message").toString().trim());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+//                        Utility.showAlertDialog(context, Error.getString("status").toString().trim(), Error.getString("message").toString().trim());
+                    } catch (Exception e) {
                         Utility.dismissProgress(context);
-                    } catch (JSONException e) {
                         e.printStackTrace();
-                        Utility.dismissProgress(context);
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 }
             }
@@ -326,6 +332,7 @@ public class Utility {
 
         }catch (Exception e){
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         return diff;
 

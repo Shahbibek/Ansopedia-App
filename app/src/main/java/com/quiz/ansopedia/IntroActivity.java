@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.api.ApiResponse;
@@ -58,6 +59,7 @@ public class IntroActivity extends AppCompatActivity {
         }
         catch(Exception e){
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         if (preferences.getBoolean(Constants.isLogin, false)) {
@@ -125,6 +127,7 @@ public class IntroActivity extends AppCompatActivity {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.showAlertDialog(IntroActivity.this, "Error", "Please Connect to Internet");

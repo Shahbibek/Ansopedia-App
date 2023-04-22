@@ -42,6 +42,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.fragments.HomeFragment;
@@ -71,17 +72,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         try {
-            if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
-                try {
-                    Glide.with(this)
-                            .load(Utility.userDetail.getAvatar())
-                            .into(profileMenu);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (Utility.userDetail != null){
+                if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
+                    try {
+                        Glide.with(this)
+                                .load(Utility.userDetail.getAvatar())
+                                .into(profileMenu);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -96,25 +101,30 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navhome);
         Constants.TOKEN = preferences.getString(Constants.token, "");
         try {
-            String fragment = getIntent().getStringExtra("fragment");
-            if (fragment.equalsIgnoreCase("HomeFragment")) {
+            if(getIntent().hasExtra("fragment")){
+                String fragment = getIntent().getStringExtra("fragment");
+                if (fragment.equalsIgnoreCase("HomeFragment")) {
+                    loadFrag(new HomeFragment());
+                    bottomNavigationView.setSelectedItemId(R.id.navHome);
+                } else if (fragment.equalsIgnoreCase("NotificationFragment")) {
+                    loadFrag(new NotificationFragment());
+                    bottomNavigationView.setSelectedItemId(R.id.navNotification);
+                } else if (fragment.equalsIgnoreCase("QuizFragment")) {
+                    tvToolbar.setText("My Courses");
+                    loadFrag(new QuizFragment());
+                    bottomNavigationView.setSelectedItemId(R.id.navList);
+                } else if (fragment.equalsIgnoreCase("LeaderBoardFragment")) {
+                    tvToolbar.setText("Leader Board");
+                    loadFrag(new LeaderBoardFragment());
+                    bottomNavigationView.setSelectedItemId(R.id.navBookmark);
+                }
+            } else {
                 loadFrag(new HomeFragment());
-                bottomNavigationView.setSelectedItemId(R.id.navHome);
-            } else if (fragment.equalsIgnoreCase("NotificationFragment")){
-                loadFrag(new NotificationFragment());
-                bottomNavigationView.setSelectedItemId(R.id.navNotification);
-            } else if (fragment.equalsIgnoreCase("QuizFragment")){
-                tvToolbar.setText("My Courses");
-                loadFrag(new QuizFragment());
-                bottomNavigationView.setSelectedItemId(R.id.navList);
-            } else if (fragment.equalsIgnoreCase("LeaderBoardFragment")){
-                tvToolbar.setText("Leader Board");
-                loadFrag(new LeaderBoardFragment());
-                bottomNavigationView.setSelectedItemId(R.id.navBookmark);
             }
         } catch (Exception e){
             loadFrag(new HomeFragment());
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -207,23 +217,28 @@ public class MainActivity extends AppCompatActivity {
         profileMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utility.showProgress(MainActivity.this);
-                if (Utility.isNetConnected(MainActivity.this)) {
-                    Utility.getUserDetailAwait(MainActivity.this, new Utility.onResponseFromServer() {
-                        @Override
-                        public void iOnResponseFromServer(int responseCode, String msg) {
-                            Utility.dismissProgress(MainActivity.this);
-                            if (responseCode == 200) {
-                                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                                finish();
-                            }else{
-                                Utility.showAlertDialog(MainActivity.this, "Failed", "Something went wrong, Please Try Again..");
+                try{
+                    Utility.showProgress(MainActivity.this);
+                    if (Utility.isNetConnected(MainActivity.this)) {
+                        Utility.getUserDetailAwait(MainActivity.this, new Utility.onResponseFromServer() {
+                            @Override
+                            public void iOnResponseFromServer(int responseCode, String msg) {
+                                Utility.dismissProgress(MainActivity.this);
+                                if (responseCode == 200) {
+                                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                    finish();
+                                } else {
+                                    Utility.showAlertDialog(MainActivity.this, "Failed", "Something went wrong, Please Try Again..");
+                                }
                             }
-                        }
-                    });
-                }else{
-                    Utility.dismissProgress(MainActivity.this);
-                    Utility.showAlertDialog(MainActivity.this, "Failed", "Please connect Internet, And Try Again..");
+                        });
+                    } else {
+                        Utility.dismissProgress(MainActivity.this);
+                        Utility.showAlertDialog(MainActivity.this, "Failed", "Please connect Internet, And Try Again..");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
         });
@@ -233,19 +248,17 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
                 try {
-//                GlideUrl url = new GlideUrl(ContentApiImplementer.BASE_URL + "user/avatar", new LazyHeaders.Builder()
-//                        .addHeader("Authorization", "Bearer " + Constants.TOKEN)
-//                        .build());
                     Glide.with(this)
                             .load(Utility.userDetail.getAvatar())
                             .into(profileMenu);
-
                 } catch (Exception e) {
                     e.printStackTrace();
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
 
 
@@ -349,6 +362,5 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.flHome, fragment);
         fragmentTransaction.commit();
     }
-
 
 }

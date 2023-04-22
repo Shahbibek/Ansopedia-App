@@ -76,14 +76,4 @@
 
     </RelativeLayout>
 
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bnHome"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:background="@drawable/bg_bottom_nav"-->
-<!--        app:itemIconTint="@color/white"-->
-<!--        app:itemTextColor="?attr/colorOnPrimary"-->
-<!--        app:menu="@menu/bottom_nav" />-->
-
 </RelativeLayout>

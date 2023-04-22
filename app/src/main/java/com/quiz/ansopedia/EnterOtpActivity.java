@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.api.ApiResponse;
@@ -67,8 +68,13 @@ public class EnterOtpActivity extends AppCompatActivity {
                 Utility.hideSoftKeyboard(EnterOtpActivity.this);
                 t4.setErrorEnabled(false);
                 if (isValidateCredentials()) {
-                    otp = password.getText().toString().trim();
-                    sendOTP();
+                    try{
+                        otp = password.getText().toString().trim();
+                        sendOTP();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
                 } else {
                     if (userOTP.isEmpty()) {
                         t4.setErrorEnabled(true);
@@ -120,12 +126,10 @@ public class EnterOtpActivity extends AppCompatActivity {
                                 try {
                                     JSONObject Error = new JSONObject(response.errorBody().string());
                                     Utility.showAlertDialog(EnterOtpActivity.this, Error.getString("status").toString().trim() , Error.getString("message").toString().trim());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                } catch (Exception e) {
                                     Utility.dismissProgress(EnterOtpActivity.this);
-                                } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Utility.dismissProgress(EnterOtpActivity.this);
+                                    FirebaseCrashlytics.getInstance().recordException(e);
                                 }
                             }
 
@@ -165,6 +169,7 @@ public class EnterOtpActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.dismissProgress(this);
@@ -198,12 +203,10 @@ public class EnterOtpActivity extends AppCompatActivity {
                                 try {
                                     JSONObject Error = new JSONObject(response.errorBody().string());
                                     Utility.showAlertDialog(EnterOtpActivity.this, Error.getString("status") , Error.getString("message"));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                } catch (Exception e) {
                                     Utility.dismissProgress(EnterOtpActivity.this);
-                                } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Utility.dismissProgress(EnterOtpActivity.this);
+                                    FirebaseCrashlytics.getInstance().recordException(e);
                                 }
                             }
                         }
@@ -248,6 +251,7 @@ public class EnterOtpActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Utility.dismissProgress(this);
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.dismissProgress(this);

@@ -111,11 +111,12 @@ public class ChaptersActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
-                                Intent intent = new Intent(ChaptersActivity.this,
-                                        ChaptersActivity.class);
-                                    intent.putExtra("subject", getIntent().getStringExtra("subject"));
-                                startActivity(intent);
-                                finish();
+                                ivSaveCourse.setVisibility(View.GONE);
+//                                Intent intent = new Intent(ChaptersActivity.this,
+//                                        ChaptersActivity.class);
+//                                    intent.putExtra("subject", getIntent().getStringExtra("subject"));
+//                                startActivity(intent);
+//                                finish();
                             }
                         })
                         .create().show();

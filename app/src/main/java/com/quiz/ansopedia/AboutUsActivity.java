@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class AboutUsActivity extends AppCompatActivity {
     ShapeableImageView ivBibek;
@@ -201,6 +202,7 @@ public class AboutUsActivity extends AppCompatActivity {
             //        ######################## Load Image End ###########################
         }catch(Exception e){
             e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         };
     }
 }

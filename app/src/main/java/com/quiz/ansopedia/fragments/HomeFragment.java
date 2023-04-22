@@ -19,6 +19,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.CourseAdapter;
@@ -144,8 +145,6 @@ public class HomeFragment extends Fragment {
                                 setTabLayout(contents.getBranch().get(0).getBranch_name());
                                 setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
                             }
-//                        }else if(response.code() == 500) {
-//                            Utility.showAlertDialog(getContext(), "Failed", "Server Error, Please Try Again");
                         }else{
                             Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
                         }
@@ -165,6 +164,7 @@ public class HomeFragment extends Fragment {
                 rvContent.setVisibility(View.VISIBLE);
                 ivProgress.setVisibility(View.GONE);
                 e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
 //            Utility.dismissProgressGif();

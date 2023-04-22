@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.JsonObject;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
@@ -195,12 +196,10 @@ public class SignupActivity extends AppCompatActivity {
                                 try {
                                     JSONObject Error = new JSONObject(response.errorBody().string());
                                     Utility.showAlertDialog(SignupActivity.this, Error.getString("status") , Error.getString("message"));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                } catch (Exception e) {
                                     Utility.dismissProgress(SignupActivity.this);
-                                } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Utility.dismissProgress(SignupActivity.this);
+                                    FirebaseCrashlytics.getInstance().recordException(e);
                                 }
                             }
                         }
@@ -212,8 +211,9 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     });
             } catch (Exception e) {
-                e.printStackTrace();
                 Utility.dismissProgress(this);
+                e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             Utility.dismissProgress(this);
