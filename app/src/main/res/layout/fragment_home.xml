@@ -31,8 +31,11 @@
             android:layout_below="@+id/cvSlider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            app:tabGravity="start"
+            android:layout_marginVertical="5dp"
+            android:paddingHorizontal="5dp"
+            app:tabPaddingStart="2dp"
+            app:tabPaddingEnd="2dp"
+            app:tabGravity="fill"
             app:tabIndicator="@null"
             app:tabMode="scrollable"/>
 

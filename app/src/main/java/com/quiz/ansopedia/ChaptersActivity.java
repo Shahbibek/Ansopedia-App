@@ -45,7 +45,6 @@ public class ChaptersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chapters);
         try {
             initView();
-
             rlTopic.getBackground().setTint(Color.parseColor(Constants.COLOR));
 //        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
 //        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));

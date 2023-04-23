@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.R;
 import com.quiz.ansopedia.ReadQuestionsActivity;
 import com.quiz.ansopedia.Utility.Constants;
@@ -107,28 +108,34 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             });
 
             holder.ivView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
-                    if (!isShowingAnswer) {
-                        isShowingAnswer = true;
-                        if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt1().trim())) {
-                            holder.option1.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt2().trim())) {
-                            holder.option2.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt3().trim())) {
-                            holder.option3.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt4().trim())) {
-                            holder.option4.setBackgroundColor(Color.parseColor("#C6D33C"));
-                        }else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt5().trim())) {
-                            holder.option5.setBackgroundColor(Color.parseColor("#C6D33C"));
+                    try{
+                        if (!isShowingAnswer) {
+                            isShowingAnswer = true;
+                            if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt1().trim())) {
+                                holder.option1.setBackgroundColor(Color.parseColor("#C6D33C"));
+                            } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt2().trim())) {
+                                holder.option2.setBackgroundColor(Color.parseColor("#C6D33C"));
+                            } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt3().trim())) {
+                                holder.option3.setBackgroundColor(Color.parseColor("#C6D33C"));
+                            } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt4().trim())) {
+                                holder.option4.setBackgroundColor(Color.parseColor("#C6D33C"));
+                            } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt5().trim())) {
+                                holder.option5.setBackgroundColor(Color.parseColor("#C6D33C"));
+                            }
+                        } else {
+                            isShowingAnswer = false;
+                            holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            holder.option5.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         }
-                    } else {
-                        isShowingAnswer = false;
-                        holder.option1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        holder.option5.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 }
             });
