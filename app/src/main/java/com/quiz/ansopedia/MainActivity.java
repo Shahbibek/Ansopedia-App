@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        super.onStart();
         try {
+            super.onStart();
             if (Utility.userDetail != null){
                 if (!Utility.userDetail.getAvatar().substring(33).equalsIgnoreCase("undefined")) {
                     try {

@@ -71,9 +71,15 @@ public class Utility {
     }
 
     public static void dismissProgress(Context context) {
-        if (progressDialog.isShowing()) {
-            progressDialog.dismiss();
+        try{
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
+
     }
 
     public static boolean isNetConnected(Context context) {
@@ -265,53 +271,64 @@ public class Utility {
     public static UserDetail userDetail = null;
     public static void getUserDetail(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-        ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<UserDetail>> call, Response<ApiResponse<UserDetail>> response) {
-                if (response.isSuccessful()) {
-                    userDetail = new UserDetail();
-                    userDetail = response.body().getData();
-                    preferences.edit().putString(Constants.name, userDetail.getName()).apply();
-                }
-                if(response.errorBody() != null){
-                    try {
-                        JSONObject Error = new JSONObject(response.errorBody().string());
+        try{
+            ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<UserDetail>> call, Response<ApiResponse<UserDetail>> response) {
+                    if (response.isSuccessful()) {
+                        userDetail = new UserDetail();
+                        userDetail = response.body().getData();
+                        preferences.edit().putString(Constants.name, userDetail.getName()).apply();
+                    }
+                    if (response.errorBody() != null) {
+                        try {
+                            JSONObject Error = new JSONObject(response.errorBody().string());
 //                        Utility.showAlertDialog(context, Error.getString("status").toString().trim(), Error.getString("message").toString().trim());
-                    } catch (Exception e) {
-                        Utility.dismissProgress(context);
-                        e.printStackTrace();
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        } catch (Exception e) {
+                            Utility.dismissProgress(context);
+                            e.printStackTrace();
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                        }
                     }
                 }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse<UserDetail>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+
+                @Override
+                public void onFailure(Call<ApiResponse<UserDetail>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
 
     }
     public static void getUserDetailAwait(Context context, final onResponseFromServer responseFromServer) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-        ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<UserDetail>> call, Response<ApiResponse<UserDetail>> response) {
-                if (response.isSuccessful()) {
-                    userDetail = new UserDetail();
-                    userDetail = response.body().getData();
-                    preferences.edit().putString(Constants.name, userDetail.getName()).apply();
-                    responseFromServer.iOnResponseFromServer(response.code(), "Success");
-                } else {
-                    responseFromServer.iOnResponseFromServer(response.code(), "fail");
+        try{
+            ContentApiImplementer.getUserDetail(new Callback<ApiResponse<UserDetail>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<UserDetail>> call, Response<ApiResponse<UserDetail>> response) {
+                    if (response.isSuccessful()) {
+                        userDetail = new UserDetail();
+                        userDetail = response.body().getData();
+                        preferences.edit().putString(Constants.name, userDetail.getName()).apply();
+                        responseFromServer.iOnResponseFromServer(response.code(), "Success");
+                    } else {
+                        responseFromServer.iOnResponseFromServer(response.code(), "fail");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse<UserDetail>> call, Throwable t) {
-                t.printStackTrace();
-                responseFromServer.iOnResponseFromServer(500, "Server error");
-            }
-        });
+                @Override
+                public void onFailure(Call<ApiResponse<UserDetail>> call, Throwable t) {
+                    t.printStackTrace();
+                    responseFromServer.iOnResponseFromServer(500, "Server error");
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)

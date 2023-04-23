@@ -60,6 +60,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             tvOptionsList.add(holder.option2);
             tvOptionsList.add(holder.option3);
             tvOptionsList.add(holder.option4);
+            tvOptionsList.add(holder.option5);
             for(TextView tvOption: tvOptionsList){
                 tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 tvOption.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +89,10 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             holder.option2.setText("b. " + arrayList.get(i).getOptions().get(0).getOpt2());
             holder.option3.setText("c. " + arrayList.get(i).getOptions().get(0).getOpt3());
             holder.option4.setText("d. " + arrayList.get(i).getOptions().get(0).getOpt4());
+            if(arrayList.get(i).getOptions().get(0).getOpt5() != null) {
+                holder.option5.setVisibility(View.VISIBLE);
+                holder.option5.setText("e. " + arrayList.get(i).getOptions().get(0).getOpt5());
+            }
             holder.tvDescription.setText(arrayList.get(i).getOptions().get(0).getDescription());
 
             holder.ivDescription.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +119,8 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                             holder.option3.setBackgroundColor(Color.parseColor("#C6D33C"));
                         } else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt4().trim())) {
                             holder.option4.setBackgroundColor(Color.parseColor("#C6D33C"));
+                        }else if (arrayList.get(i).getOptions().get(0).getCorrectAnswer().trim().equalsIgnoreCase(arrayList.get(i).getOptions().get(0).getOpt5().trim())) {
+                            holder.option5.setBackgroundColor(Color.parseColor("#C6D33C"));
                         }
                     } else {
                         isShowingAnswer = false;
@@ -121,6 +128,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                         holder.option2.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         holder.option3.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         holder.option4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        holder.option5.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     }
                 }
             });
@@ -136,17 +144,29 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
                             holder.ivShare.setClickable(true);
                         }
                     }, 1000);
+                    String shareString ;
+                    if (arrayList.get(i).getOptions().get(0).getOpt5() != null) {
+                        shareString = arrayList.get(i).getQuestion_title() +
+                                "\n\na. " + arrayList.get(i).getOptions().get(0).getOpt1() +
+                                "\nb. " + arrayList.get(i).getOptions().get(0).getOpt2() +
+                                "\nc. " + arrayList.get(i).getOptions().get(0).getOpt3() +
+                                "\nd. " + arrayList.get(i).getOptions().get(0).getOpt4() +
+                                "\nd. " + arrayList.get(i).getOptions().get(0).getOpt5() +
+                                "\n\nAnswer: " + arrayList.get(i).getOptions().get(0).getCorrectAnswer() +
+                                "\n\n\n" + "Share App: " + "https://play.google.com/store/apps/details?id=com.quiz.ansopedia";
+                    } else {
+                        shareString = arrayList.get(i).getQuestion_title() +
+                                "\n\na. " + arrayList.get(i).getOptions().get(0).getOpt1() +
+                                "\nb. " + arrayList.get(i).getOptions().get(0).getOpt2() +
+                                "\nc. " + arrayList.get(i).getOptions().get(0).getOpt3() +
+                                "\nd. " + arrayList.get(i).getOptions().get(0).getOpt4() +
+                                "\n\nAnswer: " + arrayList.get(i).getOptions().get(0).getCorrectAnswer() +
+                                "\n\n\n" + "Share App: " + "https://play.google.com/store/apps/details?id=com.quiz.ansopedia";
+                    }
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_SUBJECT, "Question");
-                    intent.putExtra(Intent.EXTRA_TEXT, arrayList.get(i).getQuestion_title() +
-                            "\n\na. " + arrayList.get(i).getOptions().get(0).getOpt1() +
-                            "\nb. " + arrayList.get(i).getOptions().get(0).getOpt2() +
-                            "\nc. " + arrayList.get(i).getOptions().get(0).getOpt3() +
-                            "\nd. " + arrayList.get(i).getOptions().get(0).getOpt4() +
-                            "\n\nAnswer: " + arrayList.get(i).getOptions().get(0).getCorrectAnswer() +
-                            "\n\n\n" + "Share App: " + "https://play.google.com/store/apps/details?id=com.quiz.ansopedia"
-                    );
+                    intent.putExtra(Intent.EXTRA_TEXT, shareString);
                     context.startActivity(Intent.createChooser(intent, "choose one"));
                 }
             });
@@ -251,7 +271,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView srNoQuestion, quiz_questions, option1, option2, option3, option4, tvDescription;
+        TextView srNoQuestion, quiz_questions, option1, option2, option3, option4, option5, tvDescription;
         ImageView ivView, ivDescription, ivShare;
         CardView cvDescription;
         LinearLayout colorOptions;
@@ -264,6 +284,7 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             option2 = itemView.findViewById(R.id.option2);
             option3 = itemView.findViewById(R.id.option3);
             option4 = itemView.findViewById(R.id.option4);
+            option5 = itemView.findViewById(R.id.option5);
             ivView = itemView.findViewById(R.id.ivView);
             ivShare = itemView.findViewById(R.id.ivShare);
             ivDescription = itemView.findViewById(R.id.ivDescription);

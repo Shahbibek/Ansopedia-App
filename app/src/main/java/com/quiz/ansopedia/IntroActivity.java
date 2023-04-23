@@ -1,6 +1,7 @@
 package com.quiz.ansopedia;
 
 import static com.quiz.ansopedia.Utility.Constants.contents;
+import static com.quiz.ansopedia.Utility.Constants.contentsList;
 import static com.quiz.ansopedia.Utility.Constants.subjectsArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,21 +63,31 @@ public class IntroActivity extends AppCompatActivity {
             FirebaseCrashlytics.getInstance().recordException(e);
         }
         preferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        if (preferences.getBoolean(Constants.isLogin, false)) {
-            mAuth = FirebaseAuth.getInstance();
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            Constants.Email = currentUser.getEmail();
-            currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-                @Override
-                public void onSuccess(GetTokenResult getTokenResult) {
-                    Constants.TOKEN = getTokenResult.getToken();
-                    updateUI(currentUser);
+        if(Utility.isNetConnected(this)){
+            try{
+                if (preferences.getBoolean(Constants.isLogin, false)) {
+                    mAuth = FirebaseAuth.getInstance();
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    Constants.Email = currentUser.getEmail();
+                    currentUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                        @Override
+                        public void onSuccess(GetTokenResult getTokenResult) {
+                            Constants.TOKEN = getTokenResult.getToken();
+                            updateUI(currentUser);
+                        }
+                    });
+                } else {
+                    startActivity(new Intent(this, SignInActivity.class));
+                    finish();
                 }
-            });
-        } else {
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
+            }catch (Exception e){
+                e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
+            }
+        }else{
+            Utility.showAlertDialog(IntroActivity.this, "Failed", "Please, Connect Internet, And Try Again !!..");
         }
+
 //        if (preferences.getBoolean(Constants.isLogin, false)) {
 //            Utility.getUserDetail(this);
 //            Utility.getLogin(this);
@@ -88,15 +99,17 @@ public class IntroActivity extends AppCompatActivity {
 //        }
     }
     private void updateUI(FirebaseUser user) {
-        if(user != null){
-            preferences.edit().putBoolean(Constants.isLogin, true).apply();
-            preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
-            preferences.edit().putString(Constants.username,  Constants.Email).apply();
-//            Log.d("TAG", "GetTokenResult result = " + Constants.TOKEN);
-//            startActivity(new Intent(IntroActivity.this, MainActivity.class));
-//            finish();
-            getContent();
+        if(Utility.isNetConnected(this)){
+            if(user != null){
+                preferences.edit().putBoolean(Constants.isLogin, true).apply();
+                preferences.edit().putString(Constants.token, Constants.TOKEN ).apply();
+                preferences.edit().putString(Constants.username,  Constants.Email).apply();
+                getContent();
+            }
+        }else{
+            Utility.showAlertDialog(IntroActivity.this, "Failed", "Please, Connect Internet, And Try Again !!..");
         }
+
     }
     private void getContent() {
 //        Utility.showProgressGif(getContext());
@@ -109,6 +122,8 @@ public class IntroActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             if (response.body().getData().size() != 0) {
                                 contents = (Contents) response.body().getData().get(0);
+                                contentsList = new ArrayList<>();
+                                contentsList = (ArrayList<Contents>) response.body().getData();
                                 startActivity(new Intent(IntroActivity.this, MainActivity.class));
                                 finish();
                             }

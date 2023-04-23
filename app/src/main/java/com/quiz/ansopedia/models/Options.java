@@ -15,6 +15,8 @@ public class Options{
 
 	@SerializedName("opt_4")
 	private String opt4;
+	@SerializedName("opt_5")
+	private String opt5;
 
 	@SerializedName("correct_answer")
 	private String correctAnswer;
@@ -68,5 +70,13 @@ public class Options{
 
 	public String getDescription(){
 		return description;
+	}
+
+	public String getOpt5() {
+		return opt5;
+	}
+
+	public void setOpt5(String opt5) {
+		this.opt5 = opt5;
 	}
 }

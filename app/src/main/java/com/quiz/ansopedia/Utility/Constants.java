@@ -16,6 +16,7 @@ public class Constants {
     public static String password = "password";
     public static String isLogin = "isLogin";
     public static Contents contents;
+    public static ArrayList<Contents> contentsList;
     public static ArrayList<Subjects> subjectsArrayList;
     public static String isImageAdded = "isImageAdded";
     public static String fragment = "fragment";

@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
@@ -42,35 +43,40 @@ public class ChaptersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapters);
-        initView();
+        try {
+            initView();
 
-        rlTopic.getBackground().setTint(Color.parseColor(Constants.COLOR));
+            rlTopic.getBackground().setTint(Color.parseColor(Constants.COLOR));
 //        vt.setBackgroundColor(Color.parseColor(Constants.COLOR));
 //        vt1.getBackground().setTint(Color.parseColor(Constants.COLOR));
-        subject = new Gson().fromJson(getIntent().getStringExtra("subject"), Subjects.class);
-        tvSubject.setText(Utility.toCapitalizeFirstLetter(subject.getSubject_name()));
+            subject = new Gson().fromJson(getIntent().getStringExtra("subject"), Subjects.class);
+            tvSubject.setText(Utility.toCapitalizeFirstLetter(subject.getSubject_name()));
 
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
+            ivBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            if (subject.getChapters().size() != 0) {
+                setRecyclerView();
             }
-        });
-        if (subject.getChapters().size() != 0) {
-            setRecyclerView();
+            for (Subjects s :
+                    Constants.subjectsArrayList) {
+                if (s.getSubject_name().equalsIgnoreCase(subject.getSubject_name())) {
+                    ivSaveCourse.setVisibility(View.GONE);
+                }
+            }
+            ivSaveCourse.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveSubject();
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
-        for (Subjects s :
-                Constants.subjectsArrayList) {
-            if (s.getSubject_name().equalsIgnoreCase(subject.getSubject_name())) {
-                ivSaveCourse.setVisibility(View.GONE);
-            }
-        }
-        ivSaveCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveSubject();
-            }
-        });
     }
 
     private void initView() {

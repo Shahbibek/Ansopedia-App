@@ -65,9 +65,7 @@ public class ReadQuestionsActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                lower = 0;
-                upper = 10;
+                onBackPressed();
             }
         });
     }
@@ -101,5 +99,13 @@ public class ReadQuestionsActivity extends AppCompatActivity {
             tempArrayList.add(questions.get(i));
         }
         return tempArrayList;
+    }
+
+    @Override
+    public void onBackPressed() {
+        lower = 0;
+        upper = 10;
+        diff = 0;
+        super.onBackPressed();
     }
 }

@@ -1,17 +1,24 @@
 package com.quiz.ansopedia.fragments;
 
 import static com.quiz.ansopedia.Utility.Constants.contents;
+import static com.quiz.ansopedia.Utility.Constants.contentsList;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
@@ -21,6 +28,7 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.quiz.ansopedia.R;
+import com.quiz.ansopedia.Utility.Constants;
 import com.quiz.ansopedia.Utility.Utility;
 import com.quiz.ansopedia.adapter.CourseAdapter;
 import com.quiz.ansopedia.api.ApiResponse;
@@ -39,11 +47,11 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     ImageSlider image_slider;
-    TabLayout tabLayout;
+    TabLayout tabLayout, tabLayoutStream;
     RecyclerView rvContent;
     CourseAdapter courseAdapter;
     ImageView ivProgress;
-    View userIcons;
+//    View userIcons;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -59,19 +67,21 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         image_slider = view.findViewById(R.id.image_slider);
         tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayoutStream = view.findViewById(R.id.tabLayoutStream);
         //userIcons = view.findViewById(R.id.userIcons);
         rvContent = view.findViewById(R.id.rvContent);
         ivProgress = view.findViewById(R.id.ivProgress);
 //            ############################### progress gif start ########################
         Glide.with(getContext()).load(R.drawable.ansopedia_loader_new).into(ivProgress);
         setImage_slider();
-        if (contents == null) {
+        if (contentsList == null) {
             rvContent.setVisibility(View.GONE);
             ivProgress.setVisibility(View.VISIBLE);
             getContent();
         } else {
-            setTabLayout(contents.getBranch().get(0).getBranch_name());
-            setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
+//            setTabLayout((ArrayList<Branch>) contents.getBranch());
+            setTabLayoutStream(Utility.toCapitalizeFirstLetter(contentsList.get(0).getTitle()));
+//            setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
         }
         return view;
     }
@@ -93,19 +103,90 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void setTabLayout(String branch_name) {
+    private void setTabLayoutStream(String branch_name) {
         ArrayList<String> tabList = new ArrayList<>();
-        for (Branch branch : contents.getBranch()) {
-            tabList.add(branch.getBranch_name());
+        if(contentsList.size() != 0){
+            for (Contents contents1 : contentsList) {
+                tabList.add(contents1.getTitle());
+            }
         }
 
         for (String tab : tabList) {
+            TabLayout.Tab newTab = tabLayoutStream.newTab();
+            newTab.setCustomView(R.layout.inactive_stream);
+            TextView stream = newTab.getCustomView().findViewById(R.id.tabInactive);
+            stream.setText(Utility.toCapitalizeFirstLetter(tab));
+            tabLayoutStream.addTab(newTab);
+        }
+        TextView textView = tabLayoutStream.getTabAt(0).getCustomView().findViewById(R.id.tabInactive);
+        textView.setBackground(getResources().getDrawable(R.drawable.color_category_bg));
+        textView.setTextColor(getResources().getColor(R.color.white));
+        for (Contents content : contentsList) {
+            if (content.getTitle().equalsIgnoreCase(textView.getText().toString())){
+                if(content.getBranch().size() != 0){
+                    setTabLayout((ArrayList<Branch>) content.getBranch());
+                }
+            }
+        }
+        tabLayoutStream.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                TextView textView = tab.getCustomView().findViewById(R.id.tabInactive);
+                textView.setBackground(getResources().getDrawable(R.drawable.color_category_bg));
+                textView.setTextColor(getResources().getColor(R.color.white));
+                for (Contents content : contentsList) {
+                    if (content.getTitle().equalsIgnoreCase(textView.getText().toString())){
+                        if(content.getBranch().size() != 0){
+                            setTabLayout((ArrayList<Branch>) content.getBranch());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                TextView textView = tab.getCustomView().findViewById(R.id.tabInactive);
+                textView.setBackground(getResources().getDrawable(R.drawable.gray_category_bg));
+                textView.setTextColor(getResources().getColor(R.color.about_color));
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+    private void setTabLayout(ArrayList<Branch> branchList) {
+        ArrayList<String> tabList = new ArrayList<>();
+        for (Branch branch : branchList) {
+            tabList.add(branch.getBranch_name());
+        }
+        tabLayout.removeAllTabs();
+        for (String tab : tabList) {
             tabLayout.addTab(tabLayout.newTab().setText(tab));
+        }
+        String s = tabLayout.getTabAt(0).getText().toString();
+        for (Branch branch : branchList) {
+            if(branch.getSubjects() != null){
+                if (branch.getBranch_name().equalsIgnoreCase(s)) {
+                    setRecyclerView((ArrayList<Subjects>) branch.getSubjects());
+                }
+            }
+
         }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                setRecyclerView(getSubjects(tab.getText().toString()));
+                String s = tab.getText().toString();
+                for (Branch branch : branchList) {
+                    if(branch.getSubjects().size() != 0){
+                        if (branch.getBranch_name().equalsIgnoreCase(s)) {
+                            setRecyclerView((ArrayList<Subjects>) branch.getSubjects());
+                        }
+                    }
+
+                }
             }
 
             @Override
@@ -142,8 +223,11 @@ public class HomeFragment extends Fragment {
                         if (response.isSuccessful()) {
                             if (response.body().getData().size() != 0) {
                                 contents = (Contents) response.body().getData().get(0);
-                                setTabLayout(contents.getBranch().get(0).getBranch_name());
-                                setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
+                                contentsList = new ArrayList<>();
+                                contentsList = (ArrayList<Contents>) response.body().getData();
+                                setTabLayoutStream(contentsList.get(0).getTitle());
+//                                setTabLayout((ArrayList<Branch>) contents.getBranch());
+//                                setRecyclerView(getSubjects(contents.getBranch().get(0).getBranch_name()));
                             }
                         }else{
                             Utility.showAlertDialog(getContext(), "Error", "Something went wrong, Please Try Again");
@@ -174,14 +258,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private ArrayList<Subjects> getSubjects(String branch_name) {
-        ArrayList<Subjects> tempList = new ArrayList<>();
-        for (Branch branch : contents.getBranch()) {
-            if (branch.getBranch_name().equalsIgnoreCase(branch_name)) {
-                tempList = (ArrayList<Subjects>) branch.getSubjects();
-            }
-        }
-        return tempList;
+    private ArrayList<Subjects> getSubjects(ArrayList<Branch> branchList) {
+//        ArrayList<Subjects> tempList = new ArrayList<>();
+//        for (Branch branch : branchList) {
+//            if (branch.getBranch_name().equalsIgnoreCase(branch_name)) {
+//                tempList = (ArrayList<Subjects>) branch.getSubjects();
+//            }
+//        }
+        return (ArrayList<Subjects>) branchList.get(0).getSubjects();
     }
 
 }
