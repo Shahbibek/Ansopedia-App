@@ -86,13 +86,34 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
 
             holder.srNoQuestion.setText(j + ". ");
             holder.quiz_questions.setText(arrayList.get(holder.getAdapterPosition()).getQuestion_title());
-            holder.option1.setText("a. " + arrayList.get(i).getOptions().get(0).getOpt1());
-            holder.option2.setText("b. " + arrayList.get(i).getOptions().get(0).getOpt2());
-            holder.option3.setText("c. " + arrayList.get(i).getOptions().get(0).getOpt3());
-            holder.option4.setText("d. " + arrayList.get(i).getOptions().get(0).getOpt4());
-            if(arrayList.get(i).getOptions().get(0).getOpt5() != null) {
-                holder.option5.setVisibility(View.VISIBLE);
-                holder.option5.setText("e. " + arrayList.get(i).getOptions().get(0).getOpt5());
+//            holder.option1.setText("a. " + arrayList.get(i).getOptions().get(0).getOpt1());
+//            holder.option2.setText("b. " + arrayList.get(i).getOptions().get(0).getOpt2());
+//            holder.option3.setText("c. " + arrayList.get(i).getOptions().get(0).getOpt3());
+//            holder.option4.setText("d. " + arrayList.get(i).getOptions().get(0).getOpt4());
+            try{
+                if (arrayList.get(i).getOptions().get(0).getOpt1() != null) {
+                    holder.option1.setVisibility(View.VISIBLE);
+                    holder.option1.setText("a. " + arrayList.get(i).getOptions().get(0).getOpt1());
+                }
+                if (arrayList.get(i).getOptions().get(0).getOpt2() != null) {
+                    holder.option2.setVisibility(View.VISIBLE);
+                    holder.option2.setText("b. " + arrayList.get(i).getOptions().get(0).getOpt2());
+                }
+                if (arrayList.get(i).getOptions().get(0).getOpt3() != null) {
+                    holder.option3.setVisibility(View.VISIBLE);
+                    holder.option3.setText("c. " + arrayList.get(i).getOptions().get(0).getOpt3());
+                }
+                if (arrayList.get(i).getOptions().get(0).getOpt4() != null) {
+                    holder.option4.setVisibility(View.VISIBLE);
+                    holder.option4.setText("d. " + arrayList.get(i).getOptions().get(0).getOpt4());
+                }
+                if (arrayList.get(i).getOptions().get(0).getOpt5() != null) {
+                    holder.option5.setVisibility(View.VISIBLE);
+                    holder.option5.setText("e. " + arrayList.get(i).getOptions().get(0).getOpt5());
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
             holder.tvDescription.setText(arrayList.get(i).getOptions().get(0).getDescription());
 
@@ -191,27 +212,37 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
             holder.nextquestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ReadQuestionsActivity.lower = ReadQuestionsActivity.lower + 10;
-                    ReadQuestionsActivity.diff = ReadQuestionsActivity.upper;
-                    ReadQuestionsActivity.upper = ReadQuestionsActivity.upper + 10;
-                    if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
-                        ReadQuestionsActivity.upper = ReadQuestionsActivity.questions.size();
+                    try{
+                        ReadQuestionsActivity.lower = ReadQuestionsActivity.lower + 10;
+                        ReadQuestionsActivity.diff = ReadQuestionsActivity.upper;
+                        ReadQuestionsActivity.upper = ReadQuestionsActivity.upper + 10;
+                        if (ReadQuestionsActivity.upper >= ReadQuestionsActivity.questions.size()) {
+                            ReadQuestionsActivity.upper = ReadQuestionsActivity.questions.size();
+                        }
+                        ReadQuestionsActivity.setRecyclerView(ReadQuestionsActivity.lower, ReadQuestionsActivity.upper);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
-                    ReadQuestionsActivity.setRecyclerView(ReadQuestionsActivity.lower, ReadQuestionsActivity.upper);
                 }
             });
 
             holder.previousquestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if ((ReadQuestionsActivity.upper - ReadQuestionsActivity.lower) == 10) {
-                        ReadQuestionsActivity.lower = ReadQuestionsActivity.lower - 10;
-                        ReadQuestionsActivity.upper = ReadQuestionsActivity.upper - 10;
-                    } else {
-                        ReadQuestionsActivity.upper = ReadQuestionsActivity.diff;
-                        ReadQuestionsActivity.lower = ReadQuestionsActivity.upper - 10;
+                    try{
+                        if ((ReadQuestionsActivity.upper - ReadQuestionsActivity.lower) == 10) {
+                            ReadQuestionsActivity.lower = ReadQuestionsActivity.lower - 10;
+                            ReadQuestionsActivity.upper = ReadQuestionsActivity.upper - 10;
+                        } else {
+                            ReadQuestionsActivity.upper = ReadQuestionsActivity.diff;
+                            ReadQuestionsActivity.lower = ReadQuestionsActivity.upper - 10;
+                        }
+                        ReadQuestionsActivity.setRecyclerView(ReadQuestionsActivity.lower, ReadQuestionsActivity.upper);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
-                    ReadQuestionsActivity.setRecyclerView(ReadQuestionsActivity.lower, ReadQuestionsActivity.upper);
                 }
             });
         }
@@ -219,12 +250,13 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
     }
 
     private void updateOption(int clickedTvOptionTag, List<TextView> tvOptionsList, int questionNo) {
-        int index = 0;
-        for(TextView tvOption: tvOptionsList){
+        try{
+            int index = 0;
+            for (TextView tvOption : tvOptionsList) {
 //            if(index < clickedTvOptionTag){
-            if(index == clickedTvOptionTag){
-                String correctAns = arrayList.get(questionNo).getOptions().get(0).getCorrectAnswer().trim();
-                String opt = tvOption.getText().toString().substring(2, tvOption.getText().length()).trim();
+                if (index == clickedTvOptionTag) {
+                    String correctAns = arrayList.get(questionNo).getOptions().get(0).getCorrectAnswer().trim();
+                    String opt = tvOption.getText().toString().substring(2, tvOption.getText().length()).trim();
 //                String opt1 = arrayList.get(questionNo).getOptions().get(0).getOpt1().trim();
 //                String opt2 = arrayList.get(questionNo).getOptions().get(0).getOpt2().trim();
 //                String opt3 = arrayList.get(questionNo).getOptions().get(0).getOpt3().trim();
@@ -239,36 +271,19 @@ public class ReadQuestionAdapter1 extends RecyclerView.Adapter<ReadQuestionAdapt
 //                }else if(correctAns.equalsIgnoreCase(opt4)){
 //                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
 //                }
-                if(correctAns.equals(opt)){
-                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+                    if (correctAns.equals(opt)) {
+                        tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
+                    } else {
+                        tvOption.setBackgroundColor(Color.parseColor("#D94E00"));
+                    }
+                } else {
+                    tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
-                else {
-                    tvOption.setBackgroundColor(Color.parseColor("#D94E00"));
-                }
-            }else{
-                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                index++;
             }
-//                if (.equalsIgnoreCase(arrayList.get(index)
-//                                .getOptions().get(0).getOpt1().trim())) {
-//                }else{
-//                }
-//            }else{
-//                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            }
-//            if (!isShowingAnswer) {
-//                isShowingAnswer = true;
-//                if (arrayList.get(index).getOptions().get(0).getCorrectAnswer()
-//                        .trim().equalsIgnoreCase(arrayList.get(index)
-//                                .getOptions().get(0).getOpt1().trim())) {
-//                    tvOption.setBackgroundColor(Color.parseColor("#C6D33C"));
-//                } else {
-//                    tvOption.setBackgroundColor(Color.parseColor("#D94E00"));
-//                }
-//            }else{
-//                isShowingAnswer = false;
-//                tvOption.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            }
-            index++;
+        }catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 

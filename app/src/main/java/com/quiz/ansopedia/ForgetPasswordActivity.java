@@ -54,13 +54,18 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 if (isValidateCredentials()) {
                     sendEmail();
                 } else {
-                    if (userName.isEmpty()) {
-                        t1.setErrorEnabled(true);
-                        t1.setError("Please Enter Email");
-                    } else if (!Patterns.EMAIL_ADDRESS.matcher(userName).matches()) {
-                        t1.setErrorEnabled(true);
-                        t1.setError("Please Enter Valid Email");
-                    };
+                    try{
+                        if (userName.isEmpty()) {
+                            t1.setErrorEnabled(true);
+                            t1.setError("* Please Enter Email");
+                        }else if (!Patterns.EMAIL_ADDRESS.matcher(userName).matches()) {
+                            t1.setErrorEnabled(true);
+                            t1.setError("* Please Enter Valid Email");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
                 }
             }
         });

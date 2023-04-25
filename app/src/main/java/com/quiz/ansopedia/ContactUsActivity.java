@@ -55,9 +55,14 @@ public class ContactUsActivity extends AppCompatActivity {
                 if (isValidateCredentials()) {
                     sendContactMessage();
                 }else{
-                    if (message.isEmpty()) {
-                        t1.setErrorEnabled(true);
-                        t1.setError("* Please enter your query !!!..");
+                    try{
+                        if (message.isEmpty()) {
+                            t1.setErrorEnabled(true);
+                            t1.setError("* Please enter your query !!!..");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 }
 //                if (!tvEditText.getText().toString().isEmpty()) {

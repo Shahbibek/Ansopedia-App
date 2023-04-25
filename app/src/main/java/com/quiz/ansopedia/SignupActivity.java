@@ -77,53 +77,47 @@ public class SignupActivity extends AppCompatActivity {
                 if (isValidateCredentials()) {
                     getRegister();
                 } else {
-                    if (uName.isEmpty()) {
-                        userNameTextField.setErrorEnabled(true);
-                        userNameTextField.setError("* Please Enter Name");
-                    }
-                    if (!uName.matches("[a-zA-Z ]+")) {
-                        userNameTextField.setErrorEnabled(true);
-                        userNameTextField.setError("* Enter Valid Name");
-                    }
-                    if (!uName.matches(".{3,}")) {
-                        userNameTextField.setErrorEnabled(true);
-                        userNameTextField.setError("* Name must be of at least 3 character");
-                    }
-                    if (uUserName.isEmpty()) {
-                        t2.setErrorEnabled(true);
-                        t2.setError("* Please Enter Name");
-                    }
-                    if (!uUserName.matches(".{3,}")) {
-                        t2.setErrorEnabled(true);
-                        t2.setError("* Username must be of at least 3 character");
-                    }
-                    if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
-                        t3.setErrorEnabled(true);
-                        t3.setError("* Invalid Email");
-                    }
-                    if (uEmail.isEmpty()) {
-                        t3.setErrorEnabled(true);
-                        t3.setError("* Please Enter Email");
-                    }
-                    if (!pass.matches(".{8,}")) {
-                        passwordTextField.setErrorEnabled(true);
-                        passwordTextField.setError("* Password must be of 8 digit");
-                    }
-                    if (!Utility.isValidPassword(pass)) {
-                        passwordTextField.setErrorEnabled(true);
-                        passwordTextField.setError("* password must contain uppercase, lowercase, one digit and one special character");
-                    }
-                    if (pass.isEmpty()) {
-                        passwordTextField.setErrorEnabled(true);
-                        passwordTextField.setError("* Please Enter Password");
-                    }
-                    if (!confirmPass.matches(pass)) {
-                        confirmPasswordTextField.setErrorEnabled(true);
-                        confirmPasswordTextField.setError("* Password must be same");
-                    }
-                    if (confirmPass.isEmpty()) {
-                        confirmPasswordTextField.setErrorEnabled(true);
-                        confirmPasswordTextField.setError("* Please Enter Confirm Password");
+                    try{
+                        if (uName.isEmpty()) {
+                            userNameTextField.setErrorEnabled(true);
+                            userNameTextField.setError("* Please Enter Name");
+                        }else if (!uName.matches("[a-zA-Z ]+")) {
+                            userNameTextField.setErrorEnabled(true);
+                            userNameTextField.setError("* Enter Valid Name");
+                        }else if (!uName.matches(".{3,}")) {
+                            userNameTextField.setErrorEnabled(true);
+                            userNameTextField.setError("* Name must be of at least 3 character");
+                        }else if (uUserName.isEmpty()) {
+                            t2.setErrorEnabled(true);
+                            t2.setError("* Please Enter Name");
+                        }else if (!uUserName.matches(".{3,}")) {
+                            t2.setErrorEnabled(true);
+                            t2.setError("* Username must be of at least 3 character");
+                        }else if (!Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
+                            t3.setErrorEnabled(true);
+                            t3.setError("* Invalid Email");
+                        }else if (uEmail.isEmpty()) {
+                            t3.setErrorEnabled(true);
+                            t3.setError("* Please Enter Email");
+                        }else if (!pass.matches(".{8,}")) {
+                            passwordTextField.setErrorEnabled(true);
+                            passwordTextField.setError("* Password must be of 8 digit");
+                        }else if (!Utility.isValidPassword(pass)) {
+                            passwordTextField.setErrorEnabled(true);
+                            passwordTextField.setError("* password must contain uppercase, lowercase, one digit and one special character");
+                        }else if (pass.isEmpty()) {
+                            passwordTextField.setErrorEnabled(true);
+                            passwordTextField.setError("* Please Enter Password");
+                        }else if (!confirmPass.matches(pass)) {
+                            confirmPasswordTextField.setErrorEnabled(true);
+                            confirmPasswordTextField.setError("* Password must be same");
+                        }else if (confirmPass.isEmpty()) {
+                            confirmPasswordTextField.setErrorEnabled(true);
+                            confirmPasswordTextField.setError("* Please Enter Confirm Password");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 }
             }

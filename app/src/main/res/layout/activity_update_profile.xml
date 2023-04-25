@@ -66,7 +66,8 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
             android:background="@drawable/layout_border">
 
             <LinearLayout
@@ -167,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginVertical="10dp"
                     android:layout_marginEnd="20dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -184,6 +185,7 @@
                 android:layout_below="@+id/t2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -198,142 +200,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginVertical="20dp"
+                    android:layout_marginVertical="10dp"
                     android:layout_marginEnd="20dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:drawablePadding="20dp"
                     android:hint="Designation"
                     android:inputType="textPersonName"
-                    android:layout_marginBottom="15dp"
                     android:textColorHint="@color/lightWhite"
                     android:textSize="24sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/userNameTextField"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_below="@+id/imgChangeLayout"-->
-<!--                app:boxCornerRadiusBottomEnd="8dp"-->
-<!--                app:boxCornerRadiusBottomStart="8dp"-->
-<!--                android:layout_marginVertical="10dp"-->
-<!--                app:boxCornerRadiusTopEnd="8dp"-->
-<!--                app:boxCornerRadiusTopStart="8dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="1.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/address1"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/imgChangeLayout"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:layout_marginBottom="5dp"-->
-<!--                    android:background="@color/editText_bg"-->
-<!--                    android:clickable="true"-->
-<!--                    android:drawablePadding="20dp"-->
-<!--                    android:focusable="true"-->
-<!--                    android:fontFamily="verdana"-->
-<!--                    android:hint="Name"-->
-<!--                    android:inputType="textPersonName"-->
-<!--                    android:padding="15dp"-->
-<!--                    android:textSize="18dp"-->
-<!--                    android:textStyle="normal"-->
-<!--                    tools:layout_editor_absoluteX="2dp" />-->
-
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/phoneNumber"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_below="@+id/userNameTextField"-->
-<!--                android:layout_marginVertical="10dp"-->
-<!--                app:boxCornerRadiusBottomEnd="8dp"-->
-<!--                app:boxCornerRadiusBottomStart="8dp"-->
-<!--                app:boxCornerRadiusTopEnd="8dp"-->
-<!--                app:boxCornerRadiusTopStart="8dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="1.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/tvPhoneNo"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/address1"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:background="@color/editText_bg"-->
-<!--                    android:clickable="true"-->
-<!--                    android:drawablePadding="20dp"-->
-<!--                    android:focusable="true"-->
-<!--                    android:fontFamily="verdana"-->
-<!--                    android:hint="Mobile No"-->
-<!--                    android:inputType="text"-->
-<!--                    android:padding="15dp"-->
-<!--                    android:textSize="18dp"-->
-<!--                    android:textStyle="normal"-->
-<!--                    tools:layout_editor_absoluteX="2dp" />-->
-
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/designationStudent"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_below="@+id/phoneNumber"-->
-<!--                app:boxCornerRadiusBottomEnd="8dp"-->
-<!--                app:boxCornerRadiusBottomStart="8dp"-->
-<!--                android:layout_marginVertical="5dp"-->
-<!--                app:boxCornerRadiusTopEnd="8dp"-->
-<!--                app:boxCornerRadiusTopStart="8dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="1.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/tvDesignation"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/tvPhoneNo"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:layout_marginBottom="20dp"-->
-<!--                    android:background="@color/editText_bg"-->
-<!--                    android:clickable="true"-->
-<!--                    android:drawablePadding="20dp"-->
-<!--                    android:focusable="true"-->
-<!--                    android:fontFamily="verdana"-->
-<!--                    android:hint="Designation"-->
-<!--                    android:inputType="text"-->
-<!--                    android:padding="15dp"-->
-<!--                    android:textColorHint="@color/lightWhite"-->
-<!--                    android:textSize="18dp"-->
-<!--                    android:textStyle="normal"-->
-<!--                    tools:layout_editor_absoluteX="2dp" />-->
-
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editAble"
             android:layout_alignParentBottom="true"
-            android:layout_marginVertical="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginVertical="10dp"
+            android:paddingBottom="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -342,7 +229,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
-                android:layout_marginBottom="20dp"
                 android:background="@drawable/button_background"
                 android:fontFamily="@font/syne_bold"
                 android:paddingVertical="5dp"

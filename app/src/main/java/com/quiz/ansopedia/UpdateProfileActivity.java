@@ -143,29 +143,29 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 } else {
-                    if (!userName.matches("[a-zA-Z ]+")) {
-                        t1.setErrorEnabled(true);
-                        t1.setError("* Invalid Name");
-                    }
-                    if ((userName.isEmpty())) {
-                        t1.setErrorEnabled(true);
-                        t1.setError("* Please Enter Name");
-                    }
-                    if (!userPhone.matches(".{10,10}")) {
-                        t2.setErrorEnabled(true);
-                        t2.setError("* Mobile no must be 10 digit");
-                    }
-                    if (userPhone.isEmpty()) {
-                        t2.setErrorEnabled(true);
-                        t2.setError("* Please Enter Phone Number");
-                    }
-                    if (!userDesignation.matches("[a-zA-Z ]+")) {
-                        t3.setErrorEnabled(true);
-                        t3.setError("* Invalid Designation");
-                    }
-                    if (userDesignation.isEmpty()) {
-                        t3.setErrorEnabled(true);
-                        t3.setError("* Please Enter Phone Number");
+                    try{
+                        if ((userName.isEmpty())) {
+                            t1.setErrorEnabled(true);
+                            t1.setError("* Please Enter Name");
+                        }else if (!userName.matches("[a-zA-Z ]+")) {
+                            t1.setErrorEnabled(true);
+                            t1.setError("* Invalid Name");
+                        }else if (userPhone.isEmpty()) {
+                            t2.setErrorEnabled(true);
+                            t2.setError("* Please Enter Phone Number");
+                        }else if (!userPhone.matches(".{10,10}")) {
+                            t2.setErrorEnabled(true);
+                            t2.setError("* Mobile no must be 10 digit");
+                        }else if (userDesignation.isEmpty()) {
+                            t3.setErrorEnabled(true);
+                            t3.setError("* Please Enter your designation");
+                        }else if (!userDesignation.matches("[a-zA-Z ]+")) {
+                            t3.setErrorEnabled(true);
+                            t3.setError("* Invalid designation, please enter character only");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        FirebaseCrashlytics.getInstance().recordException(e);
                     }
                 }
             }
@@ -272,7 +272,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     if (lengthbmp <= 1000000) {
                         uploadImage(part_image);
                     } else {
-                        Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File Size must be less than 1000 KB !!");
+                        Utility.showAlertDialog(UpdateProfileActivity.this, "Failed", "File Size must be less than 1 MB !!");
                     }
                 }
             } catch (Exception e) {

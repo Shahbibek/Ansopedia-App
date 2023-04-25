@@ -67,6 +67,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+                                                <entry key="color" value="000000" />
                                                 <entry key="imagePath" value="C:\Users\bibek\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
@@ -79,8 +80,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="E:\SEM VI-RKU\Git_Version_Control_Ansopedia_App\Ansopedia-App\app\src\main\res\drawable\logo.jpeg" />
-                                                <entry key="scalingPercent" value="67" />
+                                                <entry key="imagePath" value="E:\SEM VI-RKU\Git_Version_Control_Ansopedia_App\Ansopedia-App\app\src\main\res\drawable\ansopedia_new.xml" />
+                                                <entry key="scalingPercent" value="90" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -114,7 +115,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="legacyIconShape" value="CIRCLE" />
+                                      <entry key="outputName" value="profile_box_bg" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -320,8 +321,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="color_category_bg" />
-                            <entry key="sourceFile" value="C:\Users\bibek\Downloads\color_category_bg.svg" />
+                            <entry key="outputName" value="ansopedia_new" />
+                            <entry key="sourceFile" value="C:\Users\bibek\Downloads\ansopedia_new.svg" />
                           </map>
                         </option>
                       </PersistentState>

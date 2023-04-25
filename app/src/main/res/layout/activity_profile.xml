@@ -233,12 +233,18 @@
                 android:background="@drawable/inner_layout_border"
                 android:orientation="horizontal">
 
-                <View
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:src="@drawable/anso_coin" />-->
+                <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/anso_coin" />
+                    android:src="@drawable/anso_coin" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -258,7 +264,6 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="10dp"
                     android:fontFamily="@font/syne"
-                    android:text=" "
                     android:textColor="@color/profile_Rank"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -270,12 +275,12 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/inner_layout_border">
 
-                <View
+                <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/my_courses" />
+                    android:src="@drawable/my_courses" />
 
                 <TextView
                     android:id="@+id/tvCourses"
@@ -299,12 +304,12 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/inner_layout_border">
 
-                <View
+                <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/rank" />
+                    android:src="@drawable/rank" />
 
                 <TextView
                     android:id="@+id/tvLeadershipBoard"
@@ -387,12 +392,12 @@
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="10dp">
 
-                <View
+                <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/edit_account" />
+                    android:src="@drawable/edit_account" />
 
                 <TextView
                     android:id="@+id/tvEditProfile"
@@ -407,11 +412,11 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="20dp"
-                android:background="@color/border_color" />
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:src="@color/border_color" />-->
 
             <LinearLayout
                 android:id="@+id/llEditSetting"

@@ -129,27 +129,29 @@ public class SignInActivity extends AppCompatActivity {
                             FirebaseCrashlytics.getInstance().recordException(e);
                         }
                     } else {
-                        if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-                            t1.setErrorEnabled(true);
-                            t1.setError("* Invalid Email");
+                        try{
+                            if (username.isEmpty()) {
+                                t1.setErrorEnabled(true);
+                                t1.setError("* Please Enter Email");
+                            }else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+                                t1.setErrorEnabled(true);
+                                t1.setError("* Invalid Email");
+                            }else if (password.isEmpty()) {
+                                t2.setErrorEnabled(true);
+                                t2.setError("* Please Enter Password");
+                            }else if (!password.matches(".{8,}")) {
+                                t2.setErrorEnabled(true);
+                                t2.setError("* Password must be of 8 digit");
+                            }else if (!Utility.isValidPassword(password)) {
+                                t2.setErrorEnabled(true);
+                                t2.setError("* Invalid Password");
+                            }
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            FirebaseCrashlytics.getInstance().recordException(e);
                         }
-                        if (username.isEmpty()) {
-                            t1.setErrorEnabled(true);
-                            t1.setError("* Please Enter Email");
-                        }
-                        if (!password.matches(".{8,}")) {
-                            t2.setErrorEnabled(true);
-                            t2.setError("* Password must be of 8 digit");
-                        }
-                        if (!Utility.isValidPassword(password)) {
-                            t2.setErrorEnabled(true);
-                            t2.setError("* Invalid Password");
-                        }
-                        if (password.isEmpty()) {
-                            t2.setErrorEnabled(true);
-                            t2.setError("* Please Enter Password");
-                        }
-                        ;
+
                     }
                 }
             });
@@ -249,6 +251,7 @@ public class SignInActivity extends AppCompatActivity {
                                                                 Constants.TOKEN = "";
                                                                 preferences.edit().putBoolean(Constants.isLogin, false).apply();
                                                                 preferences.edit().putString(Constants.token, "").apply();
+                                                                Utility.dismissProgress(SignInActivity.this);
                                                                 Utility.showAlertDialog(SignInActivity.this, "Error", "Your have signup by email and Password, Please try with that method !!..");
                                                                 updateUI(null);
                                                             }
@@ -295,53 +298,59 @@ public class SignInActivity extends AppCompatActivity {
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+        try{
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithCredential:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
 //                            Constants.Email = user.getEmail();
-                            assert user != null;
+                                assert user != null;
 
-                            user.getIdToken(true).addOnSuccessListener(result -> {
+                                user.getIdToken(true).addOnSuccessListener(result -> {
 //                              String idToken = result.getToken();
 //                              Do whatever
-                                Constants.TOKEN = result.getToken();
+                                    Constants.TOKEN = result.getToken();
 //                                Log.d(TAG, "GetTokenResult result = " + Constants.TOKEN);
 //                                Log.d(TAG, "GetTokenResult result = " + user);
-                                ContentApiImplementer.signInWithGoogle(new Callback<ApiResponse<LoginModel>>() {
-                                    @Override
-                                    public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
-                                        if (response.code() == 200) {
-                                            preferences.getBoolean(Constants.isLogin, true);
-                                            updateUI(user);
-                                        } else {
-                                            updateUI(null);
-                                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Something went wrong, please try again !!..");
+                                    ContentApiImplementer.signInWithGoogle(new Callback<ApiResponse<LoginModel>>() {
+                                        @Override
+                                        public void onResponse(Call<ApiResponse<LoginModel>> call, Response<ApiResponse<LoginModel>> response) {
+                                            if (response.code() == 200) {
+                                                preferences.getBoolean(Constants.isLogin, true);
+                                                updateUI(user);
+                                            } else {
+                                                updateUI(null);
+                                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Something went wrong, please try again !!..");
+                                            }
                                         }
-                                    }
-                                    @Override
-                                    public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
-                                        updateUI(null);
-                                        Utility.dismissProgress(SignInActivity.this);
-                                        Utility.showAlertDialog(SignInActivity.this, "Failed", "Something went wrong, Please try Again !!..");
-                                    }
-                                });
 
-                            });
+                                        @Override
+                                        public void onFailure(Call<ApiResponse<LoginModel>> call, Throwable t) {
+                                            updateUI(null);
+                                            Utility.dismissProgress(SignInActivity.this);
+                                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Something went wrong, Please try Again !!..");
+                                        }
+                                    });
+
+                                });
 //                            Toast.makeText(SignInActivity.this, ""+user, Toast.LENGTH_SHORT).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            updateUI(null);
-                            Utility.dismissProgress(SignInActivity.this);
-                            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                updateUI(null);
+                                Utility.dismissProgress(SignInActivity.this);
+                                Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
+                            }
                         }
-                    }
-                });
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
     }
     // [END auth_with_google]
     // [END onactivityresult]
@@ -374,9 +383,6 @@ public class SignInActivity extends AppCompatActivity {
             Utility.dismissProgress(this);
             startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finish();
-        } else{
-            Utility.dismissProgress(this);
-            Utility.showAlertDialog(SignInActivity.this, "Failed", "Invalid Request, Please try Again !!..");
         }
     }
 

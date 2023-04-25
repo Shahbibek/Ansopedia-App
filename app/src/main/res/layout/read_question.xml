@@ -64,6 +64,7 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
                 android:text="a. option 1"
+                android:visibility="gone"
                 android:tag="0"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -76,6 +77,7 @@
                 android:background="@drawable/bg_option"
                 android:elevation="5dp"
                 android:clickable="true"
+                android:visibility="gone"
                 android:focusable="true"
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
@@ -92,6 +94,7 @@
                 android:background="@drawable/bg_option"
                 android:elevation="5dp"
                 android:clickable="true"
+                android:visibility="gone"
                 android:focusable="true"
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
@@ -108,6 +111,7 @@
                 android:background="@drawable/bg_option"
                 android:elevation="5dp"
                 android:clickable="true"
+                android:visibility="gone"
                 android:focusable="true"
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
@@ -129,7 +133,7 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="20dp"
                 android:text="e. option 5"
-                android:tag="3"
+                android:tag="4"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
